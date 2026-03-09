@@ -3,7 +3,7 @@ if not game:IsLoaded() then
 end
 if _G.IsOpened then
     game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "System VR7",
+        Title = "System TRX تعاون مع الدارك ",
         Text = "\239\191\189\217\133 \216\170\217\129\216\185\217\138\217\132 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \217\133\216\179\216\168\217\130\216\167\216\140 \216\167\216\185\216\175 \216\167\217\132\216\175\216\174\217\136\217\132 \217\132\216\170\216\180\216\186\217\138\217\132\217\135 \217\133\216\172\216\175\216\175\216\167",
         Duration = 5
     })
@@ -199,7 +199,7 @@ else
     local vu44 = false
     local vu45 = {}
     local vu46 = workspace.CurrentCamera
-    local vu47 = "VR7 ON TOP"
+    local vu47 = "TRX ON TOP"
     local vu48 = pcall(function()
         assert(firesignal)
     end)
@@ -411,9 +411,9 @@ else
     function Execute(p106)
         if GetRank() and GetRank() ~= "Not Enabled" then
             game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(p106)
-            SendNotify("System VR7", "Executed " .. command, 5)
+            SendNotify("System TRX ", "Executed " .. command, 5)
         else
-            SendNotify("System VR7", "\239\191\189\217\132\216\167\216\179\217\129 \216\167\217\132\217\133\216\167\216\168 \216\186\217\138\216\177 \217\133\216\175\216\185\217\136\217\133", 5)
+            SendNotify("System TRX ", "\239\191\189\217\132\216\167\216\179\217\129 \216\167\217\132\217\133\216\167\216\168 \216\186\217\138\216\177 \217\133\216\175\216\185\217\136\217\133", 5)
         end
     end
     function RandomChar()
@@ -471,7 +471,7 @@ else
             v122 = v122 + 1
             local v124 = GetSofa()
             if not v124 then
-                SendNotify("System VR7", "\239\191\189\216\173\216\170\216\167\216\172 \217\131\217\134\216\168\216\169 \216\173\216\170\216\167 \216\170\217\130\216\175\216\177 \216\170\216\179\216\173\216\168", 5)
+                SendNotify("System TRX " , "\239\191\189\216\173\216\170\216\167\216\172 \217\131\217\134\216\168\216\169 \216\173\216\170\216\167 \216\170\217\130\216\175\216\177 \216\170\216\179\216\173\216\168", 5)
                 break
             end
             local v125 = nil
@@ -502,7 +502,7 @@ else
                 break
             end
             if v119.Character.Humanoid.Sit and v119.Character.Humanoid.SeatPart ~= v125 then
-                SendNotify("System VR7", "\239\191\189\216\167\217\138\217\133\217\131\217\134 \216\179\216\173\216\168 \216\167\217\132\216\182\216\173\217\138\216\169 \217\132\216\167\217\134\217\135 \217\130\216\167\216\185\216\175", 5)
+                SendNotify("System TRX ", "\239\191\189\216\167\217\138\217\133\217\131\217\134 \216\179\216\173\216\168 \216\167\217\132\216\182\216\173\217\138\216\169 \217\132\216\167\217\134\217\135 \217\130\216\167\216\185\216\175", 5)
                 break
             end
             if v124.Parent ~= game.Players.LocalPlayer.Character then
@@ -658,7 +658,7 @@ else
             local vu166 = GetCuff()
             if not vu166 then
                 game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "System VR7",
+                    Title = "System TRX 💀🪐",
                     Text = "\239\191\189\216\167\216\178\217\133 \217\138\217\131\217\136\217\134 \217\133\216\185\217\131 \217\131\217\132\216\168\216\180\216\169",
                     Duration = 5
                 })
@@ -819,7 +819,7 @@ else
         end
         return false
     end
-    getgenv().VR7 = Instance.new("ScreenGui")
+    getgenv().TRX = Instance.new("ScreenGui")
     local vu221 = Instance.new("ImageLabel")
     local v222 = Instance.new("UIStroke")
     local v223 = Instance.new("TextLabel")
@@ -968,7 +968,7 @@ else
     function CreateClicker(p338)
         vu327:Clone().Parent = p338
     end
-    getgenv().VR7.Name = (function()
+    getgenv().TRX.Name = (function()
         local v339 = "ABCDEFGH#IJKLMNOPQ)RSTUV(WXYZabcdefgh@ijklmnopqrstuv!wxyz0123456789/$%#<>~!@^&*_-+=[]{}:;,.?/|"
         local v340 = ""
         for _ = 1, math.random(5, 15) do
@@ -977,10 +977,10 @@ else
         end
         return v340
     end)()
-    getgenv().VR7.Parent = gethui()
-    getgenv().VR7.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    getgenv().TRX.Parent = gethui()
+    getgenv().TRX.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     vu221.Name = "Background"
-    vu221.Parent = getgenv().VR7
+    vu221.Parent = getgenv().TRX
     vu221.AnchorPoint = Vector2.new(0.5, 0.5)
     vu221.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     vu221.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
@@ -1006,7 +1006,7 @@ else
     v223.BorderSizePixel = 0
     v223.Size = UDim2.new(1, 0, 0, 30)
     v223.Font = Enum.Font.GothamBold
-    v223.Text = "       VR7 TEAM: The Mercy Script"
+    v223.Text = "       TRX TEAM: The Mercy Script"
     v223.TextColor3 = Color3.fromRGB(vu31, vu32, vu33)
     v223.TextScaled = true
     v223.TextSize = 12
