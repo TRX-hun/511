@@ -954,7 +954,7 @@ local SetProps, SetChildren, InsertTheme, Create do
 		end
 	end
 	
-	pcall(Save, "FR_HUB.json")
+	pcall(Save, "TRX_HUB.json")
 end
 
 local Funcs = {} do
@@ -1111,7 +1111,7 @@ local GetFlag, SetFlag, CheckFlag do
 end
 
 local ScreenGui = Create("ScreenGui", CoreGui, {
-	Name = "FR HUB",
+	Name = "TRX HUB",
 }, {
 	Create("UIScale", {
 		Scale = UIScale,
@@ -1404,7 +1404,7 @@ function redzlib:SetTheme(NewTheme)
 	if not VerifyTheme(NewTheme) then return end
 	
 	redzlib.Save.Theme = NewTheme
-	SaveJson("FR_HUB.json", redzlib.Save)
+	SaveJson("TRX_HUB.json", redzlib.Save)
 	Theme = redzlib.Themes[NewTheme]
 	
 	Comnection:FireConnection("ThemeChanged", NewTheme)
@@ -1775,13 +1775,13 @@ function redzlib:MakeWindow(Configs)
 	ConnectSave(ControlSize1, function()
 		if not Minimized then
 			redzlib.Save.UISize = {MainFrame.Size.X.Offset, MainFrame.Size.Y.Offset}
-			SaveJson("FR_HUB.json", redzlib.Save)
+			SaveJson("TRX_HUB.json", redzlib.Save)
 		end
 	end)
 	
 	ConnectSave(ControlSize2, function()
 		redzlib.Save.TabSize = MainScroll.Size.X.Offset
-		SaveJson("FR_HUB.json", redzlib.Save)
+		SaveJson("TRX_HUB.json", redzlib.Save)
 	end)
 	
 	local ButtonsFolder = Create("Folder", TopBar, {
@@ -3002,7 +3002,7 @@ end
 
 
 local function ShowIntro(onDone)
-    local old=CoreGui:FindFirstChild("FR_HUB_Intro"); if old then old:Destroy() end
+    local old=CoreGui:FindFirstChild("TRX _HUB_Intro"); if old then old:Destroy() end
     local sg=Instance.new("ScreenGui"); sg.Name="FR_HUB_Intro"; sg.ResetOnSpawn=false; sg.DisplayOrder=100; sg.ZIndexBehavior=Enum.ZIndexBehavior.Sibling; sg.Parent=CoreGui
 
     local bg=Instance.new("Frame"); bg.Size=UDim2.fromScale(1,1); bg.BackgroundColor3=Color3.fromRGB(0,0,0); bg.BorderSizePixel=0; bg.ZIndex=1; bg.Parent=sg
@@ -3027,7 +3027,7 @@ local function ShowIntro(onDone)
     
     local titleLbl=Instance.new("TextLabel")
     titleLbl.Size=UDim2.new(1,0,0,90); titleLbl.Position=UDim2.new(0,0,0,10)
-    titleLbl.BackgroundTransparency=1; titleLbl.Text="FR | HUB"
+    titleLbl.BackgroundTransparency=1; titleLbl.Text="TRX | HUB"
     titleLbl.TextColor3=Color3.fromRGB(0,255,80); titleLbl.TextSize=78
     titleLbl.Font=Enum.Font.GothamBlack; titleLbl.TextXAlignment=Enum.TextXAlignment.Center
     titleLbl.TextTransparency=1; titleLbl.ZIndex=7; titleLbl.Parent=logoHolder
@@ -3035,7 +3035,7 @@ local function ShowIntro(onDone)
 
     local titleShadow=Instance.new("TextLabel")
     titleShadow.Size=UDim2.new(1,0,0,90); titleShadow.Position=UDim2.new(0,3,0,13)
-    titleShadow.BackgroundTransparency=1; titleShadow.Text="FR | HUB"
+    titleShadow.BackgroundTransparency=1; titleShadow.Text="TRX | HUB"
     titleShadow.TextColor3=Color3.fromRGB(0,60,20); titleShadow.TextSize=78
     titleShadow.Font=Enum.Font.GothamBlack; titleShadow.TextXAlignment=Enum.TextXAlignment.Center
     titleShadow.TextTransparency=1; titleShadow.ZIndex=6; titleShadow.Parent=logoHolder
@@ -3119,7 +3119,7 @@ end
 
 local function BuildMainUI()
 
-    local Window = redzlib:MakeWindow({ Name="FR HUB", SubTitle="صنع احمد  FR" })
+    local Window = redzlib:MakeWindow({ Name="TRX HUB", SubTitle="SA l TRXصنع الدارك مع تعاون المطورين   FR" })
     
 
 
