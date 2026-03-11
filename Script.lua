@@ -4461,13 +4461,13 @@ end)
     })
 
 
-    InfoTab:AddParagraph({"مرحباً في FR HUB 💚","السكربت الخاص بالمطورين"})
+    InfoTab:AddParagraph({"مرحباً في TRX HUB 💚","السكربت الخاص بالمطورين"})
     InfoTab:AddButton({
         Name="📋  زر الانفو",
         Callback=function()
             Window:Dialog({
                 Title="💚  TRX HUB",
-                Text="مرحبا بك في السكربت الخاص ب المطورين FR\n\n  TRX  l SA صنع الدارك بقيادة المطور   TRX\n\nالرجاء استمتع بمشاهده الاسكربت 😍🫶🏻💕",
+                Text="مرحبا بك في السكربت الخاص ب المطورين TRX\n\n  TRX  l SA صنع الدارك بقيادة المطور   TRX\n\nالرجاء استمتع بمشاهده الاسكربت 😍🫶🏻💕",
                 Options={{"حسناً ✓"}}
             })
         end
