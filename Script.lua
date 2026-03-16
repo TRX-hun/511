@@ -3119,7 +3119,7 @@ end
 
 local function BuildMainUI()
 
-    local Window = redzlib:MakeWindow({ Name="TRX HUB", SubTitle="SA l TRXصنع الدارك مع تعاون المطورين   FR" })
+    local Window = redzlib:MakeWindow({ Name="TRX HUB", SubTitle="SA l TRXصنع الدارك مع تعاون المطورين    l 511" })
     
 
 
