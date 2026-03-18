@@ -3706,7 +3706,7 @@ end)
     })
 
 FaresTab:AddButton({
-     Name=" SA l TRX سكربت طياران من صنع الدارك مع تعاون الطمورين FLY", 
+     Name=" SA l TRX سكربت طياران من صنع الدارك مع تعاون المطورين FLY", 
      Callback=function()
      loadstring(game:HttpGet("https://raw.githubusercontent.com/ook314745-svg/fly/refs/heads/main/fly"))()
      
@@ -4473,7 +4473,7 @@ end)
         end
     })
     InfoTab:AddSection("معلومات السكربت")
-    InfoTab:AddParagraph({"الإصدار","TRX HUB v2.0  |  by TRXالدارك مع تعاون  &  FR"})
+    InfoTab:AddParagraph({"الإصدار","TRX HUB v2.0  |  by TRXالدارك مع تعاون  &  TRX"})
     InfoTab:AddSection("بطاقة اللاعب")
     local uid   = tostring(LocalPlayer.UserId)
     local uname = LocalPlayer.Name
