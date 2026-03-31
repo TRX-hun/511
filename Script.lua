@@ -5224,7 +5224,7 @@ task.spawn(function()
     ImageLabel.Size = UDim2.new(1,0,1,0)
     ImageLabel.Position = UDim2.new(0,0,0,0)
     
-    -- رابط الصورة الخاص بك
+    --  هذا هو رابط الصورة الذي طلبت وضعه في النص تطلع الصوره لا السكريبت وتكون الرابط هاذا كداله ساعه لا رابط 
     ImageLabel.Image = "https://raw.githubusercontent.com/TRX-hun/511/refs/heads/main/E111C743-7447-410A-A434-463291488A92.png"
     
     ImageLabel.BackgroundTransparency = 1
@@ -5236,4 +5236,8 @@ task.spawn(function()
         TweenInfo.new(12, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true),
         {Position = UDim2.new(0.01,0,0.01,0)}
     ):Play()
+end)
+
+
+    
 end)
