@@ -8,7 +8,7 @@ local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local PlayerMouse = Player:GetMouse()
 
-local redzlib = {
+local Kavo = {
 	Themes = {
 		Darker = {
 			["Color Hub 1"] = ColorSequence.new({
@@ -954,7 +954,7 @@ local SetProps, SetChildren, InsertTheme, Create do
 		end
 	end
 	
-	pcall(Save, "FR_HUB.json")
+	pcall(Save, "TRX_HUB.json")
 end
 
 local Funcs = {} do
@@ -1111,7 +1111,7 @@ local GetFlag, SetFlag, CheckFlag do
 end
 
 local ScreenGui = Create("ScreenGui", CoreGui, {
-	Name = "FR HUB",
+	Name = "TRX HUB",
 }, {
 	Create("UIScale", {
 		Scale = UIScale,
@@ -1195,7 +1195,7 @@ local function MakeDrag(Instance)
 end
 
 local function VerifyTheme(Theme)
-	for name,_ in pairs(redzlib.Themes) do
+	for name,_ in pairs(Kavo.Themes) do
 		if name == Theme then
 			return true
 		end
@@ -1209,14 +1209,14 @@ local function SaveJson(FileName, save)
 	end
 end
 
-local Theme = redzlib.Themes[redzlib.Save.Theme]
+local Theme = Kavo.Themes[Kavo.Save.Theme]
 
 local function AddEle(Name, Func)
-	redzlib.Elements[Name] = Func
+      Kavo.Elements[Name] = Func
 end
 
 local function Make(Ele, Instance, props, ...)
-	local Element = redzlib.Elements[Ele](Instance, props, ...)
+	local Element = Kavo.Elements[Ele](Instance, props, ...)
 	return Element
 end
 
@@ -1404,7 +1404,7 @@ function redzlib:SetTheme(NewTheme)
 	if not VerifyTheme(NewTheme) then return end
 	
 	redzlib.Save.Theme = NewTheme
-	SaveJson("FR_HUB.json", redzlib.Save)
+	SaveJson("TRX_HUB.json", redzlib.Save)
 	Theme = redzlib.Themes[NewTheme]
 	
 	Comnection:FireConnection("ThemeChanged", NewTheme)
@@ -1775,13 +1775,13 @@ function redzlib:MakeWindow(Configs)
 	ConnectSave(ControlSize1, function()
 		if not Minimized then
 			redzlib.Save.UISize = {MainFrame.Size.X.Offset, MainFrame.Size.Y.Offset}
-			SaveJson("FR_HUB.json", redzlib.Save)
+			SaveJson("TRX_HUB.json", redzlib.Save)
 		end
 	end)
 	
 	ConnectSave(ControlSize2, function()
 		redzlib.Save.TabSize = MainScroll.Size.X.Offset
-		SaveJson("FR_HUB.json", redzlib.Save)
+		SaveJson("TRX_HUB.json", redzlib.Save)
 	end)
 	
 	local ButtonsFolder = Create("Folder", TopBar, {
@@ -2010,7 +2010,7 @@ end
 	end
 	function Window:SelectTab(TabSelect)
 		if type(TabSelect) == "number" then
-			redzlib.Tabs[TabSelect].func:Enable()
+			Kavo.Tabs[TabSelect].func:Enable()
 		else
 			for _,Tab in pairs(redzlib.Tabs) do
 				if Tab.Cont == TabSelect.Cont then
@@ -2118,7 +2118,7 @@ end
 		
 		FirstTab = true
 		local Tab = {}
-		table.insert(redzlib.Tabs, {TabInfo = {Name = TName, Icon = TIcon}, func = Tab, Cont = Container})
+		table.insert(Kavo.Tabs, {TabInfo = {Name = TName, Icon = TIcon}, func = Tab, Cont = Container})
 		Tab.Cont = Container
 		
 		function  Tab:Disable()
@@ -3074,7 +3074,7 @@ local function ShowIntro(onDone)
     local barBG=Instance.new("Frame"); barBG.Size=UDim2.new(0.6,0,0,5); barBG.Position=UDim2.new(0.2,0,0.80,0); barBG.BackgroundColor3=Color3.fromRGB(15,35,15); barBG.BorderSizePixel=0; barBG.ZIndex=6; barBG.Parent=bg; Instance.new("UICorner",barBG).CornerRadius=UDim.new(1,0)
     local barFill=Instance.new("Frame"); barFill.Size=UDim2.new(0,0,1,0); barFill.BackgroundColor3=Color3.fromRGB(0,220,65); barFill.BorderSizePixel=0; barFill.ZIndex=7; barFill.Parent=barBG; Instance.new("UICorner",barFill).CornerRadius=UDim.new(1,0)
     local glow=Instance.new("Frame"); glow.Size=UDim2.new(0,10,3,0); glow.AnchorPoint=Vector2.new(1,0.5); glow.Position=UDim2.new(1,0,0.5,0); glow.BackgroundColor3=Color3.fromRGB(180,255,180); glow.BackgroundTransparency=0.2; glow.BorderSizePixel=0; glow.ZIndex=8; glow.Parent=barFill; Instance.new("UICorner",glow).CornerRadius=UDim.new(0.5,0)
-    local brandLbl=Instance.new("TextLabel"); brandLbl.Size=UDim2.new(1,0,0,18); brandLbl.Position=UDim2.new(0,0,0.90,0); brandLbl.BackgroundTransparency=1; brandLbl.Text="FR HUB  ·  صنع احمد و FR  "; brandLbl.TextColor3=Color3.fromRGB(0,170,50); brandLbl.TextSize=11; brandLbl.Font=Enum.Font.Gotham; brandLbl.TextXAlignment=Enum.TextXAlignment.Center; brandLbl.ZIndex=6; brandLbl.Parent=bg
+    local brandLbl=Instance.new("TextLabel"); brandLbl.Size=UDim2.new(1,0,0,18); brandLbl.Position=UDim2.new(0,0,0.90,0); brandLbl.BackgroundTransparency=1; brandLbl.Text="TRX HUB  · TRX صنع  TRX"; brandLbl.TextColor3=Color3.fromRGB(0,170,50); brandLbl.TextSize=11; brandLbl.Font=Enum.Font.Gotham; brandLbl.TextXAlignment=Enum.TextXAlignment.Center; brandLbl.ZIndex=6; brandLbl.Parent=bg
 
     
     local fadeIn=TweenInfo.new(0.9,Enum.EasingStyle.Quint)
@@ -3119,7 +3119,7 @@ end
 
 local function BuildMainUI()
 
-    local Window = redzlib:MakeWindow({ Name="FR HUB", SubTitle="صنع احمد  FR" })
+    local Window = redzlib:MakeWindow({ Name="TRX HUB", SubTitle=" TRX صنع   TRX" })
     
 
 
@@ -3131,13 +3131,13 @@ local function BuildMainUI()
 
     
     local rainbowList = {
-        {text = "FR HUB", color = Color3.fromRGB(255, 0, 0)},
-        {text = "FR HUB", color = Color3.fromRGB(255, 165, 0)},
-        {text = "FR HUB", color = Color3.fromRGB(255, 255, 0)},
-        {text = "FR HUB", color = Color3.fromRGB(0, 255, 0)},
-        {text = "FR HUB", color = Color3.fromRGB(0, 255, 255)},
-        {text = "FR HUB", color = Color3.fromRGB(0, 0, 255)},
-        {text = "FR HUB", color = Color3.fromRGB(128, 0, 128)}
+        {text = "TRX HUB", color = Color3.fromRGB(255, 0, 0)},
+        {text = "TRX HUB", color = Color3.fromRGB(255, 165, 0)},
+        {text = "TRX HUB", color = Color3.fromRGB(255, 255, 0)},
+        {text = "TRX HUB", color = Color3.fromRGB(0, 255, 0)},
+        {text = "TRX HUB", color = Color3.fromRGB(0, 255, 255)},
+        {text = "TRX HUB", color = Color3.fromRGB(0, 0, 255)},
+        {text = "TRX HUB", color = Color3.fromRGB(128, 0, 128)}
     }
 
     
@@ -3320,7 +3320,7 @@ local function BuildMainUI()
     local TrollTab   = Window:MakeTab({Title="🚌 التخريب",    Icon="car"})
     local SpyTab     = Window:MakeTab({Title="👁️ المراقبة",   Icon="eye"})
     local SkinTab    = Window:MakeTab({Title="👗 السكنات",    Icon="shirt"})
-    local FunTab     = Window:MakeTab({Title="🎮 المتعة",      Icon="gamepad2"})
+    local FunTab     = Window:MakeTab({Title="🎮 الاستهداف",      Icon="gamepad2"})
     local FlingTab   = Window:MakeTab({Title="💥 الفلنق",     Icon="zap"})
     local ProtectTab = Window:MakeTab({Title="🛡️ الحماية",    Icon="shield"})
     local KillTab    = Window:MakeTab({Title="☠️ القتل",      Icon="skull"})
@@ -3334,12 +3334,12 @@ local CarTab = Window:MakeTab({Title="🚗 السيارات", Icon="car"})
 
 
     
-    local FaresTab   = Window:MakeTab({Title="⭐ سكربتات فارس", Icon="star"})
+    local FaresTab   = Window:MakeTab({Title="⭐  TRX سكربتات ", Icon="star"})
 
     FaresTab:AddSection("سكربتات مميزة")
 
     FaresTab:AddButton({
-        Name="ازاله اللاق من صنع فارس",
+        Name=" TRX ازاله اللاق من صنع ",
         Callback=function()
             local CoreGui = game:GetService("CoreGui")
 local Lighting = game:GetService("Lighting")
@@ -3569,7 +3569,7 @@ end);
         wait(1)
         toggleButton(script.Parent, false)
 	
-            Notify("سكربتات فارس", "تم اصلاح اللاق", 3)
+            Notify("سكربتات TRX", "تم اصلاح الاق")
         end
     })
 
@@ -3707,12 +3707,12 @@ Toggle.MouseButton1Click:Connect(function()
         end
     end)
 end)
-            Notify("سكربتات فارس", "تم تشغيل طياران السيارات", 3)
+            Notify("سكربتات TRX", "تم تشغيل طياران السيارات", 3)
         end
     })
 
 FaresTab:AddButton({
-     Name=" سكربت طياران من صنع فارس FLY", 
+     Name=" TRXسكربت طياران من صنع FLY", 
      Callback=function()
      loadstring(game:HttpGet("https://raw.githubusercontent.com/ook314745-svg/fly/refs/heads/main/fly"))()
      
@@ -3722,7 +3722,7 @@ FaresTab:AddButton({
 
 
     FaresTab:AddButton({
-        Name="شادر من صنع فارس",
+        Name="TRX شادر من صنع ",
         Callback=function()
             
 
@@ -4297,15 +4297,15 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
-            Notify("سكربتات فارس", "تم تشغيل الشادر", 3)
+            Notify("سكربتات TRX", "تم تشغيل الشادر)
         end
     })
 
     
 
     
-    FaresTab:AddSection("جرب دي😉")
-    FaresTab:AddParagraph({"ملاحظة مهمة", "الـ Noclip هيفيدك جدا في اختراق البيوت لما تكون عايز تتجسس😂"})
+    FaresTab:AddSection("جرب ذي😉")
+    FaresTab:AddParagraph({"ملاحظة مهمة", "الـ Noclip بيفيدك جدا في اختراق البيوت لما تكون عايز تتجسس😂"})
     FaresTab:AddToggle({
         Name="🚀 Noclip (اختراق الجدران)",
         Default=false,
@@ -4473,7 +4473,7 @@ end)
         Callback=function()
             Window:Dialog({
                 Title="💚  TRX HUB",
-                Text="مرحبا بك في السكربت الخاص ب المطورين FR\n\n TRX صنع  FR\n\nالرجاء استمتع بمشاهده الاسكربت 😍🫶🏻💕",
+                Text="مرحبا بك في السكربت الخاص ب المطورين TRX\n\n TRX صنع  TRX\n\nالرجاء استمتع بمشاهده الاسكربت 😍🫶🏻💕",
                 Options={{"حسناً ✓"}}
             })
         end
