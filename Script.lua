@@ -5201,20 +5201,3 @@ ShowIntro(function()
 
 
 end)
-task.spawn(function()
-    local targetNames = {"Fluent", "Rayfield", "ScreenGui"}
-
-    local Gui
-    repeat
-        task.wait()
-        for _, name in ipairs(targetNames) do
-            local found = game.CoreGui:FindFirstChild(name)
-            if found then
-                Gui = found
-                break
-            end
-        end
- 
-end)   
-  
-	end)
